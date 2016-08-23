@@ -1,0 +1,28 @@
+POSTMAN
+POST - http://localhost:3000/api/v1/station
+Body - raw - json
+{
+  "StationNumber": "1",
+     "Community": "Redlands",
+     "Street": "380 New York",
+     "City": "Redlands",
+    "State": "CA",
+     "Zip": 92223
+}
+
+
+
+
+RESPONSE
+{
+  "__v": 0,
+  "updatedAt": "2016-08-23T17:51:37.344Z",
+  "createdAt": "2016-08-23T17:51:37.344Z",
+  "StationNumber": "1",
+  "Community": "Redlands",
+  "Street": "380 New York",
+  "City": "Redlands",
+  "State": "CA",
+  "Zip": 92223,
+  "_id": "57bc8d29d7caaf702605c290"
+}

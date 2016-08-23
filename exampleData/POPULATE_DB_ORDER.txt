@@ -1,0 +1,6 @@
+create station
+create department
+create user
+create post
+create conversation
+create message

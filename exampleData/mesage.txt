@@ -1,0 +1,23 @@
+POSTMAN
+POST - http://localhost:3000/api/v1/messages
+Body - raw - json
+{
+  "Creator": "57bc8d88bf16d3042ee533c4",
+   "Recipient":  "57bc8d88bf16d3042ee533c4",
+   "Content": "You a Hoe",
+   "Conversation": "57bc9077ede3bdd423c3c3d0"
+}
+
+
+RESPONSE
+
+{
+  "__v": 0,
+  "updatedAt": "2016-08-23T18:07:26.400Z",
+  "created_at": "2016-08-23T18:07:26.400Z",
+  "Creator": "57bc8d88bf16d3042ee533c4",
+  "Recipient": "57bc8d88bf16d3042ee533c4",
+  "Content": "You a Hoe",
+  "Conversation": "57bc9077ede3bdd423c3c3d0",
+  "_id": "57bc90defa0eb64c0a216564"
+}

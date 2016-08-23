@@ -1,0 +1,27 @@
+POSTMAN
+POST - http://localhost:3000/api/v1/users
+Body - raw - json
+
+{
+  "FirstName": "Richard",
+  "LastName":  "Rivera",
+  "Platoon": "A",
+  "AssignedHireCode": "B3",
+  "Department": "57bc898411f2dd0c2fc0ab23",
+  "Station": "57bc8d29d7caaf702605c290"
+}
+
+
+RESPONSE
+{
+  "__v": 0,
+  "updatedAt": "2016-08-23T17:53:12.129Z",
+  "createdAt": "2016-08-23T17:53:12.129Z",
+  "FirstName": "Richard",
+  "LastName": "Rivera",
+  "Platoon": "A",
+  "AssignedHireCode": "B3",
+  "Department": "57bc898411f2dd0c2fc0ab23",
+  "Station": "57bc8d29d7caaf702605c290",
+  "_id": "57bc8d88bf16d3042ee533c4"
+}

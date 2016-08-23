@@ -1,0 +1,15 @@
+{
+  "workingDepartment": "LAFD",
+  "db": {
+    "uri": "mongodb://fire:fire@localhost:27017/fire"
+  },
+  "departments": {
+    "LAFD": {
+      "platoons": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  }
+}

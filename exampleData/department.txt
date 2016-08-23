@@ -1,0 +1,43 @@
+POSTMAN
+POST - http://localhost:3000/api/v1/departments
+Body - raw - json
+{
+    "Name": "LAFD",
+    "Platoons": [
+        "A",
+        "B",
+        "C"
+    ],
+    "Schedule": {
+        "Name": "Schedule Name",
+        "NumberOfPlatoons": 3,
+        "PlatoonSchedule": "A,C,A,B,A,B,C,B,C",
+        "ShiftLengthInHours": 24,
+        "ShiftStartTime": "0800"
+    },
+    "Stations": ["57bc8d29d7caaf702605c290"]
+}
+
+
+RESPONSE
+
+{
+  "__v": 0,
+  "Name": "LAFD",
+  "_id": "57bc8ddbfe5fa5a4332970c0",
+  "Stations": [
+    "57bc8d29d7caaf702605c290"
+  ],
+  "Schedule": {
+    "Name": "Schedule Name",
+    "NumberOfPlatoons": 3,
+    "PlatoonSchedule": "A,C,A,B,A,B,C,B,C",
+    "ShiftLengthInHours": 24,
+    "ShiftStartTime": "0800"
+  },
+  "Platoons": [
+    "A",
+    "B",
+    "C"
+  ]
+}
