@@ -30,13 +30,18 @@ router.get('/:id', function (req, res) {
 //todo lock down to admin only
 
 router.post('/', function (req, res) {
-    Station.create(req.body, function (err, station) {
-        if (err) {
-            res.send(err);
-        } else {
-            res.json(station);
-        }
-    });
+    if(req.user) {
+        Station.create(req.body, function (err, station) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.json(station);
+            }
+        });
+    }
+    else{
+        res.json({success: false, message: "Invalid request"});
+    }
 });
 
 module.exports = router;

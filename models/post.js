@@ -9,7 +9,7 @@ var platoons = config.get(util.format('departments.%s.platoons', deptId));
 var PostSchema = new mongoose.Schema({
     Creator: {
         type: mongoose.Schema.Types.ObjectId,
-        "ref": "User",
+        "ref": "Account",
         required: true
     },
     Shift: {
@@ -21,6 +21,12 @@ var PostSchema = new mongoose.Schema({
             },
             message: 'shift cannot be in the past!'
         }
+    },
+    Department: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Department",
+        index: true,
+        required: true
     },
     Station: {
         type: mongoose.Schema.Types.ObjectId,

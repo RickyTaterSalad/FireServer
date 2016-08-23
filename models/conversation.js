@@ -3,12 +3,12 @@ var mongoose = require("mongoose");
 var ConversationSchema = new mongoose.Schema({
     Creator: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Account',
         required: true
     },
     Recipient: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'Account',
         required: true
     },
     Post: {

@@ -1,27 +1,14 @@
-POSTMAN
-POST - http://localhost:3000/api/v1/post
-Body - raw - json
+POST /api/v1/posts HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+Authorization: Basic ZmlyZTpmaXJl
+Cache-Control: no-cache
+Postman-Token: 2707c50c-d3ad-390c-3b77-cf9a040e7b8e
+
 {
-  "Creator": "57bc8d88bf16d3042ee533c4",
+
      "Shift":15719749980000,
-     "Station": "57bc8d29d7caaf702605c290",
      "IsRegular": true,
      "RequestType": "off",
      "Platoon": "A"
-}
-
-
-RESPONSE
-
-{
-  "__v": 0,
-  "updatedAt": "2016-08-23T18:01:14.252Z",
-  "createdAt": "2016-08-23T18:01:14.252Z",
-  "Creator": "57bc8d88bf16d3042ee533c4",
-  "Shift": "2468-02-20T13:13:00.000Z",
-  "Station": "57bc8d29d7caaf702605c290",
-  "IsRegular": true,
-  "RequestType": "off",
-  "Platoon": "A",
-  "_id": "57bc8f677cb2ceec26b382ab"
 }

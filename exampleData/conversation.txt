@@ -1,22 +1,11 @@
-POSTMAN
-POST - http://localhost:3000/api/v1/conversation
-Body - raw - json
+POST /api/v1/conversations HTTP/1.1
+Host: localhost:3000
+Content-Type: application/json
+Authorization: Basic ZmlyZTpmaXJl
+Cache-Control: no-cache
+Postman-Token: ee91ec50-4025-65cd-8c23-95db6b8475eb
+
 {
-  "Creator": "57bc8d88bf16d3042ee533c4",
   "Recipient":  "57bc8d88bf16d3042ee533c4",
   "Post": "57bc8f677cb2ceec26b382ab"
-}
-
-
-RESPONSE
-
-{
-  "__v": 0,
-  "updatedAt": "2016-08-23T18:05:43.005Z",
-  "createdAt": "2016-08-23T18:05:43.005Z",
-  "Creator": "57bc8d88bf16d3042ee533c4",
-  "Recipient": "57bc8d88bf16d3042ee533c4",
-  "Post": "57bc8f677cb2ceec26b382ab",
-  "_id": "57bc9077ede3bdd423c3c3d0",
-  "MessageIds": []
 }

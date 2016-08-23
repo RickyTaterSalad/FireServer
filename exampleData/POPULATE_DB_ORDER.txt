@@ -1,6 +1,6 @@
-create station
 create department
-create user
+create station
+add_station_to_dept
 create post
 create conversation
 create message

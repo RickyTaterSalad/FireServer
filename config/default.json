@@ -11,5 +11,12 @@
         "C"
       ]
     }
+  },
+  "auth":{
+    "google":{
+      "clientId": "358684607680-b6pcj5dco0dbb8rngsbu4phtsb68n40q.apps.googleusercontent.com",
+      "clientSecret": "wgHVkT1W68hKaU-ct9O77BgO",
+      "callbackURL": "http://richardr.esri.com:3000/auth/google/callback"
+    }
   }
 }

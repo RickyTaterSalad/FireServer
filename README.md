@@ -16,6 +16,7 @@
 ..* posts
 ..* departments
 4. use postman to test API https://www.getpostman.com/
+5. for postman use basic authorization - any username and password will work. use same username across requests
 5. exampleData/POPULATE_DB_ORDER.txt for order of adding items to DB
 6. exampleData/* has example for adding each item. IDs will need to be altered to match your DB items
 
