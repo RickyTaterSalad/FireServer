@@ -31,8 +31,6 @@
 
 #Create mongo user
 
-create mongo user from mongo command line
--------------
-use fire
-db.createUser({user:'fire',pwd:'fire',roles:['readWrite','dbAdmin']});
-------------
+1. run mongo from command line
+2. use fire
+3. db.createUser({user:'fire',pwd:'fire',roles:['readWrite','dbAdmin']});
