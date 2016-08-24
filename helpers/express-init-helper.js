@@ -36,10 +36,6 @@ var initialize = function () {
         });
     });
 
-    //web sockets
-    require('express-ws')(app);
-
-
     return app;
 
 };
