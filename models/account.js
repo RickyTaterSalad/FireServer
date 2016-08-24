@@ -52,6 +52,24 @@ var AccountSchema = new mongoose.Schema({
     }
 
 }, {timestamps: true});
+
+AccountSchema.set('toJSON', {
+    transform: function(doc, ret, options) {
+        return  {
+            id: ret._id,
+            firstName: ret.firstName,
+            photo: ret.photo,
+            lastName: ret.lastName,
+            platoon: ret.platoon,
+            assignedHireCode: ret.assignedHireCode,
+            department: ret.department,
+            station: ret.station,
+            conversations: ret.conversations
+        };
+    }
+});
+
+
 var Account = mongoose.model('Account', AccountSchema);
 
 

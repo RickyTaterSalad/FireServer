@@ -42,6 +42,20 @@ var StationSchema = new mongoose.Schema({
     }
 }, {timestamps: true});
 
+StationSchema.set('toJSON', {
+    transform: function (doc, ret, options) {
+        return {
+            id: ret._id,
+            stationNumber: ret.stationNumber,
+            community: ret.community,
+            street: ret.street,
+            city: ret.city,
+            state: ret.state,
+            zip: ret.zip
+        };
+    }
+});
+
 var Station = mongoose.model('Station', StationSchema);
 
 module.exports = {

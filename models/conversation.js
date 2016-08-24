@@ -20,6 +20,19 @@ var ConversationSchema = new mongoose.Schema({
         {type: mongoose.Schema.Types.ObjectId, ref: 'Message'}
     ]
 }, {timestamps: true});
+
+
+ConversationSchema.set('toJSON', {
+    transform: function (doc, ret, options) {
+        return {
+            id: ret._id,
+            creator: ret.creator,
+            recipient: ret.recipient,
+            post: ret.post,
+            messages: ret.messages
+        };
+    }
+});
 var Conversation = mongoose.model('Conversation', ConversationSchema);
 module.exports = {
     Conversation: Conversation

@@ -61,6 +61,36 @@ var PostSchema = new mongoose.Schema({
     }
 }, {timestamps: true});
 
+
+PostSchema.set('toJSON', {
+    transform: function (doc, ret, options) {
+        var obj =  {
+            id: ret._id,
+            creator: ret.creator,
+            shift: ret.shift,
+            department: ret.department,
+            station: ret.station,
+            requestType: ret.requestType,
+            platoon: ret.platoon
+        };
+        if(ret.isTrade){
+            obj.isTrade = true;
+        }
+        if(ret.isOvertime){
+            obj.isOvertime = true;
+        }
+        if(ret.isAssignedHire){
+            obj.isAssignedHire = true;
+        }
+        if(ret.isRegular){
+            obj.isRegular = true;
+        }
+        return obj;
+    }
+});
+
+
+
 var Post = mongoose.model('Post', PostSchema);
 
 module.exports = {
