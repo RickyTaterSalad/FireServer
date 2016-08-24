@@ -12,8 +12,8 @@ router.get('/', passportHelper.ensureAuthenticated, function (req, res) {
             debugHelper.defaultStation().then(function (station) {
                 console.log("station: " + JSON.stringify(station));
                 Account.findByIdAndUpdate(req.user._id, {
-                    Department: dept._id,
-                    Station: station._id
+                    department: dept._id,
+                    station: station._id
                 }, null, function (err, updateResult) {
                     err ? res.json({success: false, message: err.message}) : res.json(updateResult);
                 });

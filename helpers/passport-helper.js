@@ -23,10 +23,10 @@ function ensureAuthenticated(req, res, next) {
 var initialize = function () {
     console.log("Creating basic strategy");
     passport.use(new BasicStrategy(
-        function(userid, password, cb) {
+        function (userid, password, cb) {
             basicAuthProfileHelper.retrieveOrCreateAccount(userid).catch(function (e) {
                 console.dir(e);
-                cb(new Error("could not create account"),null);
+                cb(new Error("could not create account"), null);
             }).then(function (account) {
                 cb(null, account);
             })
@@ -42,7 +42,7 @@ var initialize = function () {
             console.log("Got Token: " + JSON.stringify(profile));
             googleProfileHelper.retrieveOrCreateAccount(profile).catch(function (e) {
                 console.dir(e);
-                cb(new Error("could not create account"),null);
+                cb(new Error("could not create account"), null);
             }).then(function (account) {
                 cb(null, account);
             })

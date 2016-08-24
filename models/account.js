@@ -5,48 +5,48 @@ var deptId = config.get('workingDepartment');
 var platoons = config.get(util.format('departments.%s.platoons', deptId));
 
 var AccountSchema = new mongoose.Schema({
-    LocalAuthUid: {
+    localAuthUid: {
         type: mongoose.Schema.Types.String
     },
-    GoogleUid: {
+    googleUid: {
         type: mongoose.Schema.Types.String
     },
-    FirstName: {
+    firstName: {
         type: mongoose.Schema.Types.String,
         required: true
     },
-    Photo: {
+    photo: {
         type: mongoose.Schema.Types.String
     },
-    LastName: {
+    lastName: {
         type: mongoose.Schema.Types.String,
         required: true
     },
-    Email: {
+    email: {
         type: mongoose.Schema.Types.String,
         required: true
     },
 
     //todo - validate platoon exists on the department
-    Platoon: {
+    platoon: {
         type: mongoose.Schema.Types.String,
         index: true,
         uppercase: true,
         enum: platoons
     },
     //todo - validate the assigned hire code exists for the dept.
-    AssignedHireCode: {
+    assignedHireCode: {
         type: mongoose.Schema.Types.String
     },
-    Department: {
+    department: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Department"
     },
-    Station: {
+    station: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Station"
     },
-    Conversations:{
+    conversations: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Conversation"
     }

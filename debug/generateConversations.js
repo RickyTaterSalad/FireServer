@@ -11,10 +11,10 @@ var Post = mongoose.model('Post');
 var createMessage = function (senderId, recipientId, conversationId, messageContent) {
     return new Promise(function (resolve, reject) {
         var msg = {
-            Content: messageContent,
-            Sender: senderId,
-            Recipient: recipientId,
-            Conversation: conversationId
+            content: messageContent,
+            sender: senderId,
+            recipient: recipientId,
+            conversation: conversationId
         };
         Message.create(msg, function (err, message) {
             if (!err) {
@@ -30,9 +30,9 @@ var createMessage = function (senderId, recipientId, conversationId, messageCont
 var createConversation = function (creatorId, recipientId, postId) {
     return new Promise(function (resolve, reject) {
         var conv = {
-            Creator: creatorId,
-            Recipient: recipientId,
-            Post: postId
+            creator: creatorId,
+            recipient: recipientId,
+            post: postId
         };
         Conversation.create(conv, function (err, conversation) {
             if (!err) {
@@ -57,7 +57,7 @@ var generateConversation = function (userId1, userId2, postId) {
                         createMessage(userId2, userId1, conversation._id, "Very Well").then(function (msg4) {
                             msgs.push(msg4);
                             Conversation.findByIdAndUpdate(conversation._id, {
-                                $addToSet: {"Messages": {$each: msgs}}
+                                $addToSet: {"messages": {$each: msgs}}
                             }, null, function (err, updateResult) {
                                 console.dir("Update Conversation messages result: " + JSON.stringify((updateResult)));
                                 resolve();
@@ -73,10 +73,10 @@ var createConversations = function () {
     return new Promise(function (resolve, reject) {
         Post.findOne({}, function (err, post) {
             if (err || !post) {
-                console.log("could not find a post to create a converation from");
+                console.log("could not find a post to create a conversation from");
                 reject();
             }
-            var user1 = post.Creator;
+            var user1 = post.creator;
             var user2 = null;
             var user1IdString = user1.toString();
             Account.find({}, function (err, accounts) {

@@ -3,7 +3,7 @@ var Promise = require("bluebird");
 var retrieveOrCreateAccount = function (username) {
     return new Promise(function (resolve, reject) {
         var params = {
-            "LocalAuthUid": username
+            "localAuthUid": username
         };
         Account.findOne(params, function (err, user) {
             if (user == null) {
@@ -29,10 +29,10 @@ var createAccount = function (username) {
     return new Promise(function (resolve, reject) {
         //create
         var params = {
-            LocalAuthUid: username,
-            FirstName: username,
-            LastName: username,
-            Email: "test@gmail.com"
+            localAuthUid: username,
+            firstName: username,
+            lastName: username,
+            email: "test@gmail.com"
         };
         Account.create(params, function (err, user) {
                 if (user != null) {

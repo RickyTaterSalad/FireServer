@@ -6,18 +6,18 @@ Cache-Control: no-cache
 Postman-Token: 1d6eaf59-970a-749b-237d-857eab729bc9
 
 {
-    "Name": "LAFD",
-    "Platoons": [
+    "name": "LAFD",
+    "platoons": [
         "A",
         "B",
         "C"
     ],
-    "Schedule": {
-        "Name": "Schedule Name",
-        "NumberOfPlatoons": 3,
-        "PlatoonSchedule": "A,C,A,B,A,B,C,B,C",
-        "ShiftLengthInHours": 24,
-        "ShiftStartTime": "0800"
+    "schedule": {
+        "name": "Schedule Name",
+        "numberOfPlatoons": 3,
+        "platoonSchedule": "A,C,A,B,A,B,C,B,C",
+        "shiftLengthInHours": 24,
+        "shiftStartTime": "0800"
     },
-    "Stations": []
+    "stations": []
 }

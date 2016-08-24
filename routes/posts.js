@@ -30,18 +30,18 @@ router.get('/:id', function (req, res) {
 
 router.post('/', function (req, res) {
     if(req.user) {
-        if (!req.user.Department) {
+        if (!req.user.department) {
             return res.json({success: false, message: "user has no department"});
 
         }
-        if (!req.user.Station) {
+        if (!req.user.station) {
             return res.json({success: false, message: "user has no station"});
 
         }
         var post = JSON.parse(JSON.stringify(req.body));
-        post.Creator = req.user._id;
-        post.Station = req.user.Station;
-        post.Department = req.user.Department;
+        post.creator = req.user._id;
+        post.station = req.user.Station;
+        post.department = req.user.Department;
         //debug
         console.log("creating conversation: " + JSON.stringify(post));
         Post.create(post, function (err, post) {

@@ -1,22 +1,22 @@
 var mongoose = require("mongoose");
 
 var DepartmentSchema = new mongoose.Schema({
-    Name: {
+    name: {
         type: mongoose.Schema.Types.String,
         required: true
     },
-    Platoons: [{
+    platoons: [{
         type: mongoose.Schema.Types.String,
         uppercase: true
     }],
-    Schedule: {
+    schedule: {
         "Name": {type: mongoose.Schema.Types.String},
         "NumberOfPlatoons": {type: mongoose.Schema.Types.Number},
         "PlatoonSchedule": {type: mongoose.Schema.Types.String},
         "ShiftLengthInHours": {type: mongoose.Schema.Types.Number},
         "ShiftStartTime": {type: mongoose.Schema.Types.String}
     },
-    Stations: [
+    stations: [
         {type: mongoose.Schema.Types.ObjectId, ref: 'Station'}
     ]
 });

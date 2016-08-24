@@ -1,9 +1,6 @@
 var mongoose = require("mongoose");
 var passport = require("passport");
 
-//bring in the auth schema
-var Account = mongoose.model('Account');
-
 var initialize = function (app) {
     app.use(require('express-session')({
         secret: 'rrmmExperience',
