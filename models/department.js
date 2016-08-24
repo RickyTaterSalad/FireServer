@@ -1,5 +1,13 @@
 var mongoose = require("mongoose");
 
+var ScheduleSchema = new mongoose.Schema({
+    "name": {type: mongoose.Schema.Types.String},
+    "numberOfPlatoons": {type: mongoose.Schema.Types.Number},
+    "platoonSchedule": {type: mongoose.Schema.Types.String},
+    "shiftLengthInHours": {type: mongoose.Schema.Types.Number},
+    "shiftStartTime": {type: mongoose.Schema.Types.String}
+});
+
 var DepartmentSchema = new mongoose.Schema({
     name: {
         type: mongoose.Schema.Types.String,
@@ -9,13 +17,7 @@ var DepartmentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         uppercase: true
     }],
-    schedule: {
-        "name": {type: mongoose.Schema.Types.String},
-        "numberOfPlatoons": {type: mongoose.Schema.Types.Number},
-        "platoonSchedule": {type: mongoose.Schema.Types.String},
-        "shiftLengthInHours": {type: mongoose.Schema.Types.Number},
-        "shiftStartTime": {type: mongoose.Schema.Types.String}
-    },
+    schedule: ScheduleSchema,
     stations: [
         {type: mongoose.Schema.Types.ObjectId, ref: 'Station'}
     ]
