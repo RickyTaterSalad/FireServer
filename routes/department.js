@@ -3,6 +3,8 @@ var mongoose = require('mongoose');
 var Department = mongoose.model('Department');
 
 router.get('/', function (req, res) {
+    req.session.isLoggedIn = true;
+    console.dir(req.session);
     Department.find(function (err, departments) {
         if (err) {
             res.send(err);
@@ -13,6 +15,7 @@ router.get('/', function (req, res) {
 });
 
 router.get('/:departmentId', function (req, res) {
+
     Department.findById(req.params.departmentId, function (err, department) {
         if (err) {
             res.send(err);
