@@ -1,6 +1,7 @@
 var router = require('express').Router();
 var mongoose = require('mongoose');
 var Conversation = mongoose.model('Conversation');
+const RequestHelperMethods = require("../util/request-helper-methods");
 
 //list all - todo filter by user id in middleware
 router.get('/', function (req, res) {
@@ -18,7 +19,7 @@ router.get('/', function (req, res) {
 
     }
     else {
-        res.json({success: false, message: "Invalid request"});
+        res.json(RequestHelperMethods.invalidRequestJson);
     }
 });
 
@@ -37,7 +38,7 @@ router.post('/', function (req, res) {
         });
     }
     else {
-        res.json({success: false, message: "Invalid request"});
+        res.json(RequestHelperMethods.invalidRequestJson);
     }
 });
 module.exports = router;

@@ -1,6 +1,7 @@
 var router = require('express').Router();
 var mongoose = require('mongoose');
 var Post = mongoose.model('Post');
+const RequestHelperMethods = require("../util/request-helper-methods");
 
 router.get('/', function (req, res) {
     Post.find(function (err, post) {
@@ -13,23 +14,24 @@ router.get('/', function (req, res) {
 });
 
 router.get('/:id', function (req, res) {
-    if (req.params.id) {
+    if (RequestHelperMethods.validObjectId(req.params.id)) {
         Post.findById(req.params.id, function (err, post) {
             if (err) {
                 res.send(err);
             } else {
+                console.log(JSON.stringify(post));
                 res.json(post);
             }
         });
     }
     else {
-        res.json({success: false, message: "No Id Passed"});
+        res.json(RequestHelperMethods.invalidRequestJson);
     }
 });
 
 
 router.post('/', function (req, res) {
-    if(req.user) {
+    if (req.user) {
         if (!req.user.department) {
             return res.json({success: false, message: "user has no department"});
 
@@ -52,9 +54,15 @@ router.post('/', function (req, res) {
             }
         });
     }
-    else{
-        res.json({success: false, message: "Invalid request"});
+    else {
+        res.json(RequestHelperMethods.invalidRequestJson);
     }
+});
+
+router.ws('/echo', function (ws, req) {
+    ws.on('message', function (msg) {
+        ws.send(msg);
+    });
 });
 
 module.exports = router;

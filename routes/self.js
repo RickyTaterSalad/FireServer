@@ -8,7 +8,7 @@ router.get('/', passportHelper.ensureAuthenticated, function (req, res) {
         res.json(req.user);
     }
     else {
-        res.json({success: false, message: "account does not exist"});
+        res.json({});
     }
 });
 
