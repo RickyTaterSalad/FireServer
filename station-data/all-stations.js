@@ -47,8 +47,8 @@ module.exports = {
             "latitude": 34.277304,
             "longitude": 118.559708,
             "stationId": "8"
-        },
-        {
+        }
+        , {
             "address": "430 East 7th Street Los Angeles",
             "latitude": 34.041134,
             "longitude": 118.247889,
@@ -636,5 +636,6 @@ module.exports = {
             "longitude": 118.494962,
             "stationId": "114"
         }
+
     ]
 }

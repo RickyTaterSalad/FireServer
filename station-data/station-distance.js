@@ -1,4 +1,4 @@
-var stations = require("./allStations").stations
+var stations = require("./all-stations").stations
 
 var OUTFILE = "C:/temp/distances.json";
 

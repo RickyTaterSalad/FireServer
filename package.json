@@ -23,6 +23,7 @@
     "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
-    "geolib": "^2.0.21"
+    "geolib": "^2.0.21",
+    "google-distance": "^1.0.1"
   }
 }
