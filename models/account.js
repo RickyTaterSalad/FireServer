@@ -35,7 +35,7 @@ var AccountSchema = new mongoose.Schema({
         enum: platoons
     },
     //todo - validate the assigned hire code exists for the dept.
-    AssignedHireCode: {
+    AssignHireCode: {
         type: mongoose.Schema.Types.String
     },
     Department: {
