@@ -4,4 +4,4 @@ require("./message");
 require("./post");
 require("./station");
 require("./account");
-require("./assign_hire_code");
+require("./assign-hire-code");
