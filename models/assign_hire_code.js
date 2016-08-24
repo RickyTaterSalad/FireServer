@@ -1,16 +1,27 @@
 var mongoose = require("mongoose");
 
+var ShiftSchema = new mongoose.Schema({
+    start : {
+        type : mongoose.Schema.Types.Date,
+        required : true
+    },
+    end : {
+        type : mongoose.Schema.Types.Date,
+        required : true
+    }
+});
+
 var AssignHireCodeSchema = new mongoose.Schema({
     ah_code : {
         type : mongoose.Schema.Types.String,
-        required = true;
+        required: true
     },
     department: {
         type: mongoose.Schema.Types.ObjectId,
         "ref": "Department",
         required: true
     },
-    shifts : [Shift]
+    shifts : [ShiftSchema]
 });
 
 AssignHireCodeSchema.set('toJSON', {
@@ -20,17 +31,6 @@ AssignHireCodeSchema.set('toJSON', {
             department : ret.department,
             shifts : ret.shifts
         };
-    }
-});
-
-var Shift = new mongoose.Schema({
-    start : {
-        type : mongoose.Schema.Types.Date,
-        required = true;
-    },
-    end : {
-        type : mongoose.Schema.Types.Date,
-        required = true;
     }
 });
 
