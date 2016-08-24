@@ -21,6 +21,12 @@
 6. exampleData/* has example for adding each item. IDs will need to be altered to match your DB items
 
 
+#Populate database
+
+1. debug/populateDb.js will populate the database with - department, station,two users, 7 posts
+2. username for the posts is fire
+3. make sure mongo server is running before calling the script
+
 # Structure
 
 1. models - schema for mongo

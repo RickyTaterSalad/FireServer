@@ -42,6 +42,7 @@ var initialize = function () {
     //bring in the schema
     require('../models/all_schema');
     initialized = true;
+    console.log("Initialized mongoose");
 };
 
 
