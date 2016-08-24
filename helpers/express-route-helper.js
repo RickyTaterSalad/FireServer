@@ -1,7 +1,11 @@
 var passportHelper = require("./passport-helper");
 var passport = require('passport');
+var favicon = require('serve-favicon');
 var initialize = function (app) {
 //include auth
+
+    app.use(favicon(__dirname + '/../public/favicon.ico'));
+
     app.use('/auth', require('../routes/auth'));
     //bring in api REST
     app.use('/api/v1/',passport.authenticate('basic', { session: false }), passportHelper.ensureAuthenticated, require("../routes/index"));
