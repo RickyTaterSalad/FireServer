@@ -10,12 +10,8 @@ var initialize = function () {
 //setup mongoDB connection
     var dbURI = config.get('db.uri');
 
-    var googleOauthConfig = config.get('auth.google');
-//setup mongoDB connection
-    var dbURI = config.get('db.uri');
-
 // Create the database connection
-    mongoose.connect(dbURI);
+    mongoose.connect(process.env.MONGODB_URI || dbURI);
 // CONNECTION EVENTS
 // When successfully connected
     mongoose.connection.on('connected', function () {
