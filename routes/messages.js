@@ -1,6 +1,7 @@
 var router = require('express').Router();
 var mongoose = require('mongoose');
 var Message = mongoose.model('Message');
+const RequestHelperMethods = require("../util/request-helper-methods");
 
 router.get('/received', function (req, res) {
     if (req.user) {
@@ -13,7 +14,7 @@ router.get('/received', function (req, res) {
         });
     }
     else {
-        res.json({success: false, message: "Invalid request"});
+        res.json(RequestHelperMethods.invalidRequestJson);
     }
 });
 router.get('/sent', function (req, res) {
@@ -31,7 +32,7 @@ router.get('/sent', function (req, res) {
         });
     }
     else {
-        res.json({success: false, message: "Invalid request"});
+        res.json(RequestHelperMethods.invalidRequestJson);
     }
 });
 router.get('/:id', function (req, res) {
@@ -48,7 +49,7 @@ router.get('/:id', function (req, res) {
         });
     }
     else {
-        res.json({success: false, message: "Invalid request"});
+        res.json(RequestHelperMethods.invalidRequestJson);
     }
 });
 router.post('/', function (req, res) {
@@ -66,7 +67,7 @@ router.post('/', function (req, res) {
         });
     }
     else{
-        res.json({success: false, message: "Invalid request"});
+        res.json(RequestHelperMethods.invalidRequestJson);
     }
 });
 

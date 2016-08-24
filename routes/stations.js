@@ -1,7 +1,7 @@
 var router = require('express').Router();
 var mongoose = require('mongoose');
 var Station = mongoose.model('Station');
-
+const RequestHelperMethods = require("../util/request-helper-methods");
 router.get('/', function (req, res) {
     Station.find(function (err, department) {
         if (err) {
@@ -13,7 +13,7 @@ router.get('/', function (req, res) {
 });
 
 router.get('/:id', function (req, res) {
-    if (req.params.id) {
+    if (req.params && RequestHelperMethods.validObjectId((req.params.id))) {
         Station.findById(req.params.id, function (err, station) {
             if (err) {
                 res.send(err);
@@ -23,7 +23,7 @@ router.get('/:id', function (req, res) {
         });
     }
     else {
-        res.json({success: false, message: "No Id Passed"});
+        res.json(RequestHelperMethods.invalidRequestJson);
     }
 });
 
@@ -40,7 +40,7 @@ router.post('/', function (req, res) {
         });
     }
     else{
-        res.json({success: false, message: "Invalid request"});
+        res.json(RequestHelperMethods.invalidRequestJson);
     }
 });
 
