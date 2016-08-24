@@ -13,30 +13,30 @@ var states = ['AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC',
 
 
 var StationSchema = new mongoose.Schema({
-    StationNumber: {
+    stationNumber: {
         type: mongoose.Schema.Types.String,
         required: true
     },
-    Community: {
+    community: {
         type: mongoose.Schema.Types.String
     },
     //todo - validate platoon exists on the department
-    Street: {
+    street: {
         type: mongoose.Schema.Types.String,
         required: true
     },
     //todo - validate the assigned hire code exists for the dept.
-    City: {
+    city: {
         type: mongoose.Schema.Types.String,
         required: true
     },
-    State: {
+    state: {
         type: mongoose.Schema.Types.String,
-        uppercase:true,
+        uppercase: true,
         required: true,
         enum: states
     },
-    Zip: {
+    zip: {
         type: mongoose.Schema.Types.Number,
         required: true
     }

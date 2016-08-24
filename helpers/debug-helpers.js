@@ -5,8 +5,8 @@ var Station = require('mongoose').model('Station');
 var defaultStation = function () {
     return new Promise(function (resolve, reject) {
         defaultDepartment().then(function (department) {
-            if (department && department.Stations && department.Stations.length > 0) {
-                resolve(department.Stations[0]);
+            if (department && department.stations && department.stations.length > 0) {
+                resolve(department.stations[0]);
             }
             resolve(null);
         })

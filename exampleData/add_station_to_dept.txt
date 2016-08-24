@@ -6,11 +6,11 @@ Cache-Control: no-cache
 Postman-Token: 58b58ed8-f4d2-353a-1a78-1158c330544f
 
 {
-    "StationNumber": "1",
-     "Community": "Redlands",
-     "Street": "380 New York",
-     "City": "Redlands",
-    "State": "CA",
-     "Zip": 92223
+    "stationNumber": "1",
+     "community": "Redlands",
+     "street": "380 New York",
+     "city": "Redlands",
+    "state": "CA",
+     "zip": 92223
 
 }

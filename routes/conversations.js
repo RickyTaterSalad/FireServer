@@ -7,15 +7,15 @@ router.get('/', function (req, res) {
     if (req.user != null) {
         console.log("user logged in: " + req.user._id);
         Conversation.find({
-                $or: [{'Creator': req.user._id}, {'Recipient': req.user._id}]
-            },
-            function (err, conversations) {
-                if (err) {
-                    res.send(err);
-                } else {
-                    res.json(conversations);
-                }
-            });
+            $or: [{'creator': req.user._id}, {'recipient': req.user._id}]
+        }).populate('Messages').exec(function (err, conversations) {
+            if (err) {
+                res.send(err);
+            } else {
+                res.json(conversations);
+            }
+        });
+
     }
     else {
         res.json({success: false, message: "Invalid request"});
@@ -23,9 +23,9 @@ router.get('/', function (req, res) {
 });
 
 router.post('/', function (req, res) {
-    if(req.user) {
+    if (req.user) {
         var conversation = JSON.parse(JSON.stringify(req.body));
-        conversation.Creator = req.user._id;
+        conversation.creator = req.user._id;
         //debug
         console.log("creating conversation: " + JSON.stringify(conversation));
         Conversation.create(conversation, function (err, conversation) {
@@ -36,7 +36,7 @@ router.post('/', function (req, res) {
             }
         });
     }
-    else{
+    else {
         res.json({success: false, message: "Invalid request"});
     }
 });

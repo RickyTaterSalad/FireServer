@@ -7,12 +7,12 @@ var deptId = config.get('workingDepartment');
 var platoons = config.get(util.format('departments.%s.platoons', deptId));
 
 var PostSchema = new mongoose.Schema({
-    Creator: {
+    creator: {
         type: mongoose.Schema.Types.ObjectId,
         "ref": "Account",
         required: true
     },
-    Shift: {
+    shift: {
         type: mongoose.Schema.Types.Date,
         required: true,
         validate: {
@@ -22,37 +22,37 @@ var PostSchema = new mongoose.Schema({
             message: 'shift cannot be in the past!'
         }
     },
-    Department: {
+    department: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Department",
         index: true,
         required: true
     },
-    Station: {
+    station: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Station",
         index: true,
         required: true
     },
-    IsTrade: {
+    isTrade: {
         type: mongoose.Schema.Types.Boolean
     },
-    IsOvertime: {
+    isOvertime: {
         type: mongoose.Schema.Types.Boolean
     },
-    IsAssignedHire: {
+    isAssignedHire: {
         type: mongoose.Schema.Types.Boolean
     },
-    IsRegular: {
+    isRegular: {
         type: mongoose.Schema.Types.Boolean
     },
-    RequestType: {
+    requestType: {
         type: mongoose.Schema.Types.String,
         lowercase: true,
         enum: ["off", "on"],
         required: true
     },
-    Platoon: {
+    platoon: {
         type: mongoose.Schema.Types.String,
         index: true,
         uppercase: true,

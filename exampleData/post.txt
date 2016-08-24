@@ -7,8 +7,8 @@ Postman-Token: 2707c50c-d3ad-390c-3b77-cf9a040e7b8e
 
 {
 
-     "Shift":15719749980000,
-     "IsRegular": true,
-     "RequestType": "off",
-     "Platoon": "A"
+     "shift":15719749980000,
+     "isRegular": true,
+     "requestType": "off",
+     "platoon": "A"
 }

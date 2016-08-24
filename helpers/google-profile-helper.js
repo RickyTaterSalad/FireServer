@@ -27,7 +27,7 @@ var emailFromProfile = function (profile) {
 var retrieveOrCreateAccount = function (profile) {
     return new Promise(function (resolve, reject) {
         var params = {
-            "GoogleUid": profile.id
+            "googleUid": profile.id
         };
         Account.findOne(params, function (err, user) {
             if (user == null) {
@@ -53,11 +53,11 @@ var createAccount = function (profile) {
     return new Promise(function (resolve, reject) {
         //create
         var params = {
-            GoogleUid: profile.id,
-            FirstName: profile.name.givenName,
-            LastName: profile.name.familyName,
-            Email: emailFromProfile(profile),
-            Photo: photoFromProfile(profile)
+            googleUid: profile.id,
+            firstName: profile.name.givenName,
+            lastName: profile.name.familyName,
+            email: emailFromProfile(profile),
+            photo: photoFromProfile(profile)
         };
 
         Account.create(params, function (err, user) {

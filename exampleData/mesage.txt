@@ -6,7 +6,7 @@ Cache-Control: no-cache
 Postman-Token: de24edc5-39b9-0933-90cb-c155d4fd546f
 
 {
-   "Recipient":  "57bc8d88bf16d3042ee533c4",
-   "Content": "You a Hoe",
-   "Conversation": "57bcd53894a718dc3759fc2e"
+   "recipient":  "57bc8d88bf16d3042ee533c4",
+   "content": "You a Hoe",
+   "conversation": "57bcd53894a718dc3759fc2e"
 }

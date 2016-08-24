@@ -6,6 +6,6 @@ Cache-Control: no-cache
 Postman-Token: ee91ec50-4025-65cd-8c23-95db6b8475eb
 
 {
-  "Recipient":  "57bc8d88bf16d3042ee533c4",
-  "Post": "57bc8f677cb2ceec26b382ab"
+  "recipient":  "57bc8d88bf16d3042ee533c4",
+  "post": "57bc8f677cb2ceec26b382ab"
 }

@@ -1,22 +1,22 @@
 var mongoose = require("mongoose");
 
 var MessageSchema = new mongoose.Schema({
-    Conversation: {
+    conversation: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Conversation',
         required: true
     },
-    Creator: {
+    sender: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Account',
         required: true
     },
-    Recipient: {
+    recipient: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Account',
         required: true
     },
-    Content: {
+    content: {
         type: mongoose.Schema.Types.String,
         required: true
     }
