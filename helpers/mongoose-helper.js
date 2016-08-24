@@ -36,7 +36,7 @@ var initialize = function () {
         });
     });
     //bring in the schema
-    require('../models/all_schema');
+    require('../models/all-schema');
     initialized = true;
     console.log("Initialized mongoose");
 };
