@@ -1,7 +1,8 @@
-var http = require('http');
 var Promise = require("bluebird");
 var mongoose = require("mongoose");
+var async = require('async');
 
+var conversationGenerator = require("./generateConversations");
 
 var mongooseHelper = require("../helpers/mongoose-helper").initialize();
 var Account = mongoose.model('Account');
@@ -30,6 +31,7 @@ var createDepartment = function () {
     };
     return new Promise(function (resolve, reject) {
         Department.create(dept, function (err, department) {
+            console.log("created department");
             err ? reject(err) : resolve(department);
         });
     });
@@ -94,22 +96,23 @@ var createStationAndDepartment = function () {
             })
         })
     });
-}
-var createFireUser = function (departmentId, stationId, username) {
+};
+var createFireUsers = function (departmentId, stationId, username) {
     return new Promise(function (resolve, reject) {
         var account = {
             FirstName: username,
             LastName: username,
             Department: departmentId,
             Station: stationId,
-            Email: "fire@fire.com"
-        }
+            Email: "fire@fire.com",
+            LocalAuthUid: username
+        };
         Account.create(account, function (err, account) {
             if (account) {
                 console.log("created account: " + username);
             }
             if (username == "fire") {
-                createFireUser(departmentId, stationId, "fireuser2").catch(function (err) {
+                createFireUsers(departmentId, stationId, "fireuser2").catch(function (err) {
                     console.log("could not create user: " + username);
                     reject();
                 }).then(function (account) {
@@ -122,15 +125,24 @@ var createFireUser = function (departmentId, stationId, username) {
 
         });
     });
-}
+};
 
 var createPosts = function (departmentId, stationId, userId, type) {
-    createPost(departmentId, stationId, userId, 15719749980000, "off");
-    createPost(departmentId, stationId, userId, 15719249980000, "on");
-    createPost(departmentId, stationId, userId, 15219749980000, "off");
-    createPost(departmentId, stationId, userId, 15719749999900, "off");
-    createPost(departmentId, stationId, userId, 15719729999900, "off");
-    createPost(departmentId, stationId, userId, 15739749999900, "on");
+    return new Promise(function (resolve, reject) {
+        createPost(departmentId, stationId, userId, 15719749980000, "off").then(function () {
+            createPost(departmentId, stationId, userId, 15719249980000, "on").then(function () {
+                createPost(departmentId, stationId, userId, 15219749980000, "off").then(function () {
+                    createPost(departmentId, stationId, userId, 15719749999900, "off").then(function () {
+                        createPost(departmentId, stationId, userId, 15719729999900, "off").then(function () {
+                            createPost(departmentId, stationId, userId, 15739749999900, "on").then(function (post) {
+                                resolve(post);
+                            })
+                        })
+                    })
+                })
+            })
+        })
+    });
 };
 
 var createPost = function (departmentId, stationId, userId, shift, type) {
@@ -143,7 +155,7 @@ var createPost = function (departmentId, stationId, userId, shift, type) {
         "IsRegular": true,
         "RequestType": type,
         "Platoon": "A"
-    }
+    };
     console.log("POST To Create: " + JSON.stringify(post));
     return new Promise(function (resolve, reject) {
         Post.create(post, function (err, post) {
@@ -156,20 +168,45 @@ var createPost = function (departmentId, stationId, userId, shift, type) {
     });
 };
 
+var getFireUser = function () {
+    return new Promise(function (resolve, reject) {
+        Account.findOne({"FirstName": "fire"}, function (err, fireUser) {
+            if (fireUser) {
+                console.log("found fire user: " + JSON.stringify(fireUser));
+            }
+            err ? reject(err) : resolve(fireUser);
+
+        });
+    });
+};
+
 var run = function () {
     createStationAndDepartment().catch(function (err) {
         console.log("creating station and dept failed");
     }).then(function (stationAndDeptObj) {
-        createFireUser(stationAndDeptObj.departmentId, stationAndDeptObj.stationId, "fire").catch(function (err) {
+        createFireUsers(stationAndDeptObj.departmentId, stationAndDeptObj.stationId, "fire").catch(function (err) {
             console.log("error creating accounts");
         }).then(function (account) {
-            createPosts(stationAndDeptObj.departmentId, stationAndDeptObj.stationId, account._id);
-            console.log("create accounts");
-        })
-    })
+            getFireUser().catch(function (err) {
+                console.log("could not find fire user");
+                process.exit();
+            }).then(function (fireUser) {
+                createPosts(stationAndDeptObj.departmentId, stationAndDeptObj.stationId, fireUser._id).then(function () {
+                    console.log("done");
+                    conversationGenerator.createConversations().catch(function (err) {
+                        console.log("could not generate conversations");
+                        process.exit();
+                    }).then(function () {
+                        console.log("complete");
+                        process.exit();
 
+                    });
+                });
+            });
+        });
+
+    });
 };
-
 module.exports = {
     run: run
 };

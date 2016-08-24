@@ -45,6 +45,10 @@ var AccountSchema = new mongoose.Schema({
     Station: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Station"
+    },
+    Conversations:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Conversation"
     }
 
 }, {timestamps: true});

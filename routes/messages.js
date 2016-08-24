@@ -50,7 +50,7 @@ router.get('/:id', function (req, res) {
 router.post('/', function (req, res) {
     if (req.user) {
         var message = JSON.parse(JSON.stringify(req.body));
-        message.Creator = req.user._id;
+        message.Sender = req.user._id;
         //debug
         console.log("creating messsage: " + JSON.stringify(message));
         Message.create(message, function (err, message) {

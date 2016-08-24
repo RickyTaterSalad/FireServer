@@ -3,10 +3,22 @@ var mongoose = require('mongoose');
 var Department = mongoose.model('Department');
 
 router.get('/', function (req, res) {
-    Department.find(function (err, department) {
+    Department.find(function (err, departments) {
         if (err) {
             res.send(err);
         } else {
+            res.json(departments);
+        }
+    });
+});
+
+router.get('/:departmentId', function (req, res) {
+    Department.findById(req.params.departmentId, function (err, department) {
+        if (err) {
+            res.send(err);
+        } else {
+          //  console.log("DEPT: " + JSON.stringify((department)));
+          //  console.log(department.Stations[0].getTimestamp());
             res.json(department);
         }
     });

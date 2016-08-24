@@ -16,7 +16,7 @@ var ConversationSchema = new mongoose.Schema({
         ref: 'Post',
         required: true
     },
-    MessageIds: [
+    Messages: [
         {type: mongoose.Schema.Types.ObjectId, ref: 'Message'}
     ]
 }, {timestamps: true});

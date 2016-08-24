@@ -6,7 +6,7 @@ var MessageSchema = new mongoose.Schema({
         ref: 'Conversation',
         required: true
     },
-    Creator: {
+    Sender: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Account',
         required: true
