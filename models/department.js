@@ -8,6 +8,18 @@ var ScheduleSchema = new mongoose.Schema({
     shiftStartTime: {type: mongoose.Schema.Types.String}
 });
 
+ScheduleSchema.set('toJSON', {
+    transform: function (doc, ret, options) {
+        return {
+            name: ret.name,
+            numberOfPlatoons: ret.numberOfPlatoons,
+            platoonSchedule: ret.platoonSchedule,
+            shiftLengthInHours: ret.shiftLengthInHours,
+            shiftStartTime: ret.shiftStartTime
+        }
+    }
+});
+
 var DepartmentSchema = new mongoose.Schema({
     name: {
         type: mongoose.Schema.Types.String,
@@ -28,18 +40,9 @@ DepartmentSchema.set('toJSON', {
             id: ret._id,
             name: ret.name,
             platoons: ret.platoons,
-            stations: ret.stations
+            stations: ret.stations,
+            schedule: ret.schedule
         };
-        if (ret.schedule) {
-            obj.schedule = {
-                name: ret.schedule.name,
-                numberOfPlatoons: ret.schedule.numberOfPlatoons,
-                platoonSchedule: ret.schedule.platoonSchedule,
-                shiftLengthInHours: ret.schedule.shiftLengthInHours,
-                shiftStartTime: ret.schedule.shiftStartTime
-            }
-        }
-
         return obj;
 
     }
