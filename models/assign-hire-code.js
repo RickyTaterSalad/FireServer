@@ -5,9 +5,22 @@ var ShiftSchema = new mongoose.Schema({
         type : mongoose.Schema.Types.Date,
         required : true
     },
-    end : {
-        type : mongoose.Schema.Types.Date,
+    hours : {
+        type : mongoose.Schema.Types.Number,
         required : true
+    },
+    platoon : {
+        type : mongoose.Schema.Types.String,
+        required : true
+    }
+});
+
+ShiftSchema.set('toJSON', {
+    transform : function(doc, ret, options){
+        return {
+            start : ret.start,
+            hours : ret.hours
+        };
     }
 });
 
