@@ -2,9 +2,11 @@ var mongoose = require("mongoose");
 var async = require('async');
 
 var conversationGenerator = require("./generateConversations");
+var driveTimeGenerator = require("./populateDriveTimes");
 
 //init mongoose
 require("../../helpers/mongoose-helper").initialize();
+
 var Account = mongoose.model('Account');
 var Department = mongoose.model('Department');
 var Station = mongoose.model('Station');
@@ -97,11 +99,9 @@ var createFireUser = function (departmentId, stationId, username, callback) {
 
 var createPosts = function (departmentId, stationId, userId, callback) {
     async.series([
-        function (cb1) {
-            console.log("first create post");
-            createPost(departmentId, stationId, userId, 15719749980000, "off", cb1);
+        function (callback) {
+            createPost(departmentId, stationId, userId, 15719749980000, "off", callback);
         },
-
         function (callback) {
             createPost(departmentId, stationId, userId, 15719749980000, "off", callback)
         },
@@ -142,7 +142,7 @@ var createPost = function (departmentId, stationId, userId, shift, type, callbac
         "requestType": type,
         "platoon": "A"
     };
-    console.log("POST To Create: " + JSON.stringify(post));
+    console.log("creating post");
     Post.create(post, callback);
 };
 
@@ -175,17 +175,13 @@ var run = function () {
         },
         getFireUser,
         function (fireUser, callback) {
-            console.log("create posts to id " + fireUser._id);
+            console.log("create posts");
             createPosts(stationAndDeptObj.departmentId, stationAndDeptObj.stationId, fireUser._id, callback)
         },
         conversationGenerator.createConversations,
-        function (err, result) {
-            if (err) {
-                console.log("there was an error populating the database");
-            }
-            else {
-                console.log("complete.");
-            }
+        driveTimeGenerator.createDriveTimes,
+        function (callback){
+            callback();
             process.exit();
         }]);
 };

@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 var Promise = require("bluebird");
 var async = require('async');
 
-var mongooseHelper = require("../helpers/mongoose-helper").initialize();
+var mongooseHelper = require("../../helpers/mongoose-helper").initialize();
 var Account = mongoose.model('Account');
 var Conversation = mongoose.model('Conversation');
 var Message = mongoose.model('Message');
@@ -18,7 +18,7 @@ var createMessage = function (senderId, recipientId, conversationId, messageCont
         };
         Message.create(msg, function (err, message) {
             if (!err) {
-                console.log("created message: " + JSON.stringify(message));
+                console.log("created message");
             }
 
             err ? reject(err) : resolve(message);
@@ -36,7 +36,7 @@ var createConversation = function (creatorId, recipientId, postId) {
         };
         Conversation.create(conv, function (err, conversation) {
             if (!err) {
-                console.log("created conversation: " + JSON.stringify(conversation));
+                console.log("created conversation");
             }
 
             err ? reject(err) : resolve(conversation);
@@ -59,7 +59,7 @@ var generateConversation = function (userId1, userId2, postId) {
                             Conversation.findByIdAndUpdate(conversation._id, {
                                 $addToSet: {"messages": {$each: msgs}}
                             }, null, function (err, updateResult) {
-                                console.dir("Update Conversation messages result: " + JSON.stringify((updateResult)));
+                                console.dir("updated conversation");
                                 resolve();
                             });
                         })
@@ -69,12 +69,11 @@ var generateConversation = function (userId1, userId2, postId) {
         });
     });
 };
-var createConversations = function () {
-    return new Promise(function (resolve, reject) {
+var createConversations = function (callback) {
         Post.findOne({}, function (err, post) {
             if (err || !post) {
                 console.log("could not find a post to create a conversation from");
-                reject();
+                callback();
             }
             var user1 = post.creator;
             var user2 = null;
@@ -84,7 +83,7 @@ var createConversations = function () {
                     for (var i = 0; i < accounts.length; i++) {
                         var accountIdAsString = accounts[i]._id.toString();
                         if (accountIdAsString != user1IdString) {
-                            console.log("found second account: " + user1IdString + " != " + accountIdAsString);
+                            console.log("found second account");
                             user2 = accounts[i]._id;
                             break;
                         }
@@ -92,18 +91,16 @@ var createConversations = function () {
                     if (user1 && user2) {
                         console.log("creating conversation");
                         generateConversation(user1, user2, post._id).then(function () {
-                            console.log("complete");
-                            resolve();
+                            callback();
                         })
                     }
                 }
                 else {
                     console.log("could not find accounts to create conversations with");
-                    reject();
+                    callback();
                 }
             });
         });
-    });
 };
 module.exports = {
     createConversations: createConversations

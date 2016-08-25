@@ -7,12 +7,14 @@ var DriveTimeSchema = new mongoose.Schema({
     originStation: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Station',
-        required: true
+        //todo change once we get stations
+        required: false
     },
     destinationStation: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Station',
-        required: true
+        //todo change once we get stations
+        required: false
     },
     originAddress: {
         type: mongoose.Schema.Types.String,
@@ -30,11 +32,11 @@ var DriveTimeSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: true
     },
-    distanceMetric: {
+    distanceMeters: {
         type: mongoose.Schema.Types.Number,
         required: true
     },
-    distanceImperial: {
+    distanceFeet: {
         type: mongoose.Schema.Types.Number,
         required: true
     },
@@ -56,12 +58,12 @@ DriveTimeSchema.set('toJSON', {
         };
         if (units == "metric") {
             obj.distanceString = ret.distanceStringMetric;
-            obj.distance = ret.distanceMetric;
+            obj.distance = ret.distanceMeters;
 
         }
         else {
             obj.distanceString = ret.distanceStringImperial;
-            obj.distance = ret.distanceImperial;
+            obj.distance = ret.distanceFeet;
 
         }
     }
