@@ -1,7 +1,8 @@
 var distance = require('google-distance');
 var async = require("async");
-distance.apiKey = 'AIzaSyCIV379IS5XIdla1qjfB6nT5lwL8V_BiO8';
-
+//dillon key distance.apiKey = 'AIzaSyCIV379IS5XIdla1qjfB6nT5lwL8V_BiO8';
+//mammone key AIzaSyA-mWMJ2s2Xf_81302TptOod3nTiYGxmY8
+distance.apiKey = 'AIzaSyA-mWMJ2s2Xf_81302TptOod3nTiYGxmY8';
 
 var fs = require('fs');
 var stations = require("./all-stations").stations;
@@ -11,7 +12,7 @@ OUTFILE = "C:/temp/drivingDistance.json";
 var fxns = [];
 var latest = "";
 
-var res =  require("./distances-partial-list").distances;
+var res = require("./distances-partial-list").distances;
 for (var i = 0; i < stations.length; i++) {
     for (var j = 0; j < stations.length; j++) {
         var firstStation = stations[i];
@@ -27,8 +28,16 @@ for (var i = 0; i < stations.length; i++) {
         if (res[secondStation.stationId] == null) {
             res[secondStation.stationId] = {};
         }
-
+        if (res[firstStation.stationId][secondStation.stationId] && res[secondStation.stationId][firstStation.stationId]) {
+            console.log("already have values skipping");
+           continue;
+        }
         var fxn = function (station1, station2, callback) {
+            if (res[station1.stationId][station2.stationId] && res[station2.stationId][station1.stationId]) {
+                return callback();
+
+            }
+
             if (res[station1.stationId][station2.stationId] || res[station2.stationId][station1.stationId]) {
                 console.log("found in cache");
                 if (res[station1.stationId][station2.stationId]) {
@@ -37,8 +46,8 @@ for (var i = 0; i < stations.length; i++) {
                 else {
                     res[station2.stationId][station1.stationId] = res[station1.stationId][station2.stationId];
                 }
-                callback();
-                return;
+                return callback();
+
             }
             setTimeout(function () {
                 distance.get(
@@ -67,7 +76,7 @@ for (var i = 0; i < stations.length; i++) {
                             console.log("could not calculate");
                             console.log(err);
                         }
-                        latest= JSON.stringify(res);
+                        latest = JSON.stringify(res);
                         callback();
                     }, 2000)
             });
