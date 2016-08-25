@@ -1,6 +1,7 @@
 var mongoose = require("mongoose");
 var config = require('config');
 var util = require('util');
+var units = config.get('driveTimes.units');
 
 var deptId = config.get('workingDepartment');
 var platoons = config.get(util.format('departments.%s.platoons', deptId));
@@ -12,10 +13,24 @@ var states = ['AL', 'AK', 'AS', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC',
 ]
 
 
+var LocationObject = new mongoose.Schema ({
+    type: {
+        type: String,
+        default: 'Point'
+    },
+    coordinates: [
+        [
+            { type: [ Number ]}
+        ]
+    ]
+
+});
+
 var StationSchema = new mongoose.Schema({
     stationNumber: {
         type: mongoose.Schema.Types.String,
-        required: true
+        required: true,
+        unique : true
     },
     community: {
         type: mongoose.Schema.Types.String
@@ -39,7 +54,8 @@ var StationSchema = new mongoose.Schema({
     zip: {
         type: mongoose.Schema.Types.Number,
         required: true
-    }
+    },
+    stationCoordinate: { type: LocationObject,index: '2dsphere'}
 }, {timestamps: true});
 
 StationSchema.set('toJSON', {
