@@ -1,110 +1,650 @@
-module.exports = {
-    addressLookupByStationId: {
-        "1": "2230 Pasadena Ave, Los Angeles, CA 90031, USA",
-        "2": "1962 East Cesar E Chavez Avenue, Los Angeles, CA 90033, USA",
-        "3": "108 N Fremont Ave, Los Angeles, CA 90012, USA",
-        "4": "450 E Temple St, Los Angeles, CA 90012, USA",
-        "5": "8900 Emerson Ave, Los Angeles, CA 90045, USA",
-        "6": "326 N Virgil Ave, Los Angeles, CA 90004, USA",
-        "7": "14630 Plummer St, Panorama City, CA 91402, USA",
-        "8": "11351 Tampa Ave, Porter Ranch, CA 91326, USA",
-        "9": "430 E 7th St, Los Angeles, CA 90014, USA",
-        "10": "1335 S Olive St, Los Angeles, CA 90015, USA",
-        "11": "1819 W 7th St, Los Angeles, CA 90057, USA",
-        "12": "5921 N Figueroa St, Los Angeles, CA 90042, USA",
-        "13": "2401 W Pico Blvd, Los Angeles, CA 90006, USA",
-        "14": "3401 S Central Ave, Los Angeles, CA 90011, USA",
-        "15": "Fire Station #15, 915 W Jefferson Blvd, Los Angeles, CA 90007, USA",
-        "16": "2011 N Eastern Ave, Los Angeles, CA 90032, USA",
-        "17": "1601 S Santa Fe Ave, Los Angeles, CA 90021, USA",
-        "18": "12050 Balboa Blvd, Granada Hills, CA 91344, USA",
-        "19": "12229 Sunset Blvd, Los Angeles, CA 90049, USA",
-        "20": "2144 Sunset Blvd, Los Angeles, CA 90026, USA",
-        "21": "1192 E 51st St, Los Angeles, CA 90011, USA",
-        "23": "17281 Sunset Blvd, Pacific Palisades, CA 90272, USA",
-        "24": "9411 Wentworth St, Sunland-Tujunga, CA 91040, USA",
-        "25": "2927 Whittier Blvd, Los Angeles, CA 90023, USA",
-        "26": "2009 S Western Ave, Los Angeles, CA 90018, USA",
-        "27": "1327 Cole Ave, Los Angeles, CA 90028, USA",
-        "28": "11641 Corbin Ave, Porter Ranch, CA 91326, USA",
-        "29": "4029 Wilshire Blvd, Los Angeles, CA 90010, USA",
-        "33": "6406 S Main St, Los Angeles, CA 90003, USA",
-        "34": "3661 7th Ave, Los Angeles, CA 90018, USA",
-        "35": "1601 Hillhurst Ave, Los Angeles, CA 90027, USA",
-        "36": "1005 N Gaffey St, San Pedro, CA 90731, USA",
-        "37": "Los Angeles Fire Department Station 37, 1090 Veteran Ave, Los Angeles, CA 90024, USA",
-        "38": "124 E I St, Wilmington, CA 90744, USA",
-        "39": "14415 Sylvan St, Van Nuys, CA 91401, USA",
-        "40": "330 Ferry St, San Pedro, CA 90731, USA",
-        "41": "1439 N Gardner St, Los Angeles, CA 90046, USA",
-        "42": "2021 Colorado Blvd, Los Angeles, CA 90041, USA",
-        "43": "3690 Motor Ave, Los Angeles, CA 90034, USA",
-        "44": "1410 Cypress Ave, Los Angeles, CA 90065, USA",
-        "46": "4370 S Hoover St, Los Angeles, CA 90037, USA",
-        "47": "4575 Huntington Dr S, Los Angeles, CA 90032, USA",
-        "48": "1601 S Grand Ave, Los Angeles, CA 90015, USA",
-        "49": "194 Berth, Wilmington, CA 90744, USA",
-        "50": "3036 Fletcher Dr, Los Angeles, CA 90065, USA",
-        "51": "10435 Sepulveda Blvd, Mission Hills, CA 91345, USA",
-        "52": "4957 Melrose Ave, Los Angeles, CA 90029, USA",
-        "55": "4455 York Blvd, Los Angeles, CA 90041, USA",
-        "56": "2759 Rowena Ave, Los Angeles, CA 90039, USA",
-        "57": "7800 S Vermont Ave, Los Angeles, CA 90044, USA",
-        "58": "1556 S Robertson Blvd, Los Angeles, CA 90035, USA",
-        "59": "11505 W Olympic Blvd, Los Angeles, CA 90064, USA",
-        "60": "5320 Tujunga Ave, Los Angeles, CA 91601, USA",
-        "61": "5821 W 3rd St, Los Angeles, CA 90036, USA",
-        "62": "Los Angelis Fire Station 62, 11970 Venice Blvd, Los Angeles, CA 90066, USA",
-        "63": "1930 Shell Ave, Venice, CA 90291, USA",
-        "64": "10811 S Main St, Los Angeles, CA 90061, USA",
-        "65": "1801 E Century Blvd, Los Angeles, CA 90002, USA",
-        "66": "1909 W Slauson Ave, Los Angeles, CA 90047, USA",
-        "67": "5451 Playa Vista Dr, Playa Vista, CA 90094, USA",
-        "68": "5023 Washington Blvd, Los Angeles, CA 90016, USA",
-        "69": "15045 Sunset Blvd, Pacific Palisades, CA 90272, USA",
-        "70": "9861 Reseda Blvd, Northridge, CA 91324, USA",
-        "71": "107 S Beverly Glen Blvd, Los Angeles, CA 90024, USA",
-        "72": "6811 De Soto Ave, Canoga Park, CA 91303, USA",
-        "73": "7419 Reseda Blvd, Reseda, CA 91335, USA",
-        "74": "7777 Foothill Blvd, Tujunga, CA 91042, USA",
-        "75": "15345 San Fernando Mission Blvd, Mission Hills, CA 91345, USA",
-        "76": "3111 N Cahuenga Blvd, Los Angeles, CA 90068, USA",
-        "77": "9224 Sunland Blvd, Sun Valley, CA 91352, USA",
-        "78": "4041 Whitsett Ave, Studio City, CA 91604, USA",
-        "79": "18030 S Vermont Ave, Gardena, CA 90248, USA",
-        "80": "7250 World Way, Los Angeles, CA 90045, USA",
-        "81": "14355 Arminta St, Van Nuys, CA 91402, USA",
-        "82": "5769 Hollywood Blvd, Los Angeles, CA 90028, USA",
-        "83": "4960 Balboa Blvd, Encino, CA 91316, USA",
-        "84": "21050 Burbank Blvd, Woodland Hills, CA 91367, USA",
-        "85": "1331 W 253rd St, Harbor City, CA 90710, USA",
-        "86": "4305 Vineland Ave, Studio City, CA 91602, USA",
-        "87": "10124 Balboa Blvd, Granada Hills, CA 91344, USA",
-        "88": "5101 N Sepulveda Blvd, Los Angeles, CA 90049, USA",
-        "89": "7063 Laurel Canyon Blvd, North Hollywood, CA 91605, USA",
-        "90": "7921 Woodley Ave, Van Nuys, CA 91406, USA",
-        "91": "14430 Polk St, Sylmar, CA 91342, USA",
-        "92": "10556 W Pico Blvd, Los Angeles, CA 90064, USA",
-        "93": "19059 Ventura Blvd, Tarzana, CA 91356, USA",
-        "94": "4470 Coliseum St, Los Angeles, CA 90016, USA",
-        "95": "10010 International Rd, Los Angeles, CA 90045, USA",
-        "96": "21800 Marilla St, Chatsworth, CA 91311, USA",
-        "97": "8021 Mulholland Dr, Studio City, CA 91604, USA",
-        "98": "13035 Van Nuys Blvd, Pacoima, CA 91331, USA",
-        "99": "14145 Mulholland Dr, Sherman Oaks, CA 91423, USA",
-        "100": "6751 Louise Ave, Van Nuys, CA 91406, USA",
-        "101": "1414 W 25th St, San Pedro, CA 90732, USA",
-        "102": "13200 Burbank Blvd, Sherman Oaks, CA 91401, USA",
-        "103": "18143 Parthenia St, Northridge, CA 91325, USA",
-        "104": "8349 Winnetka Ave, Winnetka, CA 91306, USA",
-        "105": "6345 Fallbrook Ave, Woodland Hills, CA 91367, USA",
-        "106": "23004 Roscoe Blvd, West Hills, CA 91304, USA",
-        "107": "20225 Devonshire St, Chatsworth, CA 91311, USA",
-        "108": "12520 Mulholland Dr, Beverly Hills, CA 90210, USA",
-        "109": "16500 Mulholland Dr, Los Angeles, CA 90049, USA",
-        "110": "44 Berth, Wilmington, CA 90744, USA",
-        "111": "260 Berth, Wilmington, CA 90744, USA",
-        "112": "86 Berth, Wilmington, CA 90744, USA",
-        "114": "16617 Arminta St, Van Nuys, CA 91406, USA"
+/*
+var addressToAddressObject = function (address) {
+    var split = address.split(",");
+    split[2] = split[2].trim();
+    split[2] = split[2].split("");
+    return {address: split[0], city: split[1], state: split[2][0], zip: split[2][1]};
+};
+*/
+var addresses = {
+    "1": {
+        "address": "2230 Pasadena Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90031
+    },
+    "2": {
+        "address": "1962 East Cesar E Chavez Avenue",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90033
+    },
+    "3": {
+        "address": "108 N Fremont Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90012
+    },
+    "4": {
+        "address": "450 E Temple St",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90012
+    },
+    "5": {
+        "address": "8900 Emerson Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90045
+    },
+    "6": {
+        "address": "326 N Virgil Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90004
+    },
+    "7": {
+        "address": "14630 Plummer St",
+        "city": "Panorama City",
+        "state": "CA",
+        "zip": 91402
+    },
+    "8": {
+        "address": "11351 Tampa Ave",
+        "city": "Porter Ranch",
+        "state": "CA",
+        "zip": 91326
+    },
+    "9": {
+        "address": "430 E 7th St",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90014
+    },
+    "10": {
+        "address": "1335 S Olive St",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90015
+    },
+    "11": {
+        "address": "1819 W 7th St",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90057
+    },
+    "12": {
+        "address": "5921 N Figueroa St",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90042
+    },
+    "13": {
+        "address": "2401 W Pico Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90006
+    },
+    "14": {
+        "address": "3401 S Central Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90011
+    },
+    "15": {
+        "address": "Fire Station #15",
+        "city": "915 W Jefferson Blvd",
+        "state": "Los",
+        "zip": "Angeles"
+    },
+    "16": {
+        "address": "2011 N Eastern Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90032
+    },
+    "17": {
+        "address": "1601 S Santa Fe Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90021
+    },
+    "18": {
+        "address": "12050 Balboa Blvd",
+        "city": "Granada Hills",
+        "state": "CA",
+        "zip": 91344
+    },
+    "19": {
+        "address": "12229 Sunset Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90049
+    },
+    "20": {
+        "address": "2144 Sunset Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90026
+    },
+    "21": {
+        "address": "1192 E 51st St",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90011
+    },
+    "23": {
+        "address": "17281 Sunset Blvd",
+        "city": "Pacific Palisades",
+        "state": "CA",
+        "zip": 90272
+    },
+    "24": {
+        "address": "9411 Wentworth St",
+        "city": "Sunland-Tujunga",
+        "state": "CA",
+        "zip": 91040
+    },
+    "25": {
+        "address": "2927 Whittier Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90023
+    },
+    "26": {
+        "address": "2009 S Western Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90018
+    },
+    "27": {
+        "address": "1327 Cole Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90028
+    },
+    "28": {
+        "address": "11641 Corbin Ave",
+        "city": "Porter Ranch",
+        "state": "CA",
+        "zip": 91326
+    },
+    "29": {
+        "address": "4029 Wilshire Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90010
+    },
+    "33": {
+        "address": "6406 S Main St",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90003
+    },
+    "34": {
+        "address": "3661 7th Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90018
+    },
+    "35": {
+        "address": "1601 Hillhurst Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90027
+    },
+    "36": {
+        "address": "1005 N Gaffey St",
+        "city": "San Pedro",
+        "state": "CA",
+        "zip": 90731
+    },
+    "37": {
+        "address": "Los Angeles Fire Department Station 37",
+        "city": "1090 Veteran Ave",
+        "state": "Los",
+        "zip": "Angeles"
+    },
+    "38": {
+        "address": "124 E I St",
+        "city": "Wilmington",
+        "state": "CA",
+        "zip": 90744
+    },
+    "39": {
+        "address": "14415 Sylvan St",
+        "city": "Van Nuys",
+        "state": "CA",
+        "zip": 91401
+    },
+    "40": {
+        "address": "330 Ferry St",
+        "city": "San Pedro",
+        "state": "CA",
+        "zip": 90731
+    },
+    "41": {
+        "address": "1439 N Gardner St",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90046
+    },
+    "42": {
+        "address": "2021 Colorado Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90041
+    },
+    "43": {
+        "address": "3690 Motor Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90034
+    },
+    "44": {
+        "address": "1410 Cypress Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90065
+    },
+    "46": {
+        "address": "4370 S Hoover St",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90037
+    },
+    "47": {
+        "address": "4575 Huntington Dr S",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90032
+    },
+    "48": {
+        "address": "1601 S Grand Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90015
+    },
+    "49": {
+        "address": "194 Berth",
+        "city": "Wilmington",
+        "state": "CA",
+        "zip": 90744
+    },
+    "50": {
+        "address": "3036 Fletcher Dr",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90065
+    },
+    "51": {
+        "address": "10435 Sepulveda Blvd",
+        "city": "Mission Hills",
+        "state": "CA",
+        "zip": 91345
+    },
+    "52": {
+        "address": "4957 Melrose Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90029
+    },
+    "55": {
+        "address": "4455 York Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90041
+    },
+    "56": {
+        "address": "2759 Rowena Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90039
+    },
+    "57": {
+        "address": "7800 S Vermont Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90044
+    },
+    "58": {
+        "address": "1556 S Robertson Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90035
+    },
+    "59": {
+        "address": "11505 W Olympic Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90064
+    },
+    "60": {
+        "address": "5320 Tujunga Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 91601
+    },
+    "61": {
+        "address": "5821 W 3rd St",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90036
+    },
+    "62": {
+        "address": "Los Angelis Fire Station 62",
+        "city": "11970 Venice Blvd",
+        "state": "Los",
+        "zip": "Angeles"
+    },
+    "63": {
+        "address": "1930 Shell Ave",
+        "city": "Venice",
+        "state": "CA",
+        "zip": 90291
+    },
+    "64": {
+        "address": "10811 S Main St",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90061
+    },
+    "65": {
+        "address": "1801 E Century Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90002
+    },
+    "66": {
+        "address": "1909 W Slauson Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90047
+    },
+    "67": {
+        "address": "5451 Playa Vista Dr",
+        "city": "Playa Vista",
+        "state": "CA",
+        "zip": 90094
+    },
+    "68": {
+        "address": "5023 Washington Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90016
+    },
+    "69": {
+        "address": "15045 Sunset Blvd",
+        "city": "Pacific Palisades",
+        "state": "CA",
+        "zip": 90272
+    },
+    "70": {
+        "address": "9861 Reseda Blvd",
+        "city": "Northridge",
+        "state": "CA",
+        "zip": 91324
+    },
+    "71": {
+        "address": "107 S Beverly Glen Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90024
+    },
+    "72": {
+        "address": "6811 De Soto Ave",
+        "city": "Canoga Park",
+        "state": "CA",
+        "zip": 91303
+    },
+    "73": {
+        "address": "7419 Reseda Blvd",
+        "city": "Reseda",
+        "state": "CA",
+        "zip": 91335
+    },
+    "74": {
+        "address": "7777 Foothill Blvd",
+        "city": "Tujunga",
+        "state": "CA",
+        "zip": 91042
+    },
+    "75": {
+        "address": "15345 San Fernando Mission Blvd",
+        "city": "Mission Hills",
+        "state": "CA",
+        "zip": 91345
+    },
+    "76": {
+        "address": "3111 N Cahuenga Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90068
+    },
+    "77": {
+        "address": "9224 Sunland Blvd",
+        "city": "Sun Valley",
+        "state": "CA",
+        "zip": 91352
+    },
+    "78": {
+        "address": "4041 Whitsett Ave",
+        "city": "Studio City",
+        "state": "CA",
+        "zip": 91604
+    },
+    "79": {
+        "address": "18030 S Vermont Ave",
+        "city": "Gardena",
+        "state": "CA",
+        "zip": 90248
+    },
+    "80": {
+        "address": "7250 World Way",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90045
+    },
+    "81": {
+        "address": "14355 Arminta St",
+        "city": "Van Nuys",
+        "state": "CA",
+        "zip": 91402
+    },
+    "82": {
+        "address": "5769 Hollywood Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90028
+    },
+    "83": {
+        "address": "4960 Balboa Blvd",
+        "city": "Encino",
+        "state": "CA",
+        "zip": 91316
+    },
+    "84": {
+        "address": "21050 Burbank Blvd",
+        "city": "Woodland Hills",
+        "state": "CA",
+        "zip": 91367
+    },
+    "85": {
+        "address": "1331 W 253rd St",
+        "city": "Harbor City",
+        "state": "CA",
+        "zip": 90710
+    },
+    "86": {
+        "address": "4305 Vineland Ave",
+        "city": "Studio City",
+        "state": "CA",
+        "zip": 91602
+    },
+    "87": {
+        "address": "10124 Balboa Blvd",
+        "city": "Granada Hills",
+        "state": "CA",
+        "zip": 91344
+    },
+    "88": {
+        "address": "5101 N Sepulveda Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90049
+    },
+    "89": {
+        "address": "7063 Laurel Canyon Blvd",
+        "city": "North Hollywood",
+        "state": "CA",
+        "zip": 91605
+    },
+    "90": {
+        "address": "7921 Woodley Ave",
+        "city": "Van Nuys",
+        "state": "CA",
+        "zip": 91406
+    },
+    "91": {
+        "address": "14430 Polk St",
+        "city": "Sylmar",
+        "state": "CA",
+        "zip": 91342
+    },
+    "92": {
+        "address": "10556 W Pico Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90064
+    },
+    "93": {
+        "address": "19059 Ventura Blvd",
+        "city": "Tarzana",
+        "state": "CA",
+        "zip": 91356
+    },
+    "94": {
+        "address": "4470 Coliseum St",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90016
+    },
+    "95": {
+        "address": "10010 International Rd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90045
+    },
+    "96": {
+        "address": "21800 Marilla St",
+        "city": "Chatsworth",
+        "state": "CA",
+        "zip": 91311
+    },
+    "97": {
+        "address": "8021 Mulholland Dr",
+        "city": "Studio City",
+        "state": "CA",
+        "zip": 91604
+    },
+    "98": {
+        "address": "13035 Van Nuys Blvd",
+        "city": "Pacoima",
+        "state": "CA",
+        "zip": 91331
+    },
+    "99": {
+        "address": "14145 Mulholland Dr",
+        "city": "Sherman Oaks",
+        "state": "CA",
+        "zip": 91423
+    },
+    "100": {
+        "address": "6751 Louise Ave",
+        "city": "Van Nuys",
+        "state": "CA",
+        "zip": 91406
+    },
+    "101": {
+        "address": "1414 W 25th St",
+        "city": "San Pedro",
+        "state": "CA",
+        "zip": 90732
+    },
+    "102": {
+        "address": "13200 Burbank Blvd",
+        "city": "Sherman Oaks",
+        "state": "CA",
+        "zip": 91401
+    },
+    "103": {
+        "address": "18143 Parthenia St",
+        "city": "Northridge",
+        "state": "CA",
+        "zip": 91325
+    },
+    "104": {
+        "address": "8349 Winnetka Ave",
+        "city": "Winnetka",
+        "state": "CA",
+        "zip": 91306
+    },
+    "105": {
+        "address": "6345 Fallbrook Ave",
+        "city": "Woodland Hills",
+        "state": "CA",
+        "zip": 91367
+    },
+    "106": {
+        "address": "23004 Roscoe Blvd",
+        "city": "West Hills",
+        "state": "CA",
+        "zip": 91304
+    },
+    "107": {
+        "address": "20225 Devonshire St",
+        "city": "Chatsworth",
+        "state": "CA",
+        "zip": 91311
+    },
+    "108": {
+        "address": "12520 Mulholland Dr",
+        "city": "Beverly Hills",
+        "state": "CA",
+        "zip": 90210
+    },
+    "109": {
+        "address": "16500 Mulholland Dr",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90049
+    },
+    "110": {
+        "address": "44 Berth",
+        "city": "Wilmington",
+        "state": "CA",
+        "zip": 90744
+    },
+    "111": {
+        "address": "260 Berth",
+        "city": "Wilmington",
+        "state": "CA",
+        "zip": 90744
+    },
+    "112": {
+        "address": "86 Berth",
+        "city": "Wilmington",
+        "state": "CA",
+        "zip": 90744
+    },
+    "114": {
+        "address": "16617 Arminta St",
+        "city": "Van Nuys",
+        "state": "CA",
+        "zip": 91406
     }
+};
+module.exports = {
+    // addressToAddressObject:addressToAddressObject,
+    addressLookupByStationId: addresses
 }
