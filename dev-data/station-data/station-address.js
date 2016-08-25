@@ -1,11 +1,13 @@
-/*
+
 var addressToAddressObject = function (address) {
     var split = address.split(",");
     split[2] = split[2].trim();
     split[2] = split[2].split("");
     return {address: split[0], city: split[1], state: split[2][0], zip: split[2][1]};
 };
-*/
+var addressObjectToString = function(addressObj){
+    return addressObj.address + ", " + addressObj.city + ", " + addressObj.state + " " + addressObj.zip
+};
 var addresses = {
     "1": {
         "address": "2230 Pasadena Ave",
@@ -646,5 +648,6 @@ var addresses = {
 };
 module.exports = {
     // addressToAddressObject:addressToAddressObject,
+    addressObjectToString: addressObjectToString,
     addressLookupByStationId: addresses
 }
