@@ -1,16 +1,14 @@
 var distance = require('google-distance');
 var async = require("async");
-distance.apiKey = 'AIzaSyCIV379IS5XIdla1qjfB6nT5lwL8V_BiO8';
-//distance.apiKey = 'AIzaSyA-mWMJ2s2Xf_81302TptOod3nTiYGxmY8
-//distance.apiKey = 'AIzaSyA-mWMJ2s2Xf_81302TptOod3nTiYGxmY8';
-//sophya distance.apiKey = 'AIzaSyAqh8F3kwvLQ-ouABlMDJwOX5jOOCMzg1Q';
-
-//distance.apiKey = 'AIzaSyAqh8F3kwvLQ-ouABlMDJwOX5jOOCMzg1Q'
-
 var fs = require('fs');
-var stations = require("./../all-stations").stations;
-console.log(stations["1"]["2"])
-OUTFILE = "C:/temp/drivingDistance.json";
+
+
+
+var stations = require("../all-stations").stations;
+
+
+console.log(stations["1"]["2"]);
+var OUTFILE = "";
 
 var fxns = [];
 var latest = "";
@@ -71,7 +69,7 @@ for (var i = 0; i < stations.length; i++) {
                                 origin: data.origin,
                                 destination: data.destination,
                                 units: data.units
-                            }
+                            };
                             res[station1.stationId][station2.stationId] = obj;
                             res[station2.stationId][station1.stationId] = obj;
                         }
