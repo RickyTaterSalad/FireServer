@@ -21,14 +21,14 @@ var createDepartment = function (callback) {
             "B",
             "C"
         ],
-        "Schedule": {
+        "schedule": {
             "name": "Schedule Name",
             "numberOfPlatoons": 3,
             "platoonSchedule": "A,C,A,B,A,B,C,B,C",
             "shiftLengthInHours": 24,
             "shiftStartTime": "0800"
         },
-        "Stations": []
+        "stations": []
     };
     Department.create(dept, callback);
 };
