@@ -11,6 +11,14 @@ var AccountSchema = new mongoose.Schema({
     googleUid: {
         type: mongoose.Schema.Types.String
     },
+    isSoftBanned: {
+        type: mongoose.Schema.Types.Boolean,
+        default: false
+    },
+    isPermaBanned: {
+        type: mongoose.Schema.Types.Boolean,
+        default: false
+    },
     firstName: {
         type: mongoose.Schema.Types.String,
         required: true
@@ -55,8 +63,8 @@ var AccountSchema = new mongoose.Schema({
 }, {timestamps: true});
 
 AccountSchema.set('toJSON', {
-    transform: function(doc, ret, options) {
-        return  {
+    transform: function (doc, ret, options) {
+        return {
             id: ret._id,
             firstName: ret.firstName,
             photo: ret.photo,

@@ -1,4 +1,3 @@
-var config = require('config');
 
 //init all the helper functions
 
@@ -7,7 +6,7 @@ var mongooseHelper = require("./helpers/mongoose-helper");
 mongooseHelper.initialize();
 
 //init passport
-require("./helpers/passport-helper").initialize()
+require("./helpers/passport-helper").initialize();
 
 //init and create the express object
 var app = require("./helpers/express-init-helper").initialize();

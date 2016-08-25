@@ -4,7 +4,7 @@ var async = require('async');
 var conversationGenerator = require("./generateConversations");
 
 //init mongoose
-require("../helpers/mongoose-helper").initialize();
+require("../../helpers/mongoose-helper").initialize();
 var Account = mongoose.model('Account');
 var Department = mongoose.model('Department');
 var Station = mongoose.model('Station');

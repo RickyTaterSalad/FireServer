@@ -12,11 +12,14 @@
       ]
     }
   },
-  "auth":{
-    "google":{
+  "auth": {
+    "google": {
       "clientId": "",
       "clientSecret": "",
       "callbackURL": ""
     }
+  },
+  "driveTimes": {
+    "units": "imperial"
   }
 }
