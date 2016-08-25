@@ -27,7 +27,7 @@ var DriveTime = mongoose.model('DriveTime');
 
 var generateCreateFunction = function (params) {
     return function (params, callback) {
-       // console.log(util.format("%s - %s"), params.originAddress, params.destinationAddress);
+        // console.log(util.format("%s - %s"), params.originAddress, params.destinationAddress);
         DriveTime.create(params, callback);
     }.bind(null, params);
 };
@@ -90,12 +90,17 @@ var createDriveTimes = function (callback) {
                 distanceStringImperial: distanceImperialString,
                 distanceMeters: driveTime.distanceValue,
                 distanceFeet: distanceFeet,
+                originCoordinate: {"type": "Point", "coordinates": [100.0, 0.0]},
+                destinationCoordinate: {"type": "Point", "coordinates": [100.0, 0.0]},
                 duration: driveTime.durationValue
             };
             //other direction
             var driveTimeParams2 = JSON.parse(JSON.stringify(driveTimeParams1));
+            var originCoordinate = driveTimeParams1.originCoordinate;
             driveTimeParams2.originAddress = destinationAddress;
             driveTimeParams2.destinationAddress = originAddress;
+            driveTimeParams2.originCoordinate = driveTimeParams1.destinationCoordinate;
+            driveTimeParams2.destinationCoordinate = originCoordinate;
             //  driveTimeParams2.originStation = driveTime.destinationStation;
             //   driveTimeParams2.destinationStation = driveTime.originStation;
 
@@ -120,3 +125,5 @@ var createDriveTimes = function (callback) {
 module.exports = {
     createDriveTimes: createDriveTimes
 };
+
+createDriveTimes(function(){console.log("done")});

@@ -3,6 +3,20 @@ var mongoose = require("mongoose");
 var config = require('config');
 var units = config.get('driveTimes.units');
 
+var LocationObject = new mongoose.Schema ({
+    type: {
+        type: String,
+        default: 'Point'
+    },
+    coordinates: [
+        [
+            { type: [ Number ]}
+        ]
+    ]
+
+});
+
+
 var DriveTimeSchema = new mongoose.Schema({
     originStation: {
         type: mongoose.Schema.Types.ObjectId,
@@ -10,6 +24,8 @@ var DriveTimeSchema = new mongoose.Schema({
         //todo change once we get stations
         required: false
     },
+    originCoordinate: { type: LocationObject,index: '2dsphere'},
+    destinationCoordinate: { type: LocationObject,index: '2dsphere'},
     destinationStation: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Station',
@@ -51,6 +67,8 @@ DriveTimeSchema.set('toJSON', {
     transform: function (doc, ret, options) {
         var obj = {
             originStation: ret.originStation,
+            destinationCoordinate: ret.destinationCoordinate,
+            originCoordinate: ret.originCoordinate,
             destinationStation: ret.destinationStation,
             originAddress: ret.originAddress,
             destinationAddress: ret.destinationAddress,
