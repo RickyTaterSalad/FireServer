@@ -32,7 +32,7 @@ var initialize = function () {
             })
         }
     ));
-
+/*
     passport.use(new GoogleOAuth2Strategy({
             clientID: googleOauthConfig.clientId,
             clientSecret: googleOauthConfig.clientSecret,
@@ -48,9 +48,11 @@ var initialize = function () {
             })
 
         }
-    ))
-    ;
+    ));
+    */
+
 }
+
 
 
 module.exports = {
