@@ -1,9 +1,8 @@
 var router = require('express').Router();
-var mongoose = require('mongoose');
-var Department = mongoose.model('Department');
+var Department = require('mongoose').model('Department');
 const RequestHelperMethods = require("../util/request-helper-methods");
-
-router.get('/', function (req, res) {
+const hasUser = require("../validators/has-user-validator").validate;
+router.get('/', hasUser, function (req, res) {
     Department.find(function (err, departments) {
         if (err) {
             res.send(err);
@@ -12,10 +11,8 @@ router.get('/', function (req, res) {
         }
     });
 });
-
-router.get('/:departmentId', function (req, res) {
-
-    if(req.params && RequestHelperMethods.validObjectId((req.params.departmentId))) {
+router.get('/:departmentId', hasUser, function (req, res) {
+    if (req.params && RequestHelperMethods.validObjectId((req.params.departmentId))) {
         Department.findById(req.params.departmentId, function (err, department) {
             if (err) {
                 res.send(err);
@@ -26,37 +23,17 @@ router.get('/:departmentId', function (req, res) {
             }
         });
     }
-    else{
+    else {
         res.json(RequestHelperMethods.invalidRequestJson);
     }
 });
-router.post('/:departmentId/:stationId', function (req, res) {
-    if (req.user) {
-        Department.findByIdAndUpdate(req.params.departmentId, {
-            $push: {"stations": req.params.stationId}
-        }, null, function (err, updateResult) {
-            err ? res.json({success: false, message: err.message}) : res.json(updateResult);
-        });
-    }
-    else {
-        res.json({success: false, message: "Invalid request"});
-    }
+router.post('/:departmentId/:stationId', hasUser, function (req, res) {
+    Department.findByIdAndUpdate(req.params.departmentId, {
+        $push: {"stations": req.params.stationId}
+    }, null, function (err, updateResult) {
+        err ? res.json({success: false, message: err.message}) : res.json(updateResult);
+    });
 });
 
-//todo lock down to admin only
-router.post('/', function (req, res) {
-    if (req.user) {
-        Department.create(req.body, function (err, department) {
-            if (err) {
-                res.send(err);
-            } else {
-                res.json(department);
-            }
-        });
-    }
-    else {
-        res.json(RequestHelperMethods.invalidRequestJson);
-    }
-});
 
 module.exports = router;

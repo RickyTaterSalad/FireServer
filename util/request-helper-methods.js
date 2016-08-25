@@ -3,9 +3,10 @@ var validObjectId = function (id) {
 }
 
 
-var inalidRequestJson = {success: false, message: "Invalid Request"};
-
+var invalidRequestJson = {success: false, message: "Invalid Request"};
+var noUserJson = {success: false, message: "Not Logged In"};
 module.exports = {
     validObjectId: validObjectId,
-    invalidRequestJson: inalidRequestJson
+    invalidRequestJson: invalidRequestJson,
+    noUserJson: noUserJson
 }

@@ -1,15 +1,7 @@
 var router = require('express').Router();
-var mongoose = require('mongoose');
-var Account = mongoose.model('Account');
-var passportHelper = require("../helpers/passport-helper");
-
-router.get('/', passportHelper.ensureAuthenticated, function (req, res) {
-    if (req.user) {
-        res.json(req.user);
-    }
-    else {
-        res.json({});
-    }
+const hasUser = require("../validators/has-user-validator").validate;
+router.get('/', hasUser, function (req, res) {
+    res.json(req.user);
 });
 
 module.exports = router;
