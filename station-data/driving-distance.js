@@ -1,12 +1,15 @@
 var distance = require('google-distance');
 var async = require("async");
-//dillon key distance.apiKey = 'AIzaSyCIV379IS5XIdla1qjfB6nT5lwL8V_BiO8';
-//mammone key AIzaSyA-mWMJ2s2Xf_81302TptOod3nTiYGxmY8
-distance.apiKey = 'AIzaSyA-mWMJ2s2Xf_81302TptOod3nTiYGxmY8';
+//distance.apiKey = 'AIzaSyCIV379IS5XIdla1qjfB6nT5lwL8V_BiO8';
+//distance.apiKey = 'AIzaSyA-mWMJ2s2Xf_81302TptOod3nTiYGxmY8
+//distance.apiKey = 'AIzaSyA-mWMJ2s2Xf_81302TptOod3nTiYGxmY8';
+//sophya distance.apiKey = 'AIzaSyAqh8F3kwvLQ-ouABlMDJwOX5jOOCMzg1Q';
+
+distance.apiKey = 'AIzaSyAqh8F3kwvLQ-ouABlMDJwOX5jOOCMzg1Q'
 
 var fs = require('fs');
 var stations = require("./all-stations").stations;
-
+console.log(stations["1"]["2"])
 OUTFILE = "C:/temp/drivingDistance.json";
 
 var fxns = [];
