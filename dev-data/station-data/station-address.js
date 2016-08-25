@@ -94,10 +94,10 @@ var addresses = {
         "zip": 90011
     },
     "15": {
-        "address": "Fire Station #15",
-        "city": "915 W Jefferson Blvd",
-        "state": "Los",
-        "zip": "Angeles"
+        "address": "915 W Jefferson Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90007
     },
     "16": {
         "address": "2011 N Eastern Ave",
@@ -202,10 +202,10 @@ var addresses = {
         "zip": 90731
     },
     "37": {
-        "address": "Los Angeles Fire Department Station 37",
-        "city": "1090 Veteran Ave",
-        "state": "Los",
-        "zip": "Angeles"
+        "address": "1090 Veteran Ave",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90024
     },
     "38": {
         "address": "124 E I St",
@@ -334,10 +334,10 @@ var addresses = {
         "zip": 90036
     },
     "62": {
-        "address": "Los Angelis Fire Station 62",
-        "city": "11970 Venice Blvd",
-        "state": "Los",
-        "zip": "Angeles"
+        "address": "11970 Venice Blvd",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90066
     },
     "63": {
         "address": "1930 Shell Ave",
@@ -651,3 +651,4 @@ module.exports = {
     addressObjectToString: addressObjectToString,
     addressLookupByStationId: addresses
 }
+

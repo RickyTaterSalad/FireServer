@@ -2,13 +2,13 @@ module.exports = {
     neighborhoodLookupByStationId:
 {
   "1": {
-    "neighborhood": "LincolnHeights"
+    "neighborhood": "Lincoln Heights"
   },
   "2": {
-    "neighborhood": "BoyleHeights"
+    "neighborhood": "Boyle Heights"
   },
   "3": {
-    "neighborhood": "CivicCenter&BunkerHill"
+    "neighborhood": "Civic Center & Bunker Hill"
   },
   "4": {
     "neighborhood": "Chinatown"
@@ -17,25 +17,25 @@ module.exports = {
     "neighborhood": "Westchester"
   },
   "6": {
-    "neighborhood": "AngelenoHeights"
+    "neighborhood": "Angeleno Heights"
   },
   "7": {
     "neighborhood": "Arleta"
   },
   "8": {
-    "neighborhood": "PorterRanch"
+    "neighborhood": "Porter Ranch"
   },
   "9": {
-    "neighborhood": "SkidRow"
+    "neighborhood": "Skid Row"
   },
   "10": {
-    "neighborhood": "ConventionCenter"
+    "neighborhood": "Convention Center"
   },
   "11": {
-    "neighborhood": "Westlake&MacArthurPark"
+    "neighborhood": "Westlake & MacArthur Park"
   },
   "12": {
-    "neighborhood": "HighlandPark"
+    "neighborhood": "Highland Park"
   },
   "13": {
     "neighborhood": "Pico-Union"
@@ -44,13 +44,13 @@ module.exports = {
     "neighborhood": "Newton"
   },
   "15": {
-    "neighborhood": "USC/ExpositionPark"
+    "neighborhood": "USC / Exposition Park"
   },
   "16": {
-    "neighborhood": "SouthElSereno"
+    "neighborhood": "South El Sereno"
   },
   "17": {
-    "neighborhood": "IndustrialEastside"
+    "neighborhood": "Industrial Eastside"
   },
   "18": {
     "neighborhood": "Knollwood"
@@ -59,82 +59,82 @@ module.exports = {
     "neighborhood": "Brentwood"
   },
   "20": {
-    "neighborhood": "EchoPark"
+    "neighborhood": "Echo Park"
   },
   "21": {
-    "neighborhood": "SouthLosAngeles"
+    "neighborhood": "South Los Angeles"
   },
   "23": {
-    "neighborhood": "PalisadesHighlands"
+    "neighborhood": "Palisades Highlands"
   },
   "24": {
     "neighborhood": "Sunland"
   },
   "25": {
-    "neighborhood": "BoyleHeights"
+    "neighborhood": "Boyle Heights"
   },
   "26": {
-    "neighborhood": "WestAdams"
+    "neighborhood": "West Adams"
   },
   "27": {
     "neighborhood": "Hollywood"
   },
   "28": {
-    "neighborhood": "PorterRanch"
+    "neighborhood": "Porter Ranch"
   },
   "29": {
-    "neighborhood": "HancockPark"
+    "neighborhood": "Hancock Park"
   },
   "33": {
-    "neighborhood": "SouthCentral"
+    "neighborhood": "South Central"
   },
   "34": {
-    "neighborhood": "Crenshaw&LeimertPark"
+    "neighborhood": "Crenshaw & Leimert Park"
   },
   "35": {
-    "neighborhood": "LosFeliz"
+    "neighborhood": "Los Feliz"
   },
   "36": {
-    "neighborhood": "SanPedro"
+    "neighborhood": "San Pedro"
   },
   "37": {
-    "neighborhood": "WestwoodUCLA"
+    "neighborhood": "Westwood UCLA"
   },
   "38": {
     "neighborhood": "Wilmington"
   },
   "39": {
-    "neighborhood": "VanNuys"
+    "neighborhood": "Van Nuys"
   },
   "40": {
-    "neighborhood": "TerminalIsland"
+    "neighborhood": "Terminal Island"
   },
   "41": {
-    "neighborhood": "HollywoodHills"
+    "neighborhood": "Hollywood Hills"
   },
   "42": {
-    "neighborhood": "EagleRock"
+    "neighborhood": "Eagle Rock"
   },
   "43": {
     "neighborhood": "Palms"
   },
   "44": {
-    "neighborhood": "CypressPark"
+    "neighborhood": "Cypress Park"
   },
   "46": {
-    "neighborhood": "ColiseumArea"
+    "neighborhood": "Coliseum Area"
   },
   "47": {
-    "neighborhood": "ElSereno"
+    "neighborhood": "El Sereno"
   },
   "48": {
-    "neighborhood": "SanPedro"
+    "neighborhood": "San Pedro"
   },
   "49": {
-    "neighborhood": "EastHarbor"
+    "neighborhood": "East Harbor"
   },
   "50": {
-    "neighborhood": "AtwaterVillage"
+    "neighborhood": "Atwater Village"
   },
   "51": {
     "neighborhood": "LAX"
@@ -143,22 +143,22 @@ module.exports = {
     "neighborhood": "Hollywood"
   },
   "55": {
-    "neighborhood": "EagleRock"
+    "neighborhood": "Eagle Rock"
   },
   "56": {
-    "neighborhood": "SilverLake"
+    "neighborhood": "Silver Lake"
   },
   "57": {
-    "neighborhood": "SouthCentral"
+    "neighborhood": "South Central"
   },
   "58": {
     "neighborhood": "Pico-Robertson"
   },
   "59": {
-    "neighborhood": "WestLosAngeles"
+    "neighborhood": "West Los Angeles"
   },
   "60": {
-    "neighborhood": "NorthHollywood"
+    "neighborhood": "North Hollywood"
   },
   "61": {
     "neighborhood": "Fairfax"
@@ -170,22 +170,22 @@ module.exports = {
     "neighborhood": "Venice"
   },
   "64": {
-    "neighborhood": "SouthLosAngeles"
+    "neighborhood": "South Los Angeles"
   },
   "65": {
     "neighborhood": "Watts"
   },
   "66": {
-    "neighborhood": "SouthLosAngeles"
+    "neighborhood": "South Los Angeles"
   },
   "67": {
-    "neighborhood": "PlayaVista"
+    "neighborhood": "Playa Vista"
   },
   "68": {
     "neighborhood": "Mid-City"
   },
   "69": {
-    "neighborhood": "PacificPalisades"
+    "neighborhood": "Pacific Palisades"
   },
   "70": {
     "neighborhood": "Northridge"
@@ -194,7 +194,7 @@ module.exports = {
     "neighborhood": "BelAir"
   },
   "72": {
-    "neighborhood": "CanogaPark"
+    "neighborhood": "Canoga Park"
   },
   "73": {
     "neighborhood": "Reseda"
@@ -203,25 +203,25 @@ module.exports = {
     "neighborhood": "Sunland-Tujunga"
   },
   "75": {
-    "neighborhood": "MissionHills"
+    "neighborhood": "Mission Hills"
   },
   "76": {
-    "neighborhood": "CahuengaPass"
+    "neighborhood": "Cahuenga Pass"
   },
   "77": {
-    "neighborhood": "SunValley"
+    "neighborhood": "Sun Valley"
   },
   "78": {
-    "neighborhood": "StudioCity"
+    "neighborhood": "Studio City"
   },
   "79": {
-    "neighborhood": "HarborGateway"
+    "neighborhood": "Harbor Gateway"
   },
   "80": {
     "neighborhood": "LAX"
   },
   "81": {
-    "neighborhood": "PanoramaCity"
+    "neighborhood": "Panorama City"
   },
   "82": {
     "neighborhood": "Hollywood"
@@ -230,37 +230,37 @@ module.exports = {
     "neighborhood": "Encino"
   },
   "84": {
-    "neighborhood": "WoodlandHills"
+    "neighborhood": "Woodland Hills"
   },
   "85": {
-    "neighborhood": "HarborCity"
+    "neighborhood": "Harbor City"
   },
   "86": {
-    "neighborhood": "TolucaLake"
+    "neighborhood": "Toluca Lake"
   },
   "87": {
-    "neighborhood": "GranadaHills"
+    "neighborhood": "Granada Hills"
   },
   "88": {
-    "neighborhood": "ShermanOaks"
+    "neighborhood": "Sherman Oaks"
   },
   "89": {
-    "neighborhood": "NorthHollywood"
+    "neighborhood": "North Hollywood"
   },
   "90": {
-    "neighborhood": "VanNuysAirport"
+    "neighborhood": "Van Nuys Airport"
   },
   "91": {
     "neighborhood": "Sylmar"
   },
   "92": {
-    "neighborhood": "CenturyCity"
+    "neighborhood": "Century City"
   },
   "93": {
     "neighborhood": "Tarzana"
   },
   "94": {
-    "neighborhood": "Crenshaw/BaldwinHills"
+    "neighborhood": "Crenshaw / Baldwin Hills"
   },
   "95": {
     "neighborhood": "LAX"
@@ -269,55 +269,55 @@ module.exports = {
     "neighborhood": "Chatsworth"
   },
   "97": {
-    "neighborhood": "LaurelCanyon"
+    "neighborhood": "Laurel Canyon"
   },
   "98": {
     "neighborhood": "Pacoima"
   },
   "99": {
-    "neighborhood": "BeverlyGlen"
+    "neighborhood": "Beverly Glen"
   },
   "100": {
-    "neighborhood": "LakeBalboa"
+    "neighborhood": "Lake Balboa"
   },
   "101": {
-    "neighborhood": "SanPedro"
+    "neighborhood": "San Pedro"
   },
   "102": {
-    "neighborhood": "ValleyGlen"
+    "neighborhood": "Valley Glen"
   },
   "103": {
-    "neighborhood": "CSUNorthridge"
+    "neighborhood": "CSU Northridge"
   },
   "104": {
     "neighborhood": "Winnetka"
   },
   "105": {
-    "neighborhood": "WoodlandHills"
+    "neighborhood": "Woodland Hills"
   },
   "106": {
-    "neighborhood": "WestHills"
+    "neighborhood": "West Hills"
   },
   "107": {
     "neighborhood": "Chatsworth"
   },
   "108": {
-    "neighborhood": "FranklinCanyonPark"
+    "neighborhood": "Franklin Canyon Park"
   },
   "109": {
-    "neighborhood": "EncinoHills"
+    "neighborhood": "Encino Hills"
   },
   "110": {
-    "neighborhood": "FortMacArthur"
+    "neighborhood": "Fort MacArthur"
   },
   "111": {
-    "neighborhood": "PortofLosAngeles"
+    "neighborhood": "Port of Los Angeles"
   },
   "112": {
-    "neighborhood": "PortofLosAngeles"
+    "neighborhood": "Port of Los Angeles"
   },
   "114": {
-    "neighborhood": "VanNuysAirport"
+    "neighborhood": "Van Nuys Airport"
   }
 }
 }

@@ -11,38 +11,51 @@ var Station = mongoose.model('Station');
 var username = "fire";
 var password = "fire";
 
-var createStations = function(){
-    console.log('Creating Stations ...');
-
-    for(var stationNum in stationAddresses){
-
+var createStations = function () {
+    var fxns = [];
+    for (var stationNum in stationAddresses) {
         var stationWithAddress = stationAddresses[stationNum];
-        console.log(stationNum);
         //should validate this exists
         var stationWithGeoLoc = stationGeoLocs[stationNum];
         var stationWithNeighborhood = stationNeighborhoods[stationNum];
-
         var newStation = new Station({
-            "stationNumber" : stationNum,
-            "community" : stationWithNeighborhood.neighborhood,
-            "street" : stationWithAddress.address,
-            "city" : stationWithAddress.city,
-            "state" : stationWithAddress.state,
-            "zip" : stationWithAddress.zip,
-            "stationCoordinate": {  "type": "Point",
-                                    "coordinates": [stationWithGeoLoc.longitude,
-                                                    stationWithGeoLoc.latitude]}
-        });
-
-        //console.log(newStation);
-        newStation.save(function(err){
-            if (err) {
-                    console.log(err);
-                    return;
+            "stationNumber": stationNum,
+            "community": stationWithNeighborhood.neighborhood,
+            "street": stationWithAddress.address,
+            "city": stationWithAddress.city,
+            "state": stationWithAddress.state,
+            "zip": stationWithAddress.zip,
+            "stationCoordinate": {
+                "type": "Point",
+                "coordinates": [stationWithGeoLoc.longitude,
+                    stationWithGeoLoc.latitude]
             }
         });
-
+        var err = newStation.validateSync();
+        if (err) {
+            console.log("BROKE");
+            console.log(JSON.stringify(newStation));
+        }
+        else {
+            fxns.push(function (station, callback) {
+                //console.log(newStation);
+                station.save(function(err){
+                    if(err){
+                        console.log("Couldn't save");
+                        console.dir(err);
+                    }
+                    callback();
+                });
+            }.bind(null, newStation));
+        }
     }
-}
+    fxns.push(function (callback) {
+        console.log("complete");
+        callback();
+        process.exit();
+    });
+    async.series(fxns);
+
+};
 
 createStations();
