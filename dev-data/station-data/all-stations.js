@@ -1,4 +1,4 @@
-var stations =  [
+var stations = [
     {
         "address": "2230 Pasadena Avenue Los Angeles",
         "latitude": 34.075375,
@@ -636,9 +636,9 @@ var stations =  [
         "stationId": "114"
     }
 
-]
+];
 
 module.exports = {
     stations: stations
-}
+};
 
