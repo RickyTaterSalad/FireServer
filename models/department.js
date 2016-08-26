@@ -29,21 +29,17 @@ var DepartmentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         uppercase: true
     }],
-    schedule: ScheduleSchema,
-    stations: [
-        {type: mongoose.Schema.Types.ObjectId, ref: 'Station'}
-    ]
+    schedule: ScheduleSchema
+
 });
 DepartmentSchema.set('toJSON', {
     transform: function (doc, ret, options) {
-        var obj = {
+        return {
             id: ret._id,
             name: ret.name,
             platoons: ret.platoons,
-            stations: ret.stations,
             schedule: ret.schedule
         };
-        return obj;
 
     }
 });

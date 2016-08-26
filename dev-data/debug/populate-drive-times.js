@@ -2,33 +2,21 @@ var mongoose = require("mongoose");
 var async = require('async');
 var convert = require('convert-units');
 var util = require("util");
-
-require("../../helpers/mongoose-helper").initialize();
-
 var allDriveTimes = require("../station-data/all-driving-distances").distances;
-
 var DriveTime = mongoose.model('DriveTime');
-/*
-
- {
- "originStation": "1",
- "destinationStation": "2",
- "distance": "3.3 km",
- "distanceValue": 3298,
- "duration": "5 mins",
- "durationValue": 292,
- "origin": "2230 Pasadena Ave, Los Angeles, CA 90031, USA",
- "destination": "1962 East Cesar E Chavez Avenue, Los Angeles, CA 90033, USA",
- "units": "metric"
- }
-
-
- */
 
 var generateCreateFunction = function (params) {
     return function (params, callback) {
         // console.log(util.format("%s - %s"), params.originAddress, params.destinationAddress);
-        DriveTime.create(params, callback);
+        DriveTime.create(params, function(err){
+            if(err){
+                console.log("error creating drive time");
+            }
+            else{
+                console.log("created drive time");
+            }
+            callback()
+        });
     }.bind(null, params);
 };
 
@@ -121,9 +109,7 @@ var createDriveTimes = function (callback) {
         callback();
     });
 };
-
 module.exports = {
     createDriveTimes: createDriveTimes
 };
 
-createDriveTimes(function(){console.log("done")});

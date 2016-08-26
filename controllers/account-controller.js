@@ -1,4 +1,15 @@
 //model types passed can be either the instance itself or the object id
+var controllerUtils = require("../util/controller-utils");
+var Account = require('mongoose').model('Account');
+
+
+var createRandom = function(){
+
+};
+var getRandom = function (butNotThis) {
+    return controllerUtils.getRandomDocument(Account,butNotThis);
+};
+
 
 var findById = function (/*ObjectId*/ id) {
 
@@ -22,7 +33,7 @@ var registerAccount = function (/*Account */ account, registrationParameters) {
 
 };
 
-module.exports = {
+var exports = {
     findById: findById,
     findByGoogleProfile: findByGoogleProfile,
     findByFacebookProfile: findByFacebookProfile,
@@ -30,3 +41,10 @@ module.exports = {
     createAccount: createAccount,
     registerAccount: registerAccount
 };
+if (process.env.NODE_ENV !== 'production') {
+    exports.getRandom = getRandom;
+    exports.createRandom = createRandom;
+}
+
+
+module.exports = exports;

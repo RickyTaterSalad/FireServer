@@ -1,7 +1,7 @@
 {
   "workingDepartment": "LAFD",
   "db": {
-    "uri": "mongodb://fire:fire@localhost:27017/fire"
+    "uri": "mongodb://fire:fire@ds013926.mlab.com:13926/firedb"
   },
   "departments": {
     "LAFD": {

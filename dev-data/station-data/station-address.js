@@ -20,7 +20,8 @@ var addresses = {
         "city": "Los Angeles",
         "state": "CA",
         "zip": 90033
-    },
+    }/*,
+
     "3": {
         "address": "108 N Fremont Ave",
         "city": "Los Angeles",
@@ -645,6 +646,7 @@ var addresses = {
         "state": "CA",
         "zip": 91406
     }
+    */
 };
 module.exports = {
     // addressToAddressObject:addressToAddressObject,
