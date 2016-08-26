@@ -1,5 +1,4 @@
 var router = require('express').Router();
-var driveTimeCacheController = require("../cache/drive-time-cache-controller");
 const RequestHelperMethods = require("../util/request-helper-methods");
 const hasUser = require("../validators/has-user-validator").validate;
 var driveTimeController = require("../controllers/drive-time-controller");

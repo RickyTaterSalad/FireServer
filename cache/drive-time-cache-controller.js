@@ -1,7 +1,9 @@
 var cacheController = require("./cache-controller");
-var cachePrepend = "dt-";
 var debug = require('debug')('fireServer:server');
 
+
+
+var cachePrepend = "dt-";
 var getAsObject = function (origin, destination) {
     if (!origin || !destination) {
         return Promise.resolve(null);
