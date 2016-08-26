@@ -4,17 +4,20 @@ var ConversationSchema = new mongoose.Schema({
     creator: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Account',
-        required: true
+        required: true,
+        index: true
     },
     recipient: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Account',
-        required: true
+        required: true,
+        index: true
     },
     post: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post',
-        required: true
+        required: true,
+        index: true
     },
     messages: [
         {type: mongoose.Schema.Types.ObjectId, ref: 'Message'}

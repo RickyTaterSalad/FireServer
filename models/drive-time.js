@@ -3,14 +3,14 @@ var mongoose = require("mongoose");
 var config = require('config');
 var units = config.get('driveTimes.units');
 
-var LocationObject = new mongoose.Schema ({
+var LocationObject = new mongoose.Schema({
     type: {
         type: String,
         default: 'Point'
     },
     coordinates: [
         [
-            { type: [ Number ]}
+            {type: [Number]}
         ]
     ]
 
@@ -22,15 +22,18 @@ var DriveTimeSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Station',
         //todo change once we get stations
-        required: false
+        required: false,
+        index: true
     },
-    originCoordinate: { type: LocationObject,index: '2dsphere'},
-    destinationCoordinate: { type: LocationObject,index: '2dsphere'},
+    originCoordinate: {type: LocationObject, index: '2dsphere'},
+    destinationCoordinate: {type: LocationObject, index: '2dsphere'},
     destinationStation: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Station',
         //todo change once we get stations
-        required: false
+        required: false,
+        index: true
+
     },
     originAddress: {
         type: mongoose.Schema.Types.String,

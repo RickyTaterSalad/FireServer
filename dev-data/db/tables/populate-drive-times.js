@@ -3,15 +3,18 @@ var convert = require('convert-units');
 var util = require("util");
 var allDriveTimes = require("../../station-data/all-driving-distances").distances;
 var DriveTime = require("mongoose").model('DriveTime');
+var stationController = require("../../../controllers/station-controller");
+
+var Promise = require("Bluebird");
 
 var generateCreateFunction = function (params) {
     return function (params, callback) {
         // console.log(util.format("%s - %s"), params.originAddress, params.destinationAddress);
-        DriveTime.create(params, function(err){
-            if(err){
+        DriveTime.create(params, function (err) {
+            if (err) {
                 console.log("error creating drive time");
             }
-            else{
+            else {
                 console.log("created drive time");
             }
             callback()
@@ -19,9 +22,21 @@ var generateCreateFunction = function (params) {
     }.bind(null, params);
 };
 
+var getStation = function (stationNumber) {
+    return Promise.try(function () {
+        if (stationIdByStationNumber[stationNumber]) {
+            console.log("found station " + stationNumber + " in cache");
+            return stationIdByStationNumber[stationNumber];
+        }
+        else {
+            console.log("hitting db for station " + stationNumber);
+            return stationController.findByStationNumber((stationNumber))
+        }
+    })
+};
 
-var createDriveTimes = function (callback) {
-    console.log("creating drive times...");
+var writeDriveTimesToDb = function (stationLookup,callback) {
+    console.log("creating drive times... THIS CAN TAKE A WHILE");
     var stationFunctionsCreated = {};
     var fxns = [];
     for (var key in allDriveTimes) {
@@ -69,8 +84,8 @@ var createDriveTimes = function (callback) {
             }
 
             var driveTimeParams1 = {
-                // originStation: ,
-                // destinationStation: ,
+                originStation: stationLookup[driveTime.originStation]._id,
+                destinationStation: stationLookup[driveTime.destinationStation]._id,
                 originAddress: originAddress,
                 destinationAddress: destinationAddress,
                 distanceStringMetric: distanceMetricString,
@@ -88,8 +103,8 @@ var createDriveTimes = function (callback) {
             driveTimeParams2.destinationAddress = originAddress;
             driveTimeParams2.originCoordinate = driveTimeParams1.destinationCoordinate;
             driveTimeParams2.destinationCoordinate = originCoordinate;
-            //  driveTimeParams2.originStation = driveTime.destinationStation;
-            //   driveTimeParams2.destinationStation = driveTime.originStation;
+            driveTimeParams2.originStation = driveTimeParams1.destinationStation;
+            driveTimeParams2.destinationStation = driveTimeParams1.originStation;
 
             if (createDriveTime1) {
                 fxns.push(generateCreateFunction(driveTimeParams1));
@@ -107,6 +122,17 @@ var createDriveTimes = function (callback) {
         console.log("created drive times");
         callback();
     });
+};
+
+var createDriveTimes = function (callback) {
+    stationController.all().then(function(allStations){
+      var stationLookup = {};
+        for(var i =0 ; i < allStations.length;i++){
+            stationLookup[allStations[i].stationNumber] = allStations[i];
+        }
+        writeDriveTimesToDb(stationLookup,callback);
+    });
+
 };
 module.exports = {
     createDriveTimes: createDriveTimes

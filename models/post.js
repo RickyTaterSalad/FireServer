@@ -10,7 +10,8 @@ var PostSchema = new mongoose.Schema({
     creator: {
         type: mongoose.Schema.Types.ObjectId,
         "ref": "Account",
-        required: true
+        required: true,
+        index: true
     },
     shift: {
         type: mongoose.Schema.Types.Date,

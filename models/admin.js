@@ -3,8 +3,8 @@ var mongoose = require("mongoose");
 var AdminSchema = new mongoose.Schema({
     email: {
         type: mongoose.Schema.Types.String,
-        required: true
-
+        required: true,
+        index: true
     }
 
 });

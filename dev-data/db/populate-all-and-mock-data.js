@@ -43,8 +43,8 @@ var run = function () {
         require("./tables/populate-department").createDepartment,
         require("./tables/populate-stations").createStations,
         createFireUser,
-        require("./mock/generate-lots-of-data").createMockData
-        //,  require("./tables/populate-drive-times").createDriveTimes
+       // require("./mock/generate-lots-of-data").createMockData,
+        require("./tables/populate-drive-times").createDriveTimes
     ], function () {
         process.exit();
     });

@@ -30,7 +30,8 @@ var StationSchema = new mongoose.Schema({
     stationNumber: {
         type: mongoose.Schema.Types.String,
         required: true,
-        unique : true
+        unique : true,
+        index: true
     },
     community: {
         type: mongoose.Schema.Types.String

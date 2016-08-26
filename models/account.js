@@ -6,10 +6,12 @@ var platoons = config.get(util.format('departments.%s.platoons', deptId));
 
 var AccountSchema = new mongoose.Schema({
     localAuthUid: {
-        type: mongoose.Schema.Types.String
+        type: mongoose.Schema.Types.String,
+        index: true
     },
     googleUid: {
-        type: mongoose.Schema.Types.String
+        type: mongoose.Schema.Types.String,
+        index: true
     },
     isSoftBanned: {
         type: mongoose.Schema.Types.Boolean,
