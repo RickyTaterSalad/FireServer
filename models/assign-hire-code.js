@@ -25,7 +25,7 @@ ShiftSchema.set('toJSON', {
 });
 
 var AssignHireCodeSchema = new mongoose.Schema({
-    ah_code : {
+    ahCode : {
         type : mongoose.Schema.Types.String,
         required : true,
         //TODO need case insensitive validator
@@ -42,7 +42,7 @@ var AssignHireCodeSchema = new mongoose.Schema({
 AssignHireCodeSchema.set('toJSON', {
     transform : function(doc, ret, options){
         return {
-            ah_code : ret.ah_code,
+            ahCode : ret.ahCode,
             department : ret.department,
             shifts : ret.shifts
         };

@@ -1,6 +1,6 @@
 var faker = require("faker");
 var async = require("async");
-var accountController = require("../../controllers/account-controller");
+var accountController = require("../../../controllers/account-controller");
 var platoonGenerator = require('./generate-platoons');
 var Post = require('mongoose').model('Post');
 

@@ -1,8 +1,8 @@
 var faker = require("faker");
 var async = require("async");
 var Account = require('mongoose').model('Account');
-var departmentController = require("../../controllers/department-controller");
-var stationController = require("../../controllers/station-controller");
+var departmentController = require("../../../controllers/department-controller");
+var stationController = require("../../../controllers/station-controller");
 
 var fakePlatoons = ["A", "B", "C"];
 

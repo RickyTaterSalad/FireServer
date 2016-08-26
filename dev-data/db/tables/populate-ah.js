@@ -28,7 +28,7 @@ var generateAH = function () {
             function (dept, callback) {
                 //build assign hire code Object
                 var ahCode = new AssignHireCode({
-                    "ah_code": "C06",
+                    "ahCode": "C06",
                     "department": dept._id,
                     "shifts": [
                         {

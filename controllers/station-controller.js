@@ -1,5 +1,4 @@
 //model types passed can be either the instance itself or the object id
-var Promise = require("bluebird");
 var Station = require('mongoose').model('Station');
 var controllerUtils = require("../util/controller-utils");
 

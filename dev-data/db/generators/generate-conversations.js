@@ -1,8 +1,8 @@
 var async = require("async");
 var Conversation = require('mongoose').model('Conversation');
 
-var postController = require("../../controllers/post-controller");
-var accountController = require("../../controllers/account-controller");
+var postController = require("../../../controllers/post-controller");
+var accountController = require("../../../controllers/account-controller");
 
 var generateConversations = function (count, callback) {
     var fxns = [];

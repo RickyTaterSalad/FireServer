@@ -1,7 +1,7 @@
 var async = require("async");
 var faker = require("faker");
 var Message = require('mongoose').model('Message');
-var conversationController = require("../../controllers/conversation-controller");
+var conversationController = require("../../../controllers/conversation-controller");
 
 var generateMessages = function (count, callback) {
     var fxns = [];
