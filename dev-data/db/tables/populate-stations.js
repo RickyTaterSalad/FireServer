@@ -2,10 +2,10 @@ var mongoose = require("mongoose");
 var async = require('async');
 
 //init mongoose
-require("../../helpers/mongoose-helper").initialize();
-var stationAddresses = require("../station-data/station-address").addressLookupByStationId;
-var stationGeoLocs = require("../station-data/station-geolocation").geolocationLookupByStationId;
-var stationNeighborhoods = require("../station-data/station-neighborhood").neighborhoodLookupByStationId;
+//require("../../../helpers/mongoose-helper").initialize();
+var stationAddresses = require("../../station-data/station-address").addressLookupByStationId;
+var stationGeoLocs = require("../../station-data/station-geolocation").geolocationLookupByStationId;
+var stationNeighborhoods = require("../../station-data/station-neighborhood").neighborhoodLookupByStationId;
 var Station = mongoose.model('Station');
 
 var createStations = function (callback) {

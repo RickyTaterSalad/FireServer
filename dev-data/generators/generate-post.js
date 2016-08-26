@@ -1,13 +1,9 @@
 var faker = require("faker");
 var async = require("async");
 var accountController = require("../../controllers/account-controller");
+var platoonGenerator = require('./generate-platoons');
 var Post = require('mongoose').model('Post');
 
-var fakePlatoons = ["A", "B", "C"];
-
-var getRandomPlatoon = function () {
-    return fakePlatoons[Math.floor(Math.random() * fakePlatoons.length)];
-};
 
 var generatePosts = function (count, callback) {
     var fxns = [];
@@ -28,7 +24,7 @@ var generatePost = function (callback) {
                 station: account.station,
                 creator: account._id,
                 shift: faker.date.future(),
-                platoon: getRandomPlatoon()
+                platoon: platoonGenerator.generatePlatoon()
             });
         post.requestType = faker.random.boolean() ? "on" : "off";
         if (faker.random.boolean()) {

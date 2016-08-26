@@ -1,9 +1,8 @@
-var mongoose = require("mongoose");
 var async = require('async');
 var convert = require('convert-units');
 var util = require("util");
-var allDriveTimes = require("../station-data/all-driving-distances").distances;
-var DriveTime = mongoose.model('DriveTime');
+var allDriveTimes = require("../../station-data/all-driving-distances").distances;
+var DriveTime = require("mongoose").model('DriveTime');
 
 var generateCreateFunction = function (params) {
     return function (params, callback) {
