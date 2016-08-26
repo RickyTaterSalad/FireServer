@@ -40,7 +40,6 @@ var generateMessage = function (msgCount,callback) {
             callback();
         }
         else {
-            console.log("created message");
             message.save(function (err) {
                 if (err) {
                     console.log("error creating message");
