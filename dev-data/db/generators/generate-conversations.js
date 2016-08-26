@@ -3,6 +3,7 @@ var Conversation = require('mongoose').model('Conversation');
 
 var postController = require("../../../controllers/post-controller");
 var accountController = require("../../../controllers/account-controller");
+var debug = require('debug')('fireServer:server');
 
 var generateConversations = function (count, callback) {
     var fxns = [];
@@ -19,7 +20,7 @@ var generateConversation = function (callback) {
     postController.getRandom().then(function (randomPost) {
         accountController.getRandom().then(function (account) {
             if (!randomPost) {
-                console.log("could not retrieve random post to generateConversation");
+                debug("could not retrieve random post to generateConversation");
                 callback();
             }
             var conversation = new Conversation({
@@ -29,7 +30,7 @@ var generateConversation = function (callback) {
             });
             var err = conversation.validateSync();
             if (err) {
-                console.log("generated invalid conversation");
+                debug("generated invalid conversation");
                 console.dir(err);
                 callback();
             }
@@ -37,11 +38,11 @@ var generateConversation = function (callback) {
 
                 conversation.save(function (err) {
                     if (err) {
-                        console.log("error creating conversation");
+                        debug("error creating conversation");
                         console.dir(err);
                     }
                     else {
-                        console.log("created conversation");
+                        debug("created conversation");
 
                     }
                     callback();

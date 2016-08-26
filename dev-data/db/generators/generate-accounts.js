@@ -3,7 +3,7 @@ var async = require("async");
 var Account = require('mongoose').model('Account');
 var departmentController = require("../../../controllers/department-controller");
 var stationController = require("../../../controllers/station-controller");
-
+var debug = require('debug')('fireServer:server');
 var fakePlatoons = ["A", "B", "C"];
 
 var getRandomPlatoon = function () {
@@ -31,18 +31,18 @@ var generateAccount = function (callback) {
             });
             var err = account.validateSync();
             if(err){
-                console.log("generated invalid account");
-                console.log(err);
+                debug("generated invalid account");
+                debug(err);
                 callback();
             }
             else {
                 account.save(function (err) {
                     if (err) {
-                        console.log("error creating account");
-                        console.dir(err);
+                        debug("error creating account");
+                        debug(err);
                     }
                     else {
-                        console.log("created account");
+                        debug("created account");
                     }
                     callback()
                 });

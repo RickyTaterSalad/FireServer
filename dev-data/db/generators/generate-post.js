@@ -3,7 +3,7 @@ var async = require("async");
 var accountController = require("../../../controllers/account-controller");
 var platoonGenerator = require('./generate-platoons');
 var Post = require('mongoose').model('Post');
-
+var debug = require('debug')('fireServer:server');
 
 var generatePosts = function (count, callback) {
     var fxns = [];
@@ -16,7 +16,7 @@ var generatePosts = function (count, callback) {
 var generatePost = function (callback) {
     accountController.getRandom().then(function (account) {
         if (!account) {
-            console.log("could not retrieve random account to generatePost");
+            debug("could not retrieve random account to generatePost");
             callback();
         }
         var post = new Post({
@@ -36,17 +36,17 @@ var generatePost = function (callback) {
 
         var err = post.validateSync();
         if(err){
-            console.log("generated invalid post");
+            debug("generated invalid post");
             callback();
         }
         else {
             post.save(function(err){
                 if(err){
-                    console.log("error creating post");
-                    console.dir(err);
+                    debug("error creating post");
+                    debug(err);
                 }
                 else{
-                    console.log("created post");
+                    debug("created post");
                 }
                 callback()
             });

@@ -1,16 +1,33 @@
 //model types passed can be either the instance itself or the object id
+
+
 var controllerUtils = require("../util/controller-utils");
+var driveTimeCacheController = require("../cache/drive-time-cache-controller");
 var DriveTime = require('mongoose').model('DriveTime');
 var Promise = require("Bluebird");
-
+var debug = require('debug')('fireServer:server');
 var getRandom = function () {
     return controllerUtils.getRandomDocument(DriveTime);
 };
-
-
 var findByOriginStationAndDestination = function (/*ObjectId*/ originStation, /*ObjectId*/ destinationStation) {
-    return Promise.try(function(){
-        return DriveTime.find({originStation:originStation,destinationStation:destinationStation});
+    //check the redis cache first
+    return driveTimeCacheController.get(originStation, destinationStation).then(function (driveTime) {
+        if (driveTime) {
+            debug("Returning drive time from cache");
+            console.dir(driveTime);
+            return Promise.resolve(driveTime);
+        }
+        else {
+            //go to db
+            debug("hitting DB for drive time");
+            return DriveTime.find({
+                originStation: originStation,
+                destinationStation: destinationStation
+            }).then(function (driveTime) {
+                driveTimeCacheController.add(driveTime);
+                return driveTime;
+            });
+        }
     });
 };
 

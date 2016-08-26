@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 var async = require('async');
-
+var debug = require('debug')('fireServer:server');
 //init mongoose
 //require("../../helpers/mongoose-helper").initialize();
 
@@ -12,7 +12,7 @@ var username = "fire";
 var password = "fire";
 
 var generateAH = function () {
-    console.log('Generating AH Codes ...');
+    debug('Generating AH Codes ...');
 
     async.waterfall([
             //get LAFD department
@@ -21,8 +21,6 @@ var generateAH = function () {
                     .findOne({'Name': 'LAFD'})
                     .select('_id')
                     .exec(callback);
-                //console.log('Got LAFD, ID:' + dept._id);
-                //callback(null, dept);
             },
             //insert AH code object
             function (dept, callback) {
@@ -71,9 +69,9 @@ var generateAH = function () {
         //callback function to handle end of waterfall execution
         function (err, result) {
             if (err) {
-                console.log("Error!");
+                debug("Error!");
             } else {
-                console.log("Success!");
+                debug("Success!");
             }
         }
     );

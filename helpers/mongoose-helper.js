@@ -3,15 +3,20 @@ var config = require('config');
 var debug = require('debug')('fireServer:server');
 var initialized = false;
 
-var initialize = function () {
+var initialize = function (dropDatabaseOnConnect) {
     if (initialized) {
         return;
     }
 //setup mongoDB connection
     var dbURI = config.get('db.uri');
-
+    mongoose.Promise = require('bluebird');
 // Create the database connection
-    mongoose.connect(process.env.MONGODB_URI || dbURI);
+    mongoose.connect(process.env.MONGODB_URI || dbURI, function () {
+        if (process.env.NODE_ENV !== 'production' && dropDatabaseOnConnect) {
+            debug("DROPPING MONGOOSE DATABASE");
+            mongoose.connection.db.dropDatabase();
+        }
+    });
 // CONNECTION EVENTS
 // When successfully connected
     mongoose.connection.on('connected', function () {

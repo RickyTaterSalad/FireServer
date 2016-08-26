@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 var async = require('async');
-
+var debug = require('debug')('fireServer:server');
 //init mongoose
 //require("../../../helpers/mongoose-helper").initialize();
 const stations = require("../../station-data/all-stations").stations;
@@ -12,18 +12,18 @@ var createStations = function (callback) {
         var newStation = new Station(stations[i]);
         var err = newStation.validateSync();
         if (err) {
-            console.log("could not create station")
-            console.log(err);
+            debug("could not create station")
+            debug(err);
         }
         else {
             fxns.push(function (station, callback) {
                 station.save(function (err) {
                     if (err) {
-                        console.log("Couldn't save");
-                        console.dir(err);
+                        debug("Couldn't save station");
+                        debug(err);
                     }
                     else {
-                        console.log("created station");
+                        debug("created station");
                     }
                     callback();
                 });
@@ -31,7 +31,7 @@ var createStations = function (callback) {
         }
     }
     async.parallel(fxns, function () {
-        console.log("stations complete");
+        debug("stations complete");
         callback();
     });
 };

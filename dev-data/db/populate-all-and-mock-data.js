@@ -1,7 +1,8 @@
 var mongoose = require("mongoose");
 var async = require('async');
+var debug = require('debug')('fireServer:server');
 //init mongoose
-require("../../helpers/mongoose-helper").initialize();
+require("../../helpers/mongoose-helper").initialize(true);
 var Account = mongoose.model('Account');
 var departmentController = require("../../controllers/department-controller");
 var stationController = require("../../controllers/station-controller");
@@ -18,17 +19,17 @@ var createFireUser = function (callback) {
             });
             var err = account.validateSync();
             if (err) {
-                console.log("could not generate fire user ");
+                debug("could not generate fire user ");
                 callback();
             }
             else {
-                console.log("saving  fire user");
+                debug("saving  fire user");
                 account.save(function (err) {
                     if (err) {
-                        console.log("could not save fire user");
+                        debug("could not save fire user");
                     }
                     else {
-                        console.log("saved fire user");
+                        debug("saved fire user");
                         callback();
 
                     }
@@ -38,7 +39,7 @@ var createFireUser = function (callback) {
     });
 };
 var run = function () {
-    console.log("run");
+    debug("run");
     async.series([
         require("./tables/populate-department").createDepartment,
         require("./tables/populate-stations").createStations,

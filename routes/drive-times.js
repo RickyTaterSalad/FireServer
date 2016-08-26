@@ -1,8 +1,9 @@
 var router = require('express').Router();
+var driveTimeCacheController = require("../cache/drive-time-cache-controller");
 const RequestHelperMethods = require("../util/request-helper-methods");
 const hasUser = require("../validators/has-user-validator").validate;
 var driveTimeController = require("../controllers/drive-time-controller");
-
+var debug = require('debug')('fireServer:server');
 
 router.get('/:originStation/:destinationStation', hasUser, function (req, res) {
     var origin = req.params.originStation;
@@ -14,9 +15,8 @@ router.get('/:originStation/:destinationStation', hasUser, function (req, res) {
         return res.json(RequestHelperMethods.invalidRequestJson);
     }
     driveTimeController.findByOriginStationAndDestination(origin, dest).catch(function (err) {
-        return res.json(RequestHelperMethods.invalidRequestJson);
     }).then(function (driveTime) {
-        res.json(driveTime);
+        return res.json(driveTime || {});
     });
 });
 

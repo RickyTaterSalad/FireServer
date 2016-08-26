@@ -1,11 +1,12 @@
 var Department = require("mongoose").model('Department');
+var debug = require('debug')('fireServer:server');
 var createDepartment = function (callback) {
-    console.log("Create dept");
+    debug("Create dept");
     var dept = new Department(require("../../station-data/department").department);
     var err = dept.validateSync();
     if (err) {
-        console.log("generated invalid department");
-        console.log(err);
+        debug("generated invalid department");
+        debug(err);
         callback();
     }
     else {
