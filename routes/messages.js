@@ -17,10 +17,7 @@ router.get('/received', hasUser, function (req, res) {
 });
 router.get('/sent', hasUser, function (req, res) {
     var params = {'sender': req.locals.userId};
-    console.log("sent params: " + JSON.stringify(params));
     Message.find(params, function (err, message) {
-        console.log("messages sent");
-        console.log("sent params: " + JSON.stringify(message));
         if (err) {
             res.send(err);
         } else {

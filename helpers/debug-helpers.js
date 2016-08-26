@@ -17,7 +17,6 @@ var defaultDepartment = function () {
     return new Promise(function (resolve, reject) {
         Department.findOne({}).populate('Stations')
             .exec(function (err, department) {
-                console.log(JSON.stringify(department));
                 resolve(department);
             });
     });

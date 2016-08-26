@@ -7,7 +7,6 @@ var validate = function (req, res, next) {
     if (!req.user.station) {
         return res.json(RequestHelperMethods.invalidRequestJson);
     }
-    console.dir(req.user);
     var post = new Post({
         creator: req.locals.userId,
         shift: req.body.shift,
@@ -20,10 +19,8 @@ var validate = function (req, res, next) {
         requestType: req.body.requestType,
         platoon: req.body.platoon
     });
-    console.dir(post);
     var error = post.validateSync();
     if (error) {
-        //console.dir(error);
         res.json(RequestHelperMethods.invalidRequestJson);
     }
     else {

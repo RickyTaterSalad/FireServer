@@ -1,5 +1,5 @@
 var Promise = require("bluebird");
-
+var debug = require('debug')('fireServer:server');
 var getRandomDocumentFromModel = function (model) {
     return Promise.try(function () {
         return model.count().exec();
@@ -11,7 +11,7 @@ var getRandomDocumentFromModel = function (model) {
         return  res;
 
     }).catch(function(err){
-        console.log("err retrieving random document for model: " + model.modelName);
+        debug("err retrieving random document for model: " + model.modelName);
     });
 };
 

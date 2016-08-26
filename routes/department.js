@@ -17,8 +17,6 @@ router.get('/:departmentId', hasUser, function (req, res) {
             if (err) {
                 res.send(err);
             } else {
-                //  console.log("DEPT: " + JSON.stringify((department)));
-                //  console.log(department.Stations[0].getTimestamp());
                 res.json(department);
             }
         });

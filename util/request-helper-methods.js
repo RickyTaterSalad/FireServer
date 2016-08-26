@@ -1,6 +1,13 @@
+var util = require("util");
+var debug = require('debug')('fireServer:server');
 var validObjectId = function (id) {
-    id != null && id.length > 0 ? id.match(/^[0-9a-fA-F]{24}$/) : false;
-}
+    var res = ((id != null && id.length > 0) ? id.match(/^[0-9a-fA-F]{24}$/) : false);
+    if(!res) {
+        debug(util.format("invalid format Object id passed: %s", id));
+    }
+    return res;
+
+};
 
 
 var invalidRequestJson = {success: false, message: "Invalid Request"};
@@ -9,4 +16,4 @@ module.exports = {
     validObjectId: validObjectId,
     invalidRequestJson: invalidRequestJson,
     noUserJson: noUserJson
-}
+};

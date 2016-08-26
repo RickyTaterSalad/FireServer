@@ -1,5 +1,7 @@
 var Account = require('mongoose').model('Account');
 var Promise = require("bluebird");
+var debug = require('debug')('fireServer:server');
+
 var photoFromProfile = function (profile) {
     if (!profile || !profile.photos || profile.photos.length == 0) {
         return null;
@@ -31,17 +33,17 @@ var retrieveOrCreateAccount = function (profile) {
         };
         Account.findOne(params, function (err, user) {
             if (user == null) {
-                console.log("Creating account");
+                debug("Creating account");
                 return createAccount(profile).catch(function (e) {
-                    console.log("got reject in retrieveOrCreateAccount");
+                    debug("got reject in retrieveOrCreateAccount");
                     reject(e);
                 }).then(function (user) {
-                    console.log("got account in retrieveOrCreateAccount");
+                    debug("got account in retrieveOrCreateAccount");
                     resolve(user);
                 })
             }
             else {
-                console.log("found user in DB");
+                debug("found user in DB");
                 resolve(user);
 
             }
@@ -61,12 +63,9 @@ var createAccount = function (profile) {
         };
 
         Account.create(params, function (err, user) {
-                if (user != null) {
-                    console.dir(JSON.stringify(user));
-                }
                 if (err) {
-                    console.log("Caught error in create google account");
-                    console.log(err);
+                    debug("Caught error in create google account");
+                    debug(err);
                 }
                 err ? reject(err) : resolve(user);
             }
