@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 var async = require('async');
 var debug = require('debug')('fireServer:server');
 //init mongoose
-require("../../helpers/mongoose-helper").initialize(true);
+require("../../helpers/mongoose-helper").initialize();
 var Account = mongoose.model('Account');
 var departmentController = require("../../controllers/department-controller");
 var stationController = require("../../controllers/station-controller");
@@ -44,7 +44,7 @@ var run = function () {
         require("./tables/populate-department").createDepartment,
         require("./tables/populate-stations").createStations,
         createFireUser,
-       // require("./mock/generate-lots-of-data").createMockData,
+        require("./mock/generate-lots-of-data").createMockData,
         require("./tables/populate-drive-times").createDriveTimes
     ], function () {
         process.exit();

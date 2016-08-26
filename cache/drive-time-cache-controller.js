@@ -1,28 +1,31 @@
 var cacheController = require("./cache-controller");
 var debug = require('debug')('fireServer:server');
+var config = require('config');
+var useRedis = config.get('redis.enabled');
+var dbId;
+if(useRedis) {
+    dbId = config.get('redis.dbLookup.driveTime');
+}
 
 
-
-var cachePrepend = "dt-";
 var getAsObject = function (origin, destination) {
-    if (!origin || !destination) {
+    if (!origin || !destination || !useRedis) {
         return Promise.resolve(null);
     }
     return get([origin, destination], true);
 };
 var get = function (driveTimeArray, returnObject) {
-    if (!driveTimeArray || driveTimeArray.length != 2) {
-        return null;
+    if (!driveTimeArray || driveTimeArray.length != 2 || !useRedis) {
+     return Promise.resolve(null);
     }
-    driveTimeArray = [cachePrepend, driveTimeArray[0], driveTimeArray[1]];
-    return cacheController.getObjectAsync(driveTimeArray, returnObject);
+    return cacheController.getObjectAsync(dbId,driveTimeArray, returnObject);
 };
 var add = function (driveTime) {
-    if (!driveTime) {
-        return null;
+    if (!driveTime || !useRedis) {
+        return Promise.resolve(null);
     }
-    var driveTimeArray = [cachePrepend, driveTime.originStation, driveTime.destinationStation];
-    return cacheController.setObject(driveTimeArray, driveTime);
+    var driveTimeArray = [driveTime.originStation, driveTime.destinationStation];
+    return cacheController.setObject(dbId,driveTimeArray, driveTime);
 };
 module.exports = {
     get: getAsObject,

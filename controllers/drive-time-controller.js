@@ -14,17 +14,19 @@ var findByOriginStationAndDestination = function (/*ObjectId*/ originStation, /*
     return driveTimeCacheController.get(originStation, destinationStation).then(function (driveTime) {
         if (driveTime) {
             debug("Returning drive time from cache");
-            console.dir(driveTime);
+
             return Promise.resolve(driveTime);
         }
         else {
             //go to db
             debug("hitting DB for drive time");
-            return DriveTime.find({
+            return DriveTime.findOne({
                 originStation: originStation,
                 destinationStation: destinationStation
             }).then(function (driveTime) {
-                driveTimeCacheController.add(driveTime);
+                if (driveTime) {
+                    driveTimeCacheController.add(driveTime);
+                }
                 return driveTime;
             });
         }

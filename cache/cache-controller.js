@@ -1,5 +1,4 @@
 var redis = require("redis");
-var crypto = require('crypto');
 var Promise = require("Bluebird");
 var debug = require('debug')('fireServer:server');
 var config = require('config');
@@ -12,7 +11,15 @@ if (useRedis) {
         debug("Redis client connection error", err);
     });
 }
-var _getObjectAsync = Promise.promisify(function (key, callback) {
+var createKey = function (stringArray) {
+    if (!stringArray) {
+        return null;
+    }
+    return stringArray.join("-");
+};
+
+
+var _getObjectAsync = Promise.promisify(function (dbId, key, callback) {
     if (!key) {
         callback("No Key Present");
     }
@@ -23,21 +30,18 @@ var _getObjectAsync = Promise.promisify(function (key, callback) {
         if (key instanceof Array) {
             key = createKey(key);
         }
-        client.get(key, callback);
+        client.select(dbId, function (err, res) {
+            if (err) {
+                debug("error setting redis db to id: " + dbId);
+                callback();
+            }
+            else {
+                client.get(key, callback);
+            }
+        });
     }
 });
-
-var createKey = function (stringArray) {
-    if (!stringArray) {
-        return null;
-    }
-    var combined = "";
-    for (var i = 0; i < stringArray.length; i++) {
-        combined += stringArray[i];
-    }
-    return crypto.createHash('md5').update(combined).digest('hex');
-};
-var setObject = function (key, obj) {
+var setObject = function (dbId, key, obj) {
     if (client && key && obj) {
         if (key instanceof Array) {
             key = createKey(key);
@@ -46,13 +50,20 @@ var setObject = function (key, obj) {
                 return;
             }
         }
-        client.set(key, JSON.stringify(obj), redis.print);
-        debug("cached object with key: " + key);
+        return client.select(dbId, function (err, res) {
+            if (err) {
+                debug("error setting redis db to id: " + dbId);
+                return;
+            }
+            client.set(key, JSON.stringify(obj), redis.print);
+            debug("cached object with key: " + key);
+        });
     }
 };
-var getObjectAsync = function (key, returnObject) {
-    return _getObjectAsync(key).catch(function (err) {
+var getObjectAsync = function (dbId, key, returnObject) {
+    return _getObjectAsync(dbId, key).catch(function (err) {
     }).then(function (data) {
+        debug(data);
         return returnObject && data ? JSON.parse(data) : data;
     });
 

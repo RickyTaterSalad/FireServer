@@ -87,6 +87,7 @@ DriveTimeSchema.set('toJSON', {
             obj.distance = ret.distanceFeet;
 
         }
+        return obj;
     }
 });
 
