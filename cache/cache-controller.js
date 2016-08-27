@@ -19,7 +19,7 @@ var createKey = function (stringArray) {
 };
 
 
-var _getObjectAsync = Promise.promisify(function (dbId, key, callback) {
+var _getObjectAsync = Promise.promisify(function (key, callback) {
     if (!key) {
         callback("No Key Present");
     }
@@ -30,18 +30,10 @@ var _getObjectAsync = Promise.promisify(function (dbId, key, callback) {
         if (key instanceof Array) {
             key = createKey(key);
         }
-        client.select(dbId, function (err, res) {
-            if (err) {
-                debug("error setting redis db to id: " + dbId);
-                callback();
-            }
-            else {
-                client.get(key, callback);
-            }
-        });
+        client.get(key, callback);
     }
 });
-var setObject = function (dbId, key, obj) {
+var setObject = function (dbPrefix, key, obj) {
     if (client && key && obj) {
         if (key instanceof Array) {
             key = createKey(key);
@@ -50,18 +42,12 @@ var setObject = function (dbId, key, obj) {
                 return;
             }
         }
-        return client.select(dbId, function (err, res) {
-            if (err) {
-                debug("error setting redis db to id: " + dbId);
-                return;
-            }
-            client.set(key, JSON.stringify(obj), redis.print);
-            debug("cached object with key: " + key);
-        });
+        client.set(dbPrefix + key, JSON.stringify(obj), redis.print);
+        debug("cached object with key: " + key);
     }
 };
-var getObjectAsync = function (dbId, key, returnObject) {
-    return _getObjectAsync(dbId, key).catch(function (err) {
+var getObjectAsync = function (dbPrefix, key, returnObject) {
+    return _getObjectAsync(dbPrefix + key).catch(function (err) {
     }).then(function (data) {
         debug(data);
         return returnObject && data ? JSON.parse(data) : data;

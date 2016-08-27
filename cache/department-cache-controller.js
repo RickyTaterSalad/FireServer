@@ -2,12 +2,7 @@ var cacheController = require("./cache-controller");
 var debug = require('debug')('fireServer:server');
 var config = require('config');
 var useRedis = config.get('redis.enabled');
-var dbId;
-if(useRedis) {
-    dbId = config.get('redis.dbLookup.department');
-}
-
-
+var dbPrefix = "dp:";
 var getAsObject = function (departmentName) {
     if (!departmentName || !useRedis) {
         return Promise.resolve(null);
@@ -19,7 +14,7 @@ var get = function (departmentName, returnObject) {
         return Promise.resolve(null);
     }
     debug("cache - finding dept for key: " + departmentName);
-    return cacheController.getObjectAsync(dbId, departmentName, returnObject);
+    return cacheController.getObjectAsync(dbPrefix, departmentName, returnObject);
 
 };
 var add = function (department) {
@@ -27,7 +22,7 @@ var add = function (department) {
         return Promise.resolve(null);
     }
     debug("cache - storing dept: " + department.name);
-    cacheController.setObject(dbId, department.name, department);
+    cacheController.setObject(dbPrefix, department.name, department);
 };
 module.exports = {
     get: getAsObject,

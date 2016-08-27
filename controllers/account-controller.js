@@ -9,8 +9,6 @@ var createRandom = function(){
 var getRandom = function (butNotThis) {
     return controllerUtils.getRandomDocument(Account,butNotThis);
 };
-
-
 var findById = function (/*ObjectId*/ id) {
 
 };
