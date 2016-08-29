@@ -16,13 +16,6 @@ router.get('/', function (req, res) {
                 res.json({});
             }
         });
-    // AssignHireCode.find(function (err, ahCodes) {
-    //     if (err) {
-    //         res.send(err);
-    //     } else {
-    //         res.json(ahCodes);
-    //     }
-    // });
 });
 
 router.get('/:ahCode', function (req, res) {
@@ -30,6 +23,25 @@ router.get('/:ahCode', function (req, res) {
     if(req.params && req.params.ahCode) {
         AssignHireCodeController
             .findByCode(req.params.ahCode.toUpperCase())
+            .then(function(ahObj){
+                if(ahObj){
+                    res.json(ahObj);
+                }
+                else {
+                    res.json({});
+                }
+            });
+    }
+    else{
+        res.json(RequestHelperMethods.invalidRequestJson);
+    }
+});
+
+router.get('/Date/:date', function (req, res) {
+    debug(req.params);
+    if(req.params && req.params.date) {
+        AssignHireCodeController
+            .findByDate(req.params.date)
             .then(function(ahObj){
                 if(ahObj){
                     res.json(ahObj);

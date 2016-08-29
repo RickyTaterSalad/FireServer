@@ -2,7 +2,7 @@
 var controllerUtils = require("../util/controller-utils");
 var AssignHireCode = require('mongoose').model('AssignHireCode');
 var debug = require('debug')('fireServer:server');
-
+var moment = require('moment');
 
 var getRandom = function () {
     return controllerUtils.getRandomDocument(AssignHireCode);
@@ -45,7 +45,7 @@ var findByCode = function (/*String*/ code) {
                 return ahCode;
              })
             .catch(function(err){
-                return err;
+                return Promise.resolve(err);
             });
 };
 
@@ -54,12 +54,19 @@ var findByDate = function (/*Date*/ date) {
         return Promise.resolve(null);
     }
 
-    AssignHireCode.find({
-        'shifts.start' : date
-    }).then(function(err, ahCodeResults){
-        if(err) return err;
-        return ahCodeResults;
-    });
+    var searchDate = moment(date);
+    var nextDay = searchDate.clone().add(1, 'day');
+
+    return AssignHireCode
+        .find({'shifts.start' : {
+            '$gte': searchDate.format(),
+            '$lt': nextDay.format()}})
+        .then(function(ahCodeResults){
+            return ahCodeResults;
+        })
+        .catch(function(err){
+            return Promise.resolve(null);
+        });
 };
 
 var findByDayMonthYear = function (day, month, year) {
