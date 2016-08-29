@@ -1,5 +1,5 @@
 var redis = require("redis");
-var Promise = require("Bluebird");
+var Promise = require("bluebird");
 var debug = require('debug')('fireServer:server');
 var config = require('config');
 var useRedis = config.get('redis.enabled');

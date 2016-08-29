@@ -1,7 +1,7 @@
 //model types passed can be either the instance itself or the object id
 var controllerUtils = require("../util/controller-utils");
 var Department = require('mongoose').model('Department');
-var Promise = require("Bluebird");
+var Promise = require("bluebird");
 var debug = require('debug')('fireServer:server');
 var getRandom = function () {
     return controllerUtils.getRandomDocument(Department);

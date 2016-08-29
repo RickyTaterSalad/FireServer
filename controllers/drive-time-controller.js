@@ -4,7 +4,7 @@
 var controllerUtils = require("../util/controller-utils");
 var driveTimeCacheController = require("../cache/drive-time-cache-controller");
 var DriveTime = require('mongoose').model('DriveTime');
-var Promise = require("Bluebird");
+var Promise = require("bluebird");
 var debug = require('debug')('fireServer:server');
 var getRandom = function () {
     return controllerUtils.getRandomDocument(DriveTime);

@@ -2,6 +2,8 @@ var mongoose = require("mongoose");
 var util = require('util');
 var config = require('config');
 var deptId = config.get('workingDepartment');
+var validator = require('validator');
+
 var platoons = config.get(util.format('departments.%s.platoons', deptId));
 
 var AccountSchema = new mongoose.Schema({
@@ -23,21 +25,25 @@ var AccountSchema = new mongoose.Schema({
     },
     firstName: {
         type: mongoose.Schema.Types.String,
-        required: true
+        required: [true, 'User must have a First name']
     },
     photo: {
         type: mongoose.Schema.Types.String
     },
     lastName: {
         type: mongoose.Schema.Types.String,
-        required: true
+        required: [true, 'User must have a Last name']
     },
     email: {
         type: mongoose.Schema.Types.String,
-        required: true
+        required: [true, 'User email is required.'],
+        validate : {
+            validator : function(email){
+                return validator.isEmail('foo@bar.com');
+            },
+            message : 'Invalid email address.'
+        }
     },
-
-    //todo - validate platoon exists on the department
     platoon: {
         type: mongoose.Schema.Types.String,
         index: true,
@@ -51,7 +57,14 @@ var AccountSchema = new mongoose.Schema({
     },
     department: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Department"
+        ref: "Department",
+        validate: {
+            validator : function(deptIdValue){
+                return deptIdValue == deptId;
+            },
+            message : 'Department ID does not match the working department.'
+        },
+        required: [true, 'User must be associated with a department.']
     },
     station: {
         type: mongoose.Schema.Types.ObjectId,

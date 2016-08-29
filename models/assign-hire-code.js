@@ -27,14 +27,14 @@ ShiftSchema.set('toJSON', {
 var AssignHireCodeSchema = new mongoose.Schema({
     ahCode : {
         type : mongoose.Schema.Types.String,
-        required : true,
-        //TODO need case insensitive validator
+        required : [true, 'AH Code object must have a specified code'],
+        uppercase : true,
         unique : true
     },
     department: {
         type: mongoose.Schema.Types.ObjectId,
         "ref": "Department",
-        required: true
+        required: [true, "AH Code must be associated with a department."]
     },
     shifts : [ShiftSchema]
 });
