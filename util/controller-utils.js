@@ -15,6 +15,20 @@ var getRandomDocumentFromModel = function (model) {
     });
 };
 
+var all = function(model){
+    if (!model) {
+        Promise.resolve([]);
+    }
+    return model.find();
+};
+var byId = function(model,id){
+    if (!id || !model) {
+        Promise.resolve(null);
+    }
+    return model.findOne(id);
+};
+
+
 /*
 
  var Promise = require("bluebird");
@@ -38,5 +52,7 @@ var getRandomDocumentFromModel = function (model) {
  */
 
 module.exports = {
-    getRandomDocument: getRandomDocumentFromModel
+    getRandomDocument: getRandomDocumentFromModel,
+    all: all,
+    byId: byId
 };

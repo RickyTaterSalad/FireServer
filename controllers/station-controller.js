@@ -8,7 +8,7 @@ var getRandom = function () {
 };
 
 var findById = function (/*ObjectId*/ id) {
-
+    return controllerUtils.byId(Station,id)
 };
 var findByUser = function (/*Account */ account) {
 
@@ -19,9 +19,7 @@ var findByStationNumber = function (stationNumber) {
     });
 };
 var all = function () {
-    return Promise.try(function () {
-        return Station.find({});
-    });
+   return controllerUtils.all(Station);
 };
 
 var exports = {

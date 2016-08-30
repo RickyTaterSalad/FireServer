@@ -2,7 +2,7 @@ var mongoose = require("mongoose");
 
 var ShiftSchema = new mongoose.Schema({
     start : {
-        type : mongoose.Schema.Types.Date,
+        type : 'Moment',
         required : true
     },
     hours : {

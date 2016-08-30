@@ -3,6 +3,9 @@ var util = require("util");
 
 var config = require('config');
 var deptId = config.get('workingDepartment');
+var moment = require("moment");
+var dateUtils = require("../util/date-utils");
+
 
 var platoons = config.get(util.format('departments.%s.platoons', deptId));
 
@@ -14,11 +17,14 @@ var PostSchema = new mongoose.Schema({
         index: true
     },
     shift: {
-        type: mongoose.Schema.Types.Date,
+        type: "Moment",
         required: true,
         validate: {
             validator: function (d) {
-                return d > Date.now()
+                if(!d){
+                    return false;
+                }
+                return !dateUtils.isDateBeforeToday(moment(d));
             },
             message: 'shift cannot be in the past!'
         }

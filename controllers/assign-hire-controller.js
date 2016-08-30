@@ -21,15 +21,7 @@ var getAllAHCodes = function(){
 };
 
 var findById = function (/*ObjectId*/ id) {
-    if(!id){
-        return Promise.resolve(null);
-    }
-
-    return AssignHireCode.findById({
-        id:id
-    }).then(function(ahCode){
-        return ahCode;
-    });
+    return controllerUtils.byId(AssignHireCode,id);
 };
 
 var findByCode = function (/*String*/ code) {

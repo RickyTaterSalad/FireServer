@@ -20,6 +20,7 @@ var createFireUser = function (callback) {
             var err = account.validateSync();
             if (err) {
                 debug("could not generate fire user ");
+                console.dir(err);
                 callback();
             }
             else {

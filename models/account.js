@@ -38,10 +38,10 @@ var AccountSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: [true, 'User email is required.'],
         validate : {
-            validator : function(email){
-                return validator.isEmail('foo@bar.com');
+            validator: function (email) {
+                return validator.isEmail(email);
             },
-            message : 'Invalid email address.'
+            message: 'Invalid email address.'
         }
     },
     platoon: {
@@ -58,12 +58,6 @@ var AccountSchema = new mongoose.Schema({
     department: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Department",
-        validate: {
-            validator : function(deptIdValue){
-                return deptIdValue == deptId;
-            },
-            message : 'Department ID does not match the working department.'
-        },
         required: [true, 'User must be associated with a department.']
     },
     station: {

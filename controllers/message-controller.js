@@ -9,7 +9,7 @@ var getRandom = function () {
 
 
 var findById = function (/*ObjectId*/ id) {
-
+    return controllerUtils.byId(Message,id);
 };
 
 var forConversation = function (/* Conversation */ conversation) {

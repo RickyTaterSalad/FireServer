@@ -4,6 +4,7 @@ var accountController = require("../../../controllers/account-controller");
 var platoonGenerator = require('./generate-platoons');
 var Post = require('mongoose').model('Post');
 var debug = require('debug')('fireServer:server');
+var moment = require("moment");
 
 var generatePosts = function (count, callback) {
     var fxns = [];
@@ -19,11 +20,16 @@ var generatePost = function (callback) {
             debug("could not retrieve random account to generatePost");
             callback();
         }
+        var futureDate = faker.date.future();
+        var futureMoment = moment(futureDate);
+        futureMoment.minute(0);
+        futureMoment.second(0);
+        futureMoment.hour(0);
         var post = new Post({
                 department: account.department,
                 station: account.station,
                 creator: account._id,
-                shift: faker.date.future(),
+                shift: futureMoment,
                 platoon: platoonGenerator.generatePlatoon()
             });
         post.requestType = faker.random.boolean() ? "on" : "off";
@@ -36,6 +42,7 @@ var generatePost = function (callback) {
 
         var err = post.validateSync();
         if(err){
+            console.break();
             debug("generated invalid post");
             callback();
         }

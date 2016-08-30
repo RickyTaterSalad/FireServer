@@ -35,8 +35,6 @@ var dateFromDayMonthYear = function (day, month, year, options) {
     if (!append) {
         append = START_OF_DAY_UTC_APPEND;
     }
-
-    console.log([year, mStr, day].join("-"));
     return moment(util.format("%s %s",[year, mStr, day].join("-"),append));
 };
 //date in ms: 1472586908000
@@ -63,7 +61,7 @@ var isDateBeforeToday = function (/* Moment */ date) {
     if (!date) {
         return null;
     }
-    return date.isBefore(moment().utc(), DAY);
+    return date.isBefore(todayUtc(), DAY);
 
 };
 var isDateToday = function (/* Moment */ date) {
@@ -71,14 +69,17 @@ var isDateToday = function (/* Moment */ date) {
         return null;
     }
 
-    return date.isSame(moment().utc(), DAY);
+    return date.isSame(todayUtc(), DAY);
 
 };
 var isDateAfterToday = function (/* Moment */ date) {
     if (!date) {
         return null;
     }
-    return date.isAfter(moment().utc(), DAY);
+    return date.isAfter(todayUtc(), DAY);
+};
+var todayUtc = function(){
+    return moment().utc();
 };
 
 module.exports = {
@@ -86,5 +87,6 @@ module.exports = {
     dateFromDayMonthYear: dateFromDayMonthYear,
     isDateBeforeToday: isDateBeforeToday,
     isDateAfterToday: isDateAfterToday,
-    isDateToday: isDateToday
+    isDateToday: isDateToday,
+    todayUtc: todayUtc
 };

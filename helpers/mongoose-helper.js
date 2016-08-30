@@ -1,4 +1,8 @@
 var mongoose = require('mongoose');
+
+//use moment for dates in mongo
+require('mongoose-moment')(mongoose);
+
 var config = require('config');
 var debug = require('debug')('fireServer:server');
 var initialized = false;

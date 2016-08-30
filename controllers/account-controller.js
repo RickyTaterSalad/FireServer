@@ -10,7 +10,7 @@ var getRandom = function (butNotThis) {
     return controllerUtils.getRandomDocument(Account,butNotThis);
 };
 var findById = function (/*ObjectId*/ id) {
-
+    return controllerUtils.byId(Account,id);
 };
 
 var findByGoogleProfile = function (profile) {

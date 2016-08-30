@@ -9,22 +9,38 @@ var getRandom = function () {
 
 
 var findById = function (/*ObjectId*/ id) {
-
+    return controllerUtils.byId(Conversation, id);
 };
 
-var findByAccount = function (/*Account*/ user) {
-
+var findByUser = function (/*Account*/ user) {
+    if (!user) {
+        return Promise.resolve([]);
+    }
+    var params = {
+        $or: [{'creator': user._id}, {'recipient': user._id}]
+    };
+    return Conversation.find(params);
 };
 var findByCreator = function (/*Account*/ user) {
-
+    if (!user) {
+        return Promise.resolve([]);
+    }
+    return Conversation.find({
+        'creator': user._id
+    });
 };
 var findByRecipient = function (/*Account*/ user) {
-
+    if (!user) {
+        return Promise.resolve([]);
+    }
+    return Conversation.find({
+        'recipient': user._id
+    });
 };
 
 var exports = {
     findById: findById,
-    findByAccount: findByAccount,
+    findByUser: findByUser,
     findByCreator: findByCreator,
     findByRecipient: findByRecipient
 };
