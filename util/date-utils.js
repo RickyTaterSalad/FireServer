@@ -29,7 +29,8 @@ var isDateToday = function (/* Moment */ date){
     if(!date){
         return null;
     }
-    return now.isSame(moment().utc(),"day");
+
+    return date.isSame(moment().utc(),"day");
 
 };
 var isDateAfterToday = function (/* Moment */ date){
