@@ -1,7 +1,6 @@
 var moment = require("moment");
 var util = require("util");
 
-
 //EVERYTHING IN UTC
 
 var DAY = "day";
@@ -23,6 +22,9 @@ var monthAsString = function (month) {
 
 //month starts at index 1!!!!!
 var dateFromDayMonthYear = function (day, month, year, options) {
+    if(!day || (!month && month != 0) || !year){
+        return null;
+    }
     var mStr = monthAsString(month);
     var append = null;
     if (options) {
@@ -39,6 +41,9 @@ var dateFromDayMonthYear = function (day, month, year, options) {
 };
 //date in ms: 1472586908000
 var dateFromMS = function (/*Number*/ dateInMs, /* {startOfDay:true|false,endOfDay:true|false} */options) {
+    if(!dateInMs){
+        return null;
+    }
     var date = moment.utc(dateInMs);
     if (options) {
         if (options.startOfDay) {
