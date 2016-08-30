@@ -5,7 +5,7 @@ var allDriveTimes = require("../../station-data/all-driving-distances").distance
 var DriveTime = require("mongoose").model('DriveTime');
 var stationController = require("../../../controllers/station-controller");
 var debug = require('debug')('fireServer:server');
-var Promise = require("Bluebird");
+var Promise = require("bluebird");
 
 var generateCreateFunction = function (params) {
     return function (params, callback) {

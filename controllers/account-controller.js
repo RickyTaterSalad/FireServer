@@ -3,9 +3,6 @@ var controllerUtils = require("../util/controller-utils");
 var Account = require('mongoose').model('Account');
 
 
-var createRandom = function(){
-
-};
 var getRandom = function (butNotThis) {
     return controllerUtils.getRandomDocument(Account,butNotThis);
 };
@@ -14,21 +11,27 @@ var findById = function (/*ObjectId*/ id) {
 };
 
 var findByGoogleProfile = function (profile) {
+    return Account.findOne({
+        googleUid: profile.id
+    });
+
 
 };
 var findByFacebookProfile = function (profile) {
-
+//todo
+    return Account.findOne({
+        facebookUid: profile.id
+    });
 };
 //debug only
 var findByLocalUsername = function (profile) {
-
+    return Account.findOne({
+        localAuthUid: profile.id
+    });
 };
 
-var createAccount = function (/*Account */ account) {
-
-};
 var registerAccount = function (/*Account */ account, registrationParameters) {
-
+//todo
 };
 
 var exports = {
@@ -36,12 +39,10 @@ var exports = {
     findByGoogleProfile: findByGoogleProfile,
     findByFacebookProfile: findByFacebookProfile,
     findByLocalUsername: findByLocalUsername,
-    createAccount: createAccount,
     registerAccount: registerAccount
 };
 if (process.env.NODE_ENV !== 'production') {
     exports.getRandom = getRandom;
-    exports.createRandom = createRandom;
 }
 
 

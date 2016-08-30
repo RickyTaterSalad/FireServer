@@ -12,8 +12,14 @@ var findById = function (/*ObjectId*/ id) {
     return controllerUtils.byId(Message,id);
 };
 
-var forConversation = function (/* Conversation */ conversation) {
 
+var forConversation = function (/* ObjectId */ conversationId) {
+    if(!conversationId){
+        return Promise.resolve([]);
+    }
+    return Message.find({
+        conversation: conversationId
+    });
 };
 
 

@@ -15,6 +15,10 @@ var AccountSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         index: true
     },
+    facebookUid: {
+        type: mongoose.Schema.Types.String,
+        index: true
+    },
     isSoftBanned: {
         type: mongoose.Schema.Types.Boolean,
         default: false

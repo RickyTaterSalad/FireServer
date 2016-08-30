@@ -13,13 +13,10 @@ var findByOriginStationAndDestination = function (/*ObjectId*/ originStation, /*
     //check the redis cache first
     return driveTimeCacheController.get(originStation, destinationStation).then(function (driveTime) {
         if (driveTime) {
-            debug("Returning drive time from cache");
-
             return Promise.resolve(driveTime);
         }
         else {
             //go to db
-            debug("hitting DB for drive time");
             return DriveTime.findOne({
                 originStation: originStation,
                 destinationStation: destinationStation

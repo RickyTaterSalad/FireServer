@@ -1,22 +1,24 @@
 //model types passed can be either the instance itself or the object id
 var Station = require('mongoose').model('Station');
 var controllerUtils = require("../util/controller-utils");
-var Promise = require("Bluebird");
+var Promise = require("bluebird");
 
 var getRandom = function () {
     return controllerUtils.getRandomDocument(Station);
 };
 
 var findById = function (/*ObjectId*/ id) {
-    return controllerUtils.byId(Station,id)
+    return controllerUtils.byId(Station,id);
 };
-var findByUser = function (/*Account */ account) {
+var stationForUser = function (/*Account */ account) {
+    if(!account || !account.station){
+       return  Promise.resolve(null);
+    }
+    return Station.findById(account.station);
 
 };
 var findByStationNumber = function (stationNumber) {
-    return Promise.try(function () {
-        return Station.find({stationNumber: stationNumber});
-    });
+    return  Station.find({stationNumber: stationNumber});
 };
 var all = function () {
    return controllerUtils.all(Station);
@@ -24,7 +26,7 @@ var all = function () {
 
 var exports = {
     findById: findById,
-    findByUser: findByUser,
+    findByUser: stationForUser,
     findByStationNumber: findByStationNumber,
     all: all
 };
