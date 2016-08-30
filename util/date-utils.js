@@ -32,7 +32,7 @@ var isDateToday = function (/* Moment */ date){
     return now.isSame(moment().utc(),"day");
 
 };
-var isDateAfterTodayFuture = function (/* Moment */ date){
+var isDateAfterToday = function (/* Moment */ date){
     if(!date){
         return null;
     }
@@ -42,6 +42,6 @@ var isDateAfterTodayFuture = function (/* Moment */ date){
 module.exports = {
     dateFromMS: dateFromMS,
     isDateBeforeToday: isDateBeforeToday,
-    isDateAfterTodayFuture: isDateAfterTodayFuture,
+    isDateAfterToday: isDateAfterToday,
     isDateToday: isDateToday
 };
