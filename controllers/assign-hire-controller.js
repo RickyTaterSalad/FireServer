@@ -18,7 +18,7 @@ var getAllAHCodes = function(){
         .catch(function(err){
             return err;
         });
-}
+};
 
 var findById = function (/*ObjectId*/ id) {
     if(!id){
@@ -26,7 +26,7 @@ var findById = function (/*ObjectId*/ id) {
     }
 
     return AssignHireCode.findById({
-        id
+        id:id
     }).then(function(ahCode){
         return ahCode;
     });
