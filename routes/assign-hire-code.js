@@ -1,11 +1,11 @@
 var router = require('express').Router();
 var debug = require('debug')('fireServer:server');
 var mongoose = require('mongoose');
-//var AssignHireCode = mongoose.model('AssignHireCode');
 const AssignHireCodeController = require("../controllers/assign-hire-controller");
 var RequestHelperMethods = require("../util/request-helper-methods");
+const hasUser = require("../validators/has-user-validator").validate;
 
-router.get('/', function (req, res) {
+router.get('/',hasUser, function (req, res) {
     AssignHireCodeController
         .getAllAHCodes()
         .then(function(ahObj){
@@ -18,7 +18,7 @@ router.get('/', function (req, res) {
         });
 });
 
-router.get('/:ahCode', function (req, res) {
+router.get('/:ahCode',hasUser, function (req, res) {
     debug(req.params);
     if(req.params && req.params.ahCode) {
         AssignHireCodeController
@@ -37,7 +37,7 @@ router.get('/:ahCode', function (req, res) {
     }
 });
 
-router.get('/Date/:date', function (req, res) {
+router.get('/Date/:date', hasUser,function (req, res) {
     debug(req.params);
     if(req.params && req.params.date) {
         AssignHireCodeController
