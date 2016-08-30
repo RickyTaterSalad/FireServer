@@ -1,4 +1,4 @@
-var momemnt = require("moment");
+var moment = require("moment");
 //EVERYTHING IN UTC
 
 
