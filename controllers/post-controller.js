@@ -25,7 +25,6 @@ var allForDate = function (/*Moment*/ date) {
     if (!date) {
         Promise.resolve([]);
     }
-    console.log(date.valueOf());
     return Post.find({
         shift: date.valueOf()
     });
