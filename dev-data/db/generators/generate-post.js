@@ -6,6 +6,9 @@ var Post = require('mongoose').model('Post');
 var debug = require('debug')('fireServer:server');
 var moment = require("moment");
 
+
+const dept = require("../../station-data/department").department;
+
 var generatePosts = function (count, callback) {
     var fxns = [];
     for (var i = 0; i < count; i++) {
@@ -17,6 +20,7 @@ var generatePosts = function (count, callback) {
 var generatePost = function (callback) {
     accountController.getRandom().then(function (account) {
         if (!account) {
+
             debug("could not retrieve random account to generatePost");
             callback();
         }
@@ -31,7 +35,8 @@ var generatePost = function (callback) {
                 station: account.station,
                 creator: account._id,
                 shift: futureMoment,
-                platoon: platoonGenerator.generatePlatoon()
+                platoon: platoonGenerator.generatePlatoon(),
+                shiftStartTime: dept.schedule.shiftStartTime
             });
         post.requestType = faker.random.boolean() ? "on" : "off";
         if (faker.random.boolean()) {

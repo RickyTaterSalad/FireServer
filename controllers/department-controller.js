@@ -6,17 +6,25 @@ var debug = require('debug')('fireServer:server');
 var getRandom = function () {
     return controllerUtils.getRandomDocument(Department);
 };
+var cachedDept = {};
+
 var findByDepartmentName = function (/*String*/ departmentName) {
     if (!departmentName) {
         return Promise.resolve(null);
     }
-    return Department.findOne({
-        name: departmentName
-    }).then(function (department) {
-        return department;
-    });
-};
+    if(cachedDept[departmentName]) {
+        return Promise.resolve(cachedDept[departmentName]);
 
+    }
+    else{
+        return Department.findOne({
+            name: departmentName
+        }).then(function (department) {
+            cachedDept = department;
+            return department;
+        });
+    }
+};
 var exports = {
     findByDepartmentName: findByDepartmentName
 };
@@ -25,3 +33,4 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 module.exports = exports;
+

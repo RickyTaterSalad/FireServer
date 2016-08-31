@@ -65,7 +65,7 @@ var canCreatePost = function (/*Post*/ post) {
         requestType: post.requestType
     };
     return Post.findOne(params).then(function (post) {
-        return post != null;
+        return post == null;
     });
 };
 var exports = {

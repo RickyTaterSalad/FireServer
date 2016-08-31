@@ -5,16 +5,20 @@ var ScheduleSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String
     },
     numberOfPlatoons: {
-        type: mongoose.Schema.Types.Number
+        type: mongoose.Schema.Types.Number,
+        required: [true, 'Department must have schedule number of platoons']
     },
     platoonSchedule: {
-        type: mongoose.Schema.Types.String
+        type: mongoose.Schema.Types.String,
+        required: [true, 'Department must have a schedule platoon schedule']
     },
     shiftLengthInHours: {
-        type: mongoose.Schema.Types.Number
+        type: mongoose.Schema.Types.Number,
+        required: [true, 'Department must have a schedule shift length']
     },
     shiftStartTime: {
-        type: mongoose.Schema.Types.String
+        type: mongoose.Schema.Types.String,
+        required: [true, 'Department must have a schedule start time']
     }
 });
 
@@ -33,7 +37,7 @@ ScheduleSchema.set('toJSON', {
 var DepartmentSchema = new mongoose.Schema({
     name: {
         type: mongoose.Schema.Types.String,
-        required: true
+        required: [true,"Department must have a name"]
     },
     platoons: [{
         type: mongoose.Schema.Types.String,

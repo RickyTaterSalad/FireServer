@@ -21,7 +21,7 @@ var PostSchema = new mongoose.Schema({
         required: true,
         validate: {
             validator: function (d) {
-                if(!d){
+                if (!d) {
                     return false;
                 }
                 return !dateUtils.isDateBeforeToday(moment(d));
@@ -59,6 +59,10 @@ var PostSchema = new mongoose.Schema({
         enum: ["off", "on"],
         required: true
     },
+    shiftStartTime: {
+        type: mongoose.Schema.Types.String,
+        required: [true, 'Post must have a shift start time']
+    },
     platoon: {
         type: mongoose.Schema.Types.String,
         index: true,
@@ -71,7 +75,7 @@ var PostSchema = new mongoose.Schema({
 
 PostSchema.set('toJSON', {
     transform: function (doc, ret, options) {
-        var obj =  {
+        var obj = {
             id: ret._id,
             creator: ret.creator,
             shift: ret.shift,
@@ -80,22 +84,21 @@ PostSchema.set('toJSON', {
             requestType: ret.requestType,
             platoon: ret.platoon
         };
-        if(ret.isTrade){
+        if (ret.isTrade) {
             obj.isTrade = true;
         }
-        if(ret.isOvertime){
+        if (ret.isOvertime) {
             obj.isOvertime = true;
         }
-        if(ret.isAssignedHire){
+        if (ret.isAssignedHire) {
             obj.isAssignedHire = true;
         }
-        if(ret.isRegular){
+        if (ret.isRegular) {
             obj.isRegular = true;
         }
         return obj;
     }
 });
-
 
 
 var Post = mongoose.model('Post', PostSchema);
