@@ -4,42 +4,23 @@ var util = require("util");
 //EVERYTHING IN UTC
 
 var DAY = "day";
-var UTC_TIME_ZONE_APPEND = "+0000";
-var START_OF_DAY_UTC_APPEND = util.format("%s %s", "0:00:00", UTC_TIME_ZONE_APPEND);
-var END_OF_DAY_UTC_APPEND = util.format("%s %s", "23:59:59", UTC_TIME_ZONE_APPEND);
 
-
-var monthAsString = function (month) {
-    if (!month) {
-        return month;
-    }
-    var mStr = month + "";
-    if (mStr.length == 1) {
-        mStr = "0" + mStr;
-    }
-    return mStr;
-};
-
-//month starts at index 1!!!!!
-var dateFromDayMonthYear = function (day, month, year, options) {
-    if(!day || (!month && month != 0) || !year){
+//month is passed with january as 1. we decrement internally
+var dateFromDayMonthYear = function (day, month, year) {
+    if (!day || (!month && month != 0) || !year) {
         return null;
     }
-    var mStr = monthAsString(month);
-    var append = null;
-    if (options) {
-        if (options.endOfDay) {
-            append = END_OF_DAY_UTC_APPEND;
-        }
+    try {
+        var obj = {year: year,month: month - 1 ,day:day};
+        return moment.utc(obj);
     }
-    if (!append) {
-        append = START_OF_DAY_UTC_APPEND;
+    catch (err) {
+        return null;
     }
-    return moment(util.format("%s %s",[year, mStr, day].join("-"),append));
 };
 //date in ms: 1472586908000
 var dateFromMS = function (/*Number*/ dateInMs, /* {startOfDay:true|false,endOfDay:true|false} */options) {
-    if(!dateInMs){
+    if (!dateInMs) {
         return null;
     }
     var date = moment.utc(dateInMs);
@@ -48,11 +29,13 @@ var dateFromMS = function (/*Number*/ dateInMs, /* {startOfDay:true|false,endOfD
             date.minute(0);
             date.second(0);
             date.hour(0);
+            date.millisecond(0);
         }
         else if (options.endOfDay) {
             date.minute(59);
             date.second(59);
             date.hour(23);
+            date.millisecond(999);
         }
     }
     return date;
@@ -78,7 +61,7 @@ var isDateAfterToday = function (/* Moment */ date) {
     }
     return date.isAfter(todayUtc(), DAY);
 };
-var todayUtc = function(){
+var todayUtc = function () {
     return moment().utc();
 };
 

@@ -21,9 +21,10 @@ var generatePost = function (callback) {
             callback();
         }
         var futureDate = faker.date.future();
-        var futureMoment = moment(futureDate);
+        var futureMoment = moment(futureDate).utc();
         futureMoment.minute(0);
         futureMoment.second(0);
+        futureMoment.millisecond(0);
         futureMoment.hour(0);
         var post = new Post({
                 department: account.department,

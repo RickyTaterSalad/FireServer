@@ -10,7 +10,7 @@ var getRandom = function () {
 };
 
 var findById = function (/*ObjectId*/ id) {
-   return controllerUtils.byId(Post,id);
+    return controllerUtils.byId(Post, id);
 };
 
 var allForUser = function (/*Account*/ user) {
@@ -25,6 +25,7 @@ var allForDate = function (/*Moment*/ date) {
     if (!date) {
         Promise.resolve([]);
     }
+    console.log(date.valueOf());
     return Post.find({
         shift: date.valueOf()
     });
@@ -39,6 +40,20 @@ var allForDateAtStation = function (/*Date */ date, /*ObjectId*/ stationId) {
         shift: date.valueOf(),
         station: stationId
     });
+};
+var forUserFilterType = function (user, postType) {
+    if (!postType || !user) {
+        Promise.resolve([]);
+    }
+    var postTypeLower = postType.toLowerCase();
+    if (postTypeLower != "off" && postType != "on") {
+        return Promise.resolve([]);
+    }
+    var params = {
+        creator: user._id,
+        requestType: postType
+    };
+    return Post.find(params);
 };
 //returns true if the user already has a post for the requested post date
 var canCreatePost = function (/*Post*/ post) {
@@ -57,6 +72,7 @@ var canCreatePost = function (/*Post*/ post) {
 var exports = {
     findById: findById,
     allForUser: allForUser,
+    forUserFilterType: forUserFilterType,
     allForDate: allForDate,
     allForDateAtStation: allForDateAtStation,
     canCreatePost: canCreatePost

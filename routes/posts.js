@@ -6,8 +6,18 @@ const postValidator = require("../validators/post-validator").validate;
 var dateUtils = require("../util/date-utils");
 
 
-router.get('/user', hasUser, function (req, res) {
+router.get('/self', hasUser, function (req, res) {
     postController.allForUser(req.user).then(function (posts) {
+        return res.json(posts);
+    });
+});
+router.get('/self/:type', hasUser, function (req, res) {
+    var postTypeLower = req.params.type.toLowerCase();
+    if(postTypeLower != "off" && postTypeLower != "on"){
+        return res.json(RequestHelperMethods.invalidRequestJson);
+    }
+    postController.forUserFilterType(req.user,postTypeLower).then(function (posts) {
+        console.log("got response");
         return res.json(posts);
     });
 });
@@ -16,10 +26,13 @@ router.get('/:year/:month/:day', hasUser, function (req, res) {
     if (!req.params || !req.params.year || !req.params.month || !req.params.day) {
         return res.json(RequestHelperMethods.invalidRequestJson);
     }
+    console.log(req.params.day);
     var date = dateUtils.dateFromDayMonthYear(req.params.day, req.params.month, req.params.year);
+    console.dir(date);
     if (!date) {
         return res.json(RequestHelperMethods.invalidRequestJson);
     }
+
     postController.allForDate(date).then(function (posts) {
         return res.json(posts);
     });
