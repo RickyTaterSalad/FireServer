@@ -25,7 +25,7 @@ var byId = function(model,id){
     if (!id || !model) {
         Promise.resolve(null);
     }
-    return model.findOne(id);
+    return model.findById(id);
 };
 
 

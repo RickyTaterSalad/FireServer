@@ -1,14 +1,9 @@
-POST /api/v1/posts HTTP/1.1
-Host: localhost:3000
-Content-Type: application/json
-Authorization: Basic ZmlyZTpmaXJl
-Cache-Control: no-cache
-Postman-Token: 2707c50c-d3ad-390c-3b77-cf9a040e7b8e
-
 {
-
-     "shift":15719749980000,
-     "isRegular": true,
-     "requestType": "off",
-     "platoon": "A"
+    "post": {
+        "shift": 15715749980000,
+        "station": "57c6f972eae1d6141ce88afa",
+        "isRegular": true,
+        "requestType": "off",
+        "platoon": "A"
+    }
 }

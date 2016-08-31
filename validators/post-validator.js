@@ -13,13 +13,16 @@ var deptController = require("../controllers/department-controller");
 
 
 var validate = function (req, res, next) {
-    if (!req.user.department) {
+    if (!req.user.department || !RequestHelperMethods.validObjectId(req.user.department)) {
         return res.json(RequestHelperMethods.invalidRequestJson);
     }
-    if (!req.user.station) {
+    if (!req.user.station || !RequestHelperMethods.validObjectId(req.user.station)) {
         return res.json(RequestHelperMethods.invalidRequestJson);
     }
-    var shift = dateUtil.dateFromMS(req.body.shift, momentParseOptions);
+    if(!req.body.post){
+        return res.json(RequestHelperMethods.invalidRequestJson);
+    }
+    var shift = dateUtil.dateFromMS(req.body.post.shift, momentParseOptions);
     var shiftValid = shift != null && shift.isValid();
     var shiftIsInPast = dateUtil.isDateBeforeToday(shift);
     if (!shift || !shiftValid || shiftIsInPast) {
@@ -50,13 +53,13 @@ var validate = function (req, res, next) {
             shift: shift,
             department: req.user.department,
             station: req.user.station,
-            isTrade: req.body.isTrade,
-            isOvertime: req.body.isOvertime,
-            isAssignedHire: req.body.isAssignedHire,
-            isRegular: req.body.isRegular,
-            requestType: req.body.requestType,
+            isTrade: req.body.post.isTrade,
+            isOvertime: req.body.post.isOvertime,
+            isAssignedHire: req.body.post.isAssignedHire,
+            isRegular: req.body.post.isRegular,
+            requestType: req.body.post.requestType,
             shiftStartTime: dept.schedule.shiftStartTime,
-            platoon: req.body.platoon
+            platoon: req.body.post.platoon
         };
         var post = new Post(params);
         var error = post.validateSync();
@@ -75,7 +78,7 @@ var validate = function (req, res, next) {
                     next();
                 }
                 else {
-                    debug(util.format("post with type: %s for day %s already exists for user %s",req.body.requestType, shift, req.locals.userId));
+                    debug(util.format("post with type: %s for day %s already exists for user %s",req.body.post.requestType, shift, req.locals.userId));
                     return res.json({success: false, message: "User already has post for that day"});
                 }
             });

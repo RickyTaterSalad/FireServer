@@ -49,7 +49,7 @@ var generateMessage = function (msgCount,callback) {
                 }
                 else {
                     debug("created message");
-                    //add message to converstation
+                    //add message to conversation
                     conversation.update({ $push: { messages: message }},callback);
                 }
             });

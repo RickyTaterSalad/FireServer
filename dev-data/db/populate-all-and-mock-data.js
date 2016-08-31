@@ -44,6 +44,7 @@ var run = function () {
     async.series([
         require("./tables/populate-department").createDepartment,
         require("./tables/populate-stations").createStations,
+        require("./tables/populate-ah").generateAH,
         createFireUser,
         require("./mock/generate-lots-of-data").createMockData,
         require("./tables/populate-drive-times").createDriveTimes
