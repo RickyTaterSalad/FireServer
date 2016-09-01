@@ -13,10 +13,10 @@ router.get('/self', hasUser, function (req, res) {
 });
 router.get('/self/:type', hasUser, function (req, res) {
     var postTypeLower = req.params.type.toLowerCase();
-    if(postTypeLower != "off" && postTypeLower != "on"){
+    if (postTypeLower != "off" && postTypeLower != "on") {
         return res.json(RequestHelperMethods.invalidRequestJson);
     }
-    postController.forUserFilterType(req.user,postTypeLower).then(function (posts) {
+    postController.forUserFilterType(req.user, postTypeLower).then(function (posts) {
         return res.json(posts);
     });
 });
@@ -44,13 +44,24 @@ router.get('/:id', hasUser, function (req, res) {
         res.json(RequestHelperMethods.invalidRequestJson);
     }
 });
+router.delete("/:postId", hasUser, function (req, res) {
+    postController.deletePostIfBelongsToUser(req.user.id, req.params.postId).then(function (response) {
+        console.dir(response);
+        if(!response || response.result.n == 0){
+            return res.json(RequestHelperMethods.invalidRequestJson);
+        }
+        else{
+            return res.json({success:true,message:"complete"});
+        }
+    });
+});
 router.post('/', hasUser, postValidator, function (req, res) {
-    if(req.locals && req.locals.post) {
+    if (req.locals && req.locals.post) {
         req.locals.post.save(function (err) {
             return err ? res.json(RequestHelperMethods.invalidRequestJson) : res.json(req.locals.post);
         });
     }
-    else{
+    else {
         return res.json(RequestHelperMethods.invalidRequestJson);
     }
 });

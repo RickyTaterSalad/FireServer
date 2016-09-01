@@ -28,14 +28,15 @@ var generateMessage = function (msgCount,callback) {
         });
         if (faker.random.boolean()) {
             message.sender = conversation.creator;
-            message.recipient = conversation.recipient;
+            message.recipient = conversation.post.creator;
         }
         else {
-            message.sender = conversation.recipient;
+            message.sender = conversation.post.creator;
             message.recipient = conversation.creator;
         }
         var err = message.validateSync();
         if(err){
+            console.dir(message);
             debug("generated invalid message");
             callback();
         }
@@ -50,7 +51,7 @@ var generateMessage = function (msgCount,callback) {
                 else {
                     debug("created message");
                     //add message to conversation
-                    conversation.update({ $push: { messages: message }},callback);
+                    conversationController.addMessageToConversation(message).then(function(){callback()});
                 }
             });
         }

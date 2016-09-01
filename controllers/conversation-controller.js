@@ -5,10 +5,10 @@ var RequestHelperMethods = require("../util/request-helper-methods");
 var debug = require('debug')('fireServer:server');
 
 var getRandom = function () {
-    return controllerUtils.getRandomDocument(Conversation);
+    return controllerUtils.getRandomDocument(Conversation, {populate: "post messages"});
 };
 var findById = function (/*ObjectId*/ id) {
-    return controllerUtils.byId(Conversation, id);
+    return controllerUtils.byId(Conversation, id).populate("post messages").exec();
 };
 
 var findByUser = function (/*Account*/ user) {
@@ -18,7 +18,7 @@ var findByUser = function (/*Account*/ user) {
     var params = {
         $or: [{'creator': user._id}, {'recipient': user._id}]
     };
-    return Conversation.find(params);
+    return Conversation.find(params).populate("post messages").exec();
 };
 var findByCreator = function (/*Account*/ user) {
     if (!user) {
@@ -26,7 +26,7 @@ var findByCreator = function (/*Account*/ user) {
     }
     return Conversation.find({
         'creator': user._id
-    });
+    }).populate("post messages").exec();
 };
 var findByRecipient = function (/*Account*/ user) {
     if (!user) {
@@ -34,29 +34,26 @@ var findByRecipient = function (/*Account*/ user) {
     }
     return Conversation.find({
         'recipient': user._id
-    });
+    }).populate("post messages").exec();
 };
-var addMessageToConversation = function (/*Conversation*/ conversation, /* Message */ message) {
-    if (!RequestHelperMethods.validObjectId(conversation) || !message) {
+var addMessageToConversation = function (message) {
+    if (!message || !message.conversation) {
         debug("invalid data send to addMessageToConversation");
         return Promise.resolve(false);
     }
     else {
-        return conversation.update({$push: {messages: message}},{new: true}).then(function(err,model){
-            debug("Could not update conversation");
-            debug(err);
-            return err ? null : model;
-        });
+        return Conversation.findByIdAndUpdate(message.conversation, {$push: {messages: message}}, {new: true}).exec();
     }
-};
-var conversationExistsForUserAndPost = function(/*ObjectId */ account, /*ObjectId*/ post ){
-    if(!RequestHelperMethods.validObjectId(account) || RequestHelperMethods.validObjectId(post)){
+}
+
+var conversationExistsForUserAndPost = function (/*ObjectId */ account, /*ObjectId*/ post) {
+    if (!RequestHelperMethods.validObjectId(account) || RequestHelperMethods.validObjectId(post)) {
         Promise.resolve(true);
     }
     return Conversation.findOne({
         'creator': account,
         'post': post
-    }).then(function(conversation){
+    }).then(function (conversation) {
         return conversation != null;
     });
 };

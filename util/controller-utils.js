@@ -1,12 +1,17 @@
 var Promise = require("bluebird");
 var debug = require('debug')('fireServer:server');
-var getRandomDocumentFromModel = function (model) {
+var getRandomDocumentFromModel = function (model,options) {
     return Promise.try(function () {
         return model.count().exec();
     }).then(function (count) {
         return Math.floor(Math.random() * count);
     }).then(function (random) {
-        return model.findOne().skip(random).exec();
+        if(options && options.populate){
+            return model.findOne().skip(random).populate(options.populate).exec();
+        }
+        else {
+            return model.findOne().skip(random).exec();
+        }
     }).then(function (res) {
         return  res;
 

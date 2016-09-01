@@ -1,5 +1,5 @@
 var mongoose = require("mongoose");
-
+var moment = require("moment");
 var MessageSchema = new mongoose.Schema({
     conversation: {
         type: mongoose.Schema.Types.ObjectId,
@@ -26,16 +26,18 @@ var MessageSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         required: true
     }
-}, {timestamps: {createdAt: 'created_at'}});
+}, {timestamps: true});
 
 MessageSchema.set('toJSON', {
     transform: function (doc, ret, options) {
+        var created = moment(ret.createdAt);
         return {
-            id: ret._id,
-            conversation: ret.conversation,
+           // id: ret._id,
+        //    conversation: ret.conversation,
             sender: ret.sender,
             recipient: ret.recipient,
-            content: ret.content
+            content: ret.content,
+            sent: created.valueOf()
         };
     }
 });

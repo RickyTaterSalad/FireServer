@@ -3,11 +3,35 @@ const RequestHelperMethods = require("../util/request-helper-methods");
 var conversationController = require("../controllers/conversation-controller");
 var postController = require("../controllers/post-controller");
 var debug = require('debug')('fireServer:server');
-var validate = function (req, res, next) {
+
+
+var isPartOfConversation = function (req, res, next) {
+    if (!req || !req.params || !req.params.conversationId || !RequestHelperMethods.validObjectId((req.params.conversationId ))) {
+        return res.json(RequestHelperMethods.invalidRequestJson);
+    }
+    else {
+        conversationController.findById(req.params.conversationId).then(function (conversation) {
+            if (!conversation) {
+                return res.json({success: false, message: "User is not part of conversation"});
+            }
+            else {
+                postController.findById(conversation.post).then(function (post) {
+                    if (post.creator == req.locals.userId || conversation.creator == req.locals.userId) {
+                        return res.json({success: false, message: "User is not part of conversation"});
+                    }
+                    else{
+                        next();
+                    }
+                })
+            }
+        })
+    }
+};
+
+var create = function (req, res, next) {
     if (!req.body.message || !RequestHelperMethods.validObjectId((req.body.message.conversation))) {
         res.json(RequestHelperMethods.invalidRequestJson);
     }
-    debug("CONV ID: "+ req.body.message.conversation);
     conversationController.findById(req.body.message.conversation).then(function (conversation) {
         console.dir(arguments);
         if (!conversation) {
@@ -44,5 +68,6 @@ var validate = function (req, res, next) {
 };
 
 module.exports = {
-    validate: validate
+    create: create,
+    isPartOfConversation: isPartOfConversation
 };
