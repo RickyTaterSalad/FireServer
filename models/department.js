@@ -19,25 +19,49 @@ var ScheduleSchema = new mongoose.Schema({
     shiftStartTime: {
         type: mongoose.Schema.Types.String,
         required: [true, 'Department must have a schedule start time']
-    }
+    },
+    platoonScheduleStartDate: {
+        type: "Moment",
+        required: [true, 'Department must have a platoon schedule start date']
+    },
+    platoonColorCodes: [{
+        platoon: {
+            type: mongoose.Schema.Types.String,
+            required: true
+        },
+        hexColor: {
+            type: mongoose.Schema.Types.String,
+            required: true
+        }
+    }]
 });
 
 ScheduleSchema.set('toJSON', {
     transform: function (doc, ret, options) {
-        return {
+        var obj = {
             name: ret.name,
             numberOfPlatoons: ret.numberOfPlatoons,
-            platoonSchedule: ret.platoonSchedule,
+            platoonSchedule: ret.platoonSchedule.split(","),
             shiftLengthInHours: ret.shiftLengthInHours,
-            shiftStartTime: ret.shiftStartTime
+            shiftStartTime: ret.shiftStartTime,
+            platoonScheduleStartDate: ret.platoonScheduleStartDate
+        };
+
+        if (ret.platoonColorCodes) {
+            obj.platoonColorCodes = {};
+            for (var i = 0; i < ret.platoonColorCodes.length; i++) {
+                obj.platoonColorCodes[ret.platoonColorCodes[i].platoon] = ret.platoonColorCodes[i].hexColor;
+            }
         }
+
+        return obj;
     }
 });
 
 var DepartmentSchema = new mongoose.Schema({
     name: {
         type: mongoose.Schema.Types.String,
-        required: [true,"Department must have a name"]
+        required: [true, "Department must have a name"]
     },
     platoons: [{
         type: mongoose.Schema.Types.String,

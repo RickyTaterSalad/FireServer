@@ -4,7 +4,16 @@ const hasUser = require("../validators/has-user-validator").validate;
 const RequestHelperMethods = require("../util/request-helper-methods");
 router.get('/', function (req, res) {
     Station.find(function (err, stations) {
-        return err ? res.send(err) : res.json(stations);
+        if(err){
+          return  res.json(RequestHelperMethods.invalidRequestJson);
+        }
+        else{
+            var ret = {};
+            for(var i =0 ; i < stations.length;i++){
+                ret[stations[i]._id] = stations[i];
+            }
+            return res.json(ret);
+        }
     });
 });
 router.get('/:id', hasUser, function (req, res) {

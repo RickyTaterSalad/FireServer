@@ -1,6 +1,7 @@
 const RequestHelperMethods = require("../util/request-helper-methods");
 
 var validate = function (req, res, next) {
+    console.log("validate");
     if (req.user) {
         if(!req.locals){
             req.locals = {};
@@ -9,6 +10,7 @@ var validate = function (req, res, next) {
         next()
     }
     else {
+        console.log("no user");
         res.json(RequestHelperMethods.noUserJson);
     }
 };

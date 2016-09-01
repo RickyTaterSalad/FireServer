@@ -4,10 +4,10 @@ var Account = require('mongoose').model('Account');
 
 
 var getRandom = function (butNotThis) {
-    return controllerUtils.getRandomDocument(Account,butNotThis);
+    return controllerUtils.getRandomDocument(Account, butNotThis);
 };
 var findById = function (/*ObjectId*/ id) {
-    return controllerUtils.byId(Account,id);
+    return controllerUtils.byId(Account, id);
 };
 
 var findByGoogleProfile = function (profile) {
@@ -28,6 +28,23 @@ var findByLocalUsername = function (profile) {
     return Account.findOne({
         localAuthUid: profile.id
     });
+};
+var permaBanUser = function (account) {
+    if (!account) {
+        Promise.resolve(false);
+    }
+    account.update({isPermaBanned: true}).then(function (err) {
+        return !error;
+    })
+};
+var softBanUser = function (account) {
+
+    if (!account) {
+        Promise.resolve(false);
+    }
+    account.update({isSoftBanned: true}).then(function (err) {
+        return !error;
+    })
 };
 
 var registerAccount = function (/*Account */ account, registrationParameters) {

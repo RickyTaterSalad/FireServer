@@ -27,7 +27,7 @@ var allForDate = function (/*Moment*/ date) {
     }
     return Post.find({
         shift: date.valueOf()
-    });
+    }).populate('creator').exec()
 };
 
 

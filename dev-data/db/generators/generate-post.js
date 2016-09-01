@@ -43,6 +43,12 @@ var generatePost = function (callback) {
             post.isRegular = true;
         }
         else {
+            post.isAssignedHire = true;
+        }
+        if (faker.random.boolean()) {
+            post.isTrade = true;
+        }
+        else {
             post.isOvertime = true;
         }
 

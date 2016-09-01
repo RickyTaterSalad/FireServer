@@ -1,6 +1,6 @@
 var moment = require("moment");
 var util = require("util");
-
+var debug = require('debug')('fireServer:server');
 //EVERYTHING IN UTC
 
 var DAY = "day";
@@ -12,6 +12,7 @@ var dateFromDayMonthYear = function (day, month, year) {
     }
     try {
         var obj = {year: year,month: month - 1 ,day:day};
+        debug(JSON.stringify(obj));
         return moment.utc(obj);
     }
     catch (err) {

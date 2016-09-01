@@ -75,6 +75,8 @@ var PostSchema = new mongoose.Schema({
 
 PostSchema.set('toJSON', {
     transform: function (doc, ret, options) {
+       var created = moment(ret.createdAt);
+
         var obj = {
             id: ret._id,
             creator: ret.creator,
@@ -82,7 +84,9 @@ PostSchema.set('toJSON', {
             department: ret.department,
             station: ret.station,
             requestType: ret.requestType,
-            platoon: ret.platoon
+            platoon: ret.platoon,
+            createdString: created.format('MMMM Do YYYY, h:mm:ss a'),
+            created: created.valueOf()
         };
         if (ret.isTrade) {
             obj.isTrade = true;

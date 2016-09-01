@@ -46,7 +46,7 @@ router.get('/:id', hasUser, function (req, res) {
 });
 router.post('/', hasUser, postValidator, function (req, res) {
     if(req.locals && req.locals.post) {
-        req.locals.post.save(function (err, post) {
+        req.locals.post.save(function (err) {
             return err ? res.json(RequestHelperMethods.invalidRequestJson) : res.json(req.locals.post);
         });
     }
