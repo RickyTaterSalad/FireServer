@@ -1,12 +1,11 @@
 //model types passed can be either the instance itself or the object id
 var Post = require('mongoose').model('Post');
 var Promise = require("bluebird");
-var RequestHelperMethods = require("../util/request-helper-methods");
+
 var controllerUtils = require("../util/controller-utils");
 
 
 var getRandom = function () {
-    return controllerUtils.getRandomDocument(Post);
 };
 
 var findById = function (/*ObjectId*/ id) {
@@ -27,7 +26,7 @@ var allForDate = function (/*Moment*/ date) {
     }
     return Post.find({
         shift: date.valueOf()
-    }).populate('creator').exec()
+    });
 };
 
 
@@ -54,22 +53,6 @@ var forUserFilterType = function (user, postType) {
     };
     return Post.find(params);
 };
-var deletePostIfBelongsToUser = function (/*ObjectId*/ userId, /*ObjectId*/ postId) {
-
-    if (!RequestHelperMethods.validObjectId(userId) || !RequestHelperMethods.validObjectId(postId)) {
-        Promise.resolve(null);
-    }
-    var params = {
-        creator: userId,
-        id: postId
-    };
-    console.dir(params);
-    return Post.findOne(params).then(function(post){
-      //  console.dir(post);
-        return post;
-    })//.remove().exec();
-};
-
 //returns true if the user already has a post for the requested post date
 var canCreatePost = function (/*Post*/ post) {
     if (!post || !post.shift) {
@@ -84,14 +67,24 @@ var canCreatePost = function (/*Post*/ post) {
         return post == null;
     });
 };
+
+//writes a post to the database
+var createPost = function(/*Post*/ post) {
+    if(canCreatePost(post)){
+        post.save(function (err) {
+            return err ? Promis.resolve(null) : post;
+        });
+    }
+    else return Promise.resolve(null);
+};
+
 var exports = {
     findById: findById,
     allForUser: allForUser,
     forUserFilterType: forUserFilterType,
     allForDate: allForDate,
     allForDateAtStation: allForDateAtStation,
-    canCreatePost: canCreatePost,
-    deletePostIfBelongsToUser: deletePostIfBelongsToUser
+    canCreatePost: canCreatePost
 };
 if (process.env.NODE_ENV !== 'production') {
     exports.getRandom = getRandom;

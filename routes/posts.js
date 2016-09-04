@@ -57,9 +57,11 @@ router.delete("/:postId", hasUser, function (req, res) {
 });
 router.post('/', hasUser, postValidator, function (req, res) {
     if (req.locals && req.locals.post) {
-        req.locals.post.save(function (err) {
-            return err ? res.json(RequestHelperMethods.invalidRequestJson) : res.json(req.locals.post);
-        });
+        postController.createPost(req.locals.post)
+            .then(function (post) {
+                return !post ? res.json(RequestHelperMethods.invalidRequestJson)
+                        : res.json(post);
+            });
     }
     else {
         return res.json(RequestHelperMethods.invalidRequestJson);
