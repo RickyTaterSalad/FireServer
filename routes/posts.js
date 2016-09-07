@@ -7,7 +7,6 @@ const postValidator = require("../validators/post-validator").validate;
 const claimShiftValidator = require("../validators/post-validator").claimShiftValidator;
 var dateUtils = require("../util/date-utils");
 var debug = require('debug')('fireServer:server');
-var loadPostOptions = {loadUser: true};
 
 
 router.get('/myOffers', hasUser, function (req, res) {
@@ -15,7 +14,7 @@ router.get('/myOffers', hasUser, function (req, res) {
         var postIds = posts.map(function (p) {
             return p._id
         });
-        conversationController.conversationsForUserAndPosts(req.user, postIds,{populate:"messages creator recipient"}).then(function (convs) {
+        conversationController.conversationsForUserAndPosts(req.user, postIds, {populate: "messages creator recipient"}).then(function (convs) {
             return res.json({posts: posts, conversations: convs});
         });
 
@@ -27,7 +26,7 @@ router.get('/myPosts', hasUser, function (req, res) {
         var postIds = posts.map(function (p) {
             return p._id
         });
-        conversationController.conversationsForUserAndPosts(req.user, postIds,{populate:"messages creator recipient"}).then(function (convs) {
+        conversationController.conversationsForUserAndPosts(req.user, postIds, {populate: "messages creator recipient"}).then(function (convs) {
             return res.json({posts: posts, conversations: convs});
         });
     });
@@ -59,6 +58,7 @@ router.get("/hasPost/:year/:month/:day", hasUser, function (req, res) {
 
 
 router.get('/:year/:month/:day', hasUser, function (req, res) {
+    //don't return the users posts on this query
     if (!req.params || !req.params.year || !req.params.month || !req.params.day) {
         return res.status(400).send("Invalid Parameters");
     }
@@ -68,7 +68,7 @@ router.get('/:year/:month/:day', hasUser, function (req, res) {
         return res.json(RequestHelperMethods.invalidRequestJson);
     }
 
-    postController.allForDate(date, loadPostOptions).then(function (posts) {
+    postController.allForDate(date, {loadUser: true, excludeUser: req.locals.userId}).then(function (posts) {
         return res.json(posts);
     });
 });

@@ -94,6 +94,7 @@ var conversationsForUserAndPosts = function (/*Account*/ user, /*Array<ObjectId>
             {recipient: user._id},
             {creator: user._id}
         ],
+        messages: {$exists:true,$not:{$size: 0}},
         post: {$in: conversations},
         archived: false
 

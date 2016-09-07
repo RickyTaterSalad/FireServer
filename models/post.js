@@ -109,7 +109,8 @@ PostSchema.set('toJSON', {
                 id: ret.creator.id,
                 firstName: ret.creator.firstName,
                 lastName: ret.creator.lastName,
-                platoon: ret.creator.platoon
+                platoon: ret.creator.platoon,
+                photo: ret.creator.photo
             }
         }
         else {

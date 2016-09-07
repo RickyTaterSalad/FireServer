@@ -59,12 +59,17 @@ var allForDate = function (/*Moment*/ date, options) {
         Promise.resolve([]);
     }
     if (options) {
+        var params = {
+            shift: date.valueOf(),
+            archived:false
+        };
+        if(options.excludeUser){
+            params.creator = {$ne: options.excludeUser};
+        };
         if (options.loadUser) {
-            return Post.find({
-                shift: date.valueOf(),
-                archived:false
-            }).populate("creator station").exec();
+            return Post.find(params).populate("creator station").exec();
         }
+
     }
     return Post.find({
         shift: date.valueOf(),
