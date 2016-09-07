@@ -1,14 +1,18 @@
 //model types passed can be either the instance itself or the object id
 var controllerUtils = require("../util/controller-utils");
-var Conversation = require('mongoose').model('Conversation');
+var mongoose = require('mongoose');
+var Conversation = mongoose.model('Conversation');
+var Post = mongoose.model('Post');
+var Account = mongoose.model('Account');
+var Message = mongoose.model('Message');
 var RequestHelperMethods = require("../util/request-helper-methods");
 var debug = require('debug')('fireServer:server');
 
 var getRandom = function () {
-    return controllerUtils.getRandomDocument(Conversation, {populate: "post messages"});
+    return controllerUtils.getRandomDocument(Conversation);
 };
 var findById = function (/*ObjectId*/ id) {
-    return controllerUtils.byId(Conversation, id).populate("post messages").exec();
+    return controllerUtils.byId(Conversation, id).exec();
 };
 
 var findByUser = function (/*Account*/ user) {
@@ -18,15 +22,22 @@ var findByUser = function (/*Account*/ user) {
     var params = {
         $or: [{'creator': user._id}, {'recipient': user._id}]
     };
-    return Conversation.find(params).populate("post messages").exec();
+    return Conversation.find(params).populate("creator  messages recipient post").exec();
 };
-var findByCreator = function (/*Account*/ user) {
+var findByCreator = function (/*Account*/ user, populateChildren) {
     if (!user) {
         return Promise.resolve([]);
     }
-    return Conversation.find({
-        'creator': user._id
-    }).populate("post messages").exec();
+    if (populateChildren) {
+        return Conversation.find({
+            'creator': user._id
+        }).populate("post messages").exec();
+    }
+    else {
+        return Conversation.find({
+            'creator': user._id
+        }).exec();
+    }
 };
 var findByRecipient = function (/*Account*/ user) {
     if (!user) {
@@ -57,6 +68,20 @@ var conversationExistsForUserAndPost = function (/*ObjectId */ account, /*Object
         return conversation != null;
     });
 };
+var conversationsForUserAndPosts = function (/*Account*/ user, /*Array<ObjectId>*/ conversations) {
+    if (!user || !conversations) {
+        return Promise.resolve([]);
+    }
+    var params = {
+        $or: [
+            {recipient: user._id},
+            {creator: user._id}
+        ],
+        post:{$in: conversations}
+
+    };
+    return Conversation.find(params).populate("messages").exec();
+}
 
 
 var exports = {
@@ -65,6 +90,7 @@ var exports = {
     findByCreator: findByCreator,
     findByRecipient: findByRecipient,
     addMessageToConversation: addMessageToConversation,
+    conversationsForUserAndPosts: conversationsForUserAndPosts,
     conversationExistsForUserAndPost: conversationExistsForUserAndPost
 };
 if (process.env.NODE_ENV !== 'production') {

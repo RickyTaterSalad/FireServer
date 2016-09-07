@@ -6,11 +6,11 @@ var debug = require('debug')('fireServer:server');
 
 
 var isPartOfConversation = function (req, res, next) {
-    if (!req || !req.params || !req.params.conversationId || !RequestHelperMethods.validObjectId((req.params.conversationId ))) {
+    if (!req || !req.params || !req.params.conversation || !req.params.conversation.id) {
         return res.json(RequestHelperMethods.invalidRequestJson);
     }
     else {
-        conversationController.findById(req.params.conversationId).then(function (conversation) {
+        conversationController.findById(req.params.conversation.id).then(function (conversation) {
             if (!conversation) {
                 return res.json({success: false, message: "User is not part of conversation"});
             }
@@ -27,34 +27,31 @@ var isPartOfConversation = function (req, res, next) {
         })
     }
 };
-
 var create = function (req, res, next) {
-    if (!req.body.message || !RequestHelperMethods.validObjectId((req.body.message.conversation))) {
-        res.json(RequestHelperMethods.invalidRequestJson);
+    if (!req.body.content || !req.body.conversation || !req.body.conversation.id) {
+        return res.status(400).send( "Bad Request");
     }
-    conversationController.findById(req.body.message.conversation).then(function (conversation) {
-        console.dir(arguments);
+    conversationController.findById(req.body.conversation.id).then(function (conversation) {
         if (!conversation) {
-            return res.json({success: false, message: "Conversation does not exist"});
+            return res.status(400).send( "Conversation does not exist");
         }
         postController.findById(conversation.post).then(function (post) {
             if (!post) {
-                return res.json({success: false, message: "Post does not exist"});
+                return res.status(400).send( "Post does not exist");
             }
             if (post.creator == req.locals.userId || conversation.creator == req.locals.userId) {
-                return res.json({success: false, message: "User is not part of conversation"});
+                return res.status(400).send( "You are not part of the conversation");
             }
             var otherPersonId = post.creator != req.locals.userId ? conversation.creator : post.creator;
-            debug("other person: " + otherPersonId);
             var message = new Message({
                 sender: req.locals.userId,
                 recipient: otherPersonId,
-                content: req.body.message.content,
-                conversation: req.body.message.conversation
+                content: req.body.content,
+                conversation: req.body.conversation.id
             });
             var error = message.validateSync();
             if (error) {
-                res.json(RequestHelperMethods.invalidRequestJson);
+                return res.status(400).send( "Could not create message");
             }
             else {
                 if (!req.locals) {

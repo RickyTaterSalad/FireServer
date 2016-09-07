@@ -8,27 +8,28 @@ var debug = require('debug')('fireServer:server');
 //must have a message to create a conversation
 
 var validate = function (req, res, next) {
-    if (!req.body.conversation || !RequestHelperMethods.validObjectId(req.body.conversation.post) ) {
-        return res.json(RequestHelperMethods.invalidRequestJson);
+    if (!req.body.conversation || !req.body.conversation.post || !req.body.conversation.post.id) {
+        return res.status(400).send("Bad Request");
     }
-    conversationController.conversationExistsForUserAndPost(req.locals.userId,req.body.conversation.post).then(function(exists){
-        if(exists){
-            return res.json({success: false, message: "Conversation already exists for post."});
+    conversationController.conversationExistsForUserAndPost(req.locals.userId, req.body.conversation.post.id).then(function (exists) {
+        if (exists) {
+            return res.status(400).send("Conversation already exists for post.");
         }
-        postController.findById(req.body.conversation.post).then(function(post){
-            if(post == null){
-                return res.json({success: false, message: "Cannot locate post to create conversation for."});
+        postController.findById(req.body.conversation.post.id).then(function (post) {
+            if (post == null) {
+                return res.status(400).send("Cannot locate post to create conversation for.");
             }
-            if(post.creator == req.locals.userId){
-                return res.json({success: false, message: "Cannot create a conversation with yourself."});
+            if (post.creator == req.locals.userId) {
+                return res.status(400).send("Cannot create a conversation with yourself.");
             }
             var conversation = new Conversation({
                 creator: req.locals.userId,
-                post: req.body.conversation.post
+                post: req.body.conversation.post.id,
+                recipient: post.creator
             });
             var error = conversation.validateSync();
             if (error) {
-                return res.json(RequestHelperMethods.invalidRequestJson);
+                return res.status(400).send("Bad Request")
             }
             else {
                 if (!req.locals) {

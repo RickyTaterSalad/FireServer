@@ -16,6 +16,13 @@ var PostSchema = new mongoose.Schema({
         required: true,
         index: true
     },
+    claiment: {
+        type: mongoose.Schema.Types.ObjectId,
+        "ref": "Account"
+    },
+    claimentHasConfirmed: {
+        type: mongoose.Schema.Types.Boolean
+    },
     shift: {
         type: "Moment",
         required: true,
@@ -53,6 +60,9 @@ var PostSchema = new mongoose.Schema({
     isRegular: {
         type: mongoose.Schema.Types.Boolean
     },
+    comments: {
+        type: mongoose.Schema.Types.String
+    },
     requestType: {
         type: mongoose.Schema.Types.String,
         lowercase: true,
@@ -75,19 +85,41 @@ var PostSchema = new mongoose.Schema({
 
 PostSchema.set('toJSON', {
     transform: function (doc, ret, options) {
-       var created = moment(ret.createdAt);
+        var created = moment(ret.createdAt);
 
         var obj = {
             id: ret._id,
             creator: ret.creator,
             shift: ret.shift,
-            department: ret.department,
-            station: ret.station,
+            comments: ret.comments,
+            shiftStartTime: ret.shiftStartTime,
             requestType: ret.requestType,
             platoon: ret.platoon,
             createdString: created.format('MMMM Do YYYY, h:mm:ss a'),
             created: created.valueOf()
         };
+        if (ret.creator && ret.creator.station) {
+            obj.creator = {
+                id: ret.creator.id,
+                firstName: ret.creator.firstName,
+                lastName: ret.creator.lastName,
+                platoon: ret.creator.platoon
+            }
+        }
+        else {
+            obj.creator = ret.creator;
+        }
+
+        if (ret.station && ret.station.stationNumber) {
+            obj.station = {
+                stationNumber: ret.station.stationNumber,
+                id: ret.station.id
+            }
+        }
+        else {
+            obj.station = ret.station;
+        }
+
         if (ret.isTrade) {
             obj.isTrade = true;
         }

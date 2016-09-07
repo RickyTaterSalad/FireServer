@@ -4,7 +4,7 @@ var config = require('config');
 var deploymentDepartment = config.get("workingDepartment");
 
 var validObjectId = function (id) {
-    var res = ((id != null && id.length > 0) ? id.match(/^[0-9a-fA-F]{24}$/) : false);
+    var res = (id != null && id.length > 0) ? id.match(/^[0-9a-fA-F]{24}$/) : false;
     if (!res) {
         debug(util.format("invalid format Object id passed: %s", id));
     }

@@ -27,7 +27,8 @@ var generateAccount = function (callback) {
                 station: station._id,
                 email: faker.internet.email(),
                 localAuthUid: faker.internet.userName(),
-                platoon: getRandomPlatoon()
+                platoon: getRandomPlatoon(),
+                photo: faker.image.avatar()
             });
             var err = account.validateSync();
             if(err){

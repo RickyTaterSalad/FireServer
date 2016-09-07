@@ -24,8 +24,8 @@ var generateConversation = function (callback) {
                 callback();
             }
             var conversation = new Conversation({
-                creator: randomPost.creator,
-                recipient: account._id,
+                creator: account._id,
+                recipient:randomPost.creator ,
                 post: randomPost._id
             });
             var err = conversation.validateSync();

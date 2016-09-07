@@ -1,36 +1,74 @@
 var router = require('express').Router();
 var postController = require("../controllers/post-controller");
+var conversationController = require("../controllers/conversation-controller");
 const RequestHelperMethods = require("../util/request-helper-methods");
 const hasUser = require("../validators/has-user-validator").validate;
 const postValidator = require("../validators/post-validator").validate;
+const claimShiftValidator = require("../validators/post-validator").claimShiftValidator;
 var dateUtils = require("../util/date-utils");
+var debug = require('debug')('fireServer:server');
+var loadPostOptions = {loadUser: true};
 
 
-router.get('/self', hasUser, function (req, res) {
-    postController.allForUser(req.user).then(function (posts) {
-        return res.json(posts);
+router.get('/myOffers', hasUser, function (req, res) {
+    postController.allOffersForUser(req.user).then(function (posts) {
+        var postIds = posts.map(function (p) {
+            return p._id
+        });
+        conversationController.conversationsForUserAndPosts(req.user, postIds).then(function (convs) {
+            return res.json({posts: posts, conversations: convs});
+        });
+
+    });
+});
+
+router.get('/myPosts', hasUser, function (req, res) {
+    postController.allPostingsForUser(req.user).then(function (posts) {
+        var postIds = posts.map(function (p) {
+            return p._id
+        });
+        conversationController.conversationsForUserAndPosts(req.user, postIds).then(function (convs) {
+            return res.json({posts: posts, conversations: convs});
+        });
     });
 });
 router.get('/self/:type', hasUser, function (req, res) {
     var postTypeLower = req.params.type.toLowerCase();
     if (postTypeLower != "off" && postTypeLower != "on") {
-        return res.json(RequestHelperMethods.invalidRequestJson);
+        return res.status(400).send("Invalid Post Type");
     }
     postController.forUserFilterType(req.user, postTypeLower).then(function (posts) {
         return res.json(posts);
     });
 });
 
-router.get('/:year/:month/:day', hasUser, function (req, res) {
+router.get("/hasPost/:year/:month/:day", hasUser, function (req, res) {
     if (!req.params || !req.params.year || !req.params.month || !req.params.day) {
-        return res.json(RequestHelperMethods.invalidRequestJson);
+        return res.status(400).send("Invalid Parameters");
     }
     var date = dateUtils.dateFromDayMonthYear(req.params.day, req.params.month, req.params.year);
+    debug("Has Posts For: " + date.format('MMMM Do YYYY'));
     if (!date) {
         return res.json(RequestHelperMethods.invalidRequestJson);
     }
 
-    postController.allForDate(date).then(function (posts) {
+    postController.userHasPostForDate(req.locals.userId, date).then(function (hasPost) {
+        return res.json({hasPost: hasPost});
+    });
+});
+
+
+router.get('/:year/:month/:day', hasUser, function (req, res) {
+    if (!req.params || !req.params.year || !req.params.month || !req.params.day) {
+        return res.status(400).send("Invalid Parameters");
+    }
+    var date = dateUtils.dateFromDayMonthYear(req.params.day, req.params.month, req.params.year);
+    debug("Shifts For: " + date.format('MMMM Do YYYY'));
+    if (!date) {
+        return res.json(RequestHelperMethods.invalidRequestJson);
+    }
+
+    postController.allForDate(date, loadPostOptions).then(function (posts) {
         return res.json(posts);
     });
 });
@@ -41,30 +79,42 @@ router.get('/:id', hasUser, function (req, res) {
         });
     }
     else {
-        res.json(RequestHelperMethods.invalidRequestJson);
+        return res.status(400).send("Invalid Parameters");
     }
 });
 router.delete("/:postId", hasUser, function (req, res) {
-    postController.deletePostIfBelongsToUser(req.user.id, req.params.postId).then(function (response) {
-        console.dir(response);
-        if(!response || response.result.n == 0){
-            return res.json(RequestHelperMethods.invalidRequestJson);
+    postController.deletePost(req.user.id, req.params.postId).then(function (response) {
+        if (!response || response.result.n == 0) {
+            return res.status(400).send("Could Not Delete Requested Post.");
         }
-        else{
-            return res.json({success:true,message:"complete"});
+        else {
+            return res.json({success: true, message: "complete"});
         }
     });
 });
+
+router.post('/claim', hasUser, claimShiftValidator, function (req, res) {
+    if (req.locals && req.locals.post) {
+        postController.claimPost(req.locals.post, req.locals.claiment).then(function (response) {
+
+            return res.json({success: response.n == 1});
+        })
+    }
+    else {
+        return res.status(400).send("Invalid Post.");
+    }
+});
+
 router.post('/', hasUser, postValidator, function (req, res) {
     if (req.locals && req.locals.post) {
         postController.createPost(req.locals.post)
             .then(function (post) {
-                return !post ? res.json(RequestHelperMethods.invalidRequestJson)
-                        : res.json(post);
+                return !post ? res.status(400).send("Could Not Create Post.")
+                    : res.json(post);
             });
     }
     else {
-        return res.json(RequestHelperMethods.invalidRequestJson);
+        return res.status(400).send("Invalid Post.");
     }
 });
 module.exports = router;

@@ -1,21 +1,30 @@
 var mongoose = require("mongoose");
 var async = require('async');
+var faker = require("faker");
 var debug = require('debug')('fireServer:server');
 //init mongoose
 require("../../helpers/mongoose-helper").initialize();
 var Account = mongoose.model('Account');
 var departmentController = require("../../controllers/department-controller");
 var stationController = require("../../controllers/station-controller");
+
+var fakePlatoons = ["A", "B", "C"];
+var getRandomPlatoon = function () {
+    return fakePlatoons[Math.floor(Math.random() * fakePlatoons.length)];
+};
+
 var createFireUser = function (callback) {
     departmentController.getRandom().then(function (dept) {
         stationController.getRandom().then(function (station) {
             var account = new Account({
                 localAuthUid: "fire",
-                firstName: "fire",
-                lastName: "fire",
+                photo: faker.image.avatar(),
+                firstName: "Mammone ",
+                lastName: "Rivera",
                 department: dept,
                 station: station,
-                email: "fire@fire.com"
+                email: "fire@fire.com",
+                platoon: getRandomPlatoon()
             });
             var err = account.validateSync();
             if (err) {

@@ -22,21 +22,23 @@ var generateMessage = function (msgCount,callback) {
         }
         debug("creating conversations for post: " + conversation._id);
 
-        var message = new Message({
+        var params = {
             content: faker.lorem.sentence(),
             conversation: conversation._id
-        });
+        }
         if (faker.random.boolean()) {
-            message.sender = conversation.creator;
-            message.recipient = conversation.post.creator;
+            params.sender = conversation.creator;
+            params.recipient = conversation.recipient;
         }
         else {
-            message.sender = conversation.post.creator;
-            message.recipient = conversation.creator;
+            params.sender = conversation.recipient;
+            params.recipient = conversation.creator;
         }
+        var message = new Message(params);
+
         var err = message.validateSync();
         if(err){
-            console.dir(message);
+           // console.dir(message);
             debug("generated invalid message");
             callback();
         }

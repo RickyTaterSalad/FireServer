@@ -7,6 +7,12 @@ var ConversationSchema = new mongoose.Schema({
         required: true,
         index: true
     },
+    recipient: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Account',
+        required: true,
+        index: true
+    },
     post: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Post',
