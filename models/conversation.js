@@ -19,6 +19,12 @@ var ConversationSchema = new mongoose.Schema({
         required: true,
         index: true
     },
+    archived:{
+        type: mongoose.Schema.Types.Boolean,
+        default: false,
+        required: true,
+        index: true
+    },
     messages: [
         {type: mongoose.Schema.Types.ObjectId, ref: 'Message'}
     ]

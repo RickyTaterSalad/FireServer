@@ -19,6 +19,7 @@
     "moment": "^2.14.1",
     "mongoose": "^4.5.9",
     "morgan": "~1.7.0",
+    "node-schedule": "^1.1.1",
     "passport": "^0.3.2",
     "passport-google-oauth": "^1.0.0",
     "passport-http": "^0.3.0",

@@ -79,7 +79,13 @@ var PostSchema = new mongoose.Schema({
         uppercase: true,
         enum: platoons,
         required: true
-    }
+    },
+    archived:{
+        type: mongoose.Schema.Types.Boolean,
+        default: false,
+        required: true,
+        index: true
+    },
 }, {timestamps: true});
 
 

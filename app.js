@@ -16,5 +16,7 @@ require("./helpers/express-auth-helper").initialize(app);
 require("./helpers/express-route-helper").initialize(app);
 
 
+//schedule the DB archiver
+require("./util/db-cleanup").initialize();
 
 module.exports = app;

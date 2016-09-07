@@ -13,13 +13,16 @@ var getRandom = function () {
 var findById = function (/*ObjectId*/ id) {
     return controllerUtils.byId(Post, id);
 };
+var archiveBeforeDate = function(/*Moment*/ date){
+        return Post.update({shift: {$lt: date}},{archived:true},{multi:true});
+};
 
 var findByIds = function (/*Array<ObjectId>*/ ids) {
     return Post.find({
         _id: { $in: ids}
     });
 };
-var allOffersForUser = function (/*Acccount */ user) {
+var allOffersForUser = function (/*Account */ user) {
     //todo might want to store offers on the users account
     if (!user) {
         Promise.resolve([]);
@@ -38,8 +41,18 @@ var allPostingsForUser = function (/*Account*/ user) {
         Promise.resolve([]);
     }
     return Post.find({
-        creator: user._id
+        creator: user._id || user.id,
+        archived:false
     }).sort("shift");
+};
+var allBeforeDateThatAreNotArchived = function (/*Moment*/ date) {
+    if (!date) {
+        Promise.resolve([]);
+    }
+    return Post.find({
+        shift: {$lt:date.valueOf()},
+        archived: false
+    }).populate("station").exec();
 };
 var allForDate = function (/*Moment*/ date, options) {
     if (!date) {
@@ -48,12 +61,14 @@ var allForDate = function (/*Moment*/ date, options) {
     if (options) {
         if (options.loadUser) {
             return Post.find({
-                shift: date.valueOf()
+                shift: date.valueOf(),
+                archived:false
             }).populate("creator station").exec();
         }
     }
     return Post.find({
-        shift: date.valueOf()
+        shift: date.valueOf(),
+        archived: false
     }).populate("station").exec();
 };
 
@@ -63,7 +78,8 @@ var findUsersPost = function (/*ObjectId */ account, /*ObjectId*/ postId) {
     }
     var params = {
         creator: account,
-        _id: postId
+        _id: postId,
+        archived:false
     };
     return Post.findOne(params);
 };
@@ -75,6 +91,7 @@ var allForDateAtStation = function (/*Date */ date, /*ObjectId*/ stationId) {
     }
     return Post.find({
         shift: date.valueOf(),
+        archived:false,
         station: stationId
     });
 };
@@ -156,7 +173,9 @@ var exports = {
     deletePost: deletePost,
     findUsersPost: findUsersPost,
     allOffersForUser: allOffersForUser,
-    claimPost: claimPost
+    claimPost: claimPost,
+    allBeforeDateThatAreNotArchived:allBeforeDateThatAreNotArchived,
+    archiveBeforeDate:archiveBeforeDate
 };
 if (process.env.NODE_ENV !== 'production') {
     exports.getRandom = getRandom;

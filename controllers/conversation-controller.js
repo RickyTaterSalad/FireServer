@@ -20,22 +20,37 @@ var findByUser = function (/*Account*/ user) {
         return Promise.resolve([]);
     }
     var params = {
-        $or: [{'creator': user._id}, {'recipient': user._id}]
+        $or: [{'creator': user._id}, {'recipient': user._id}],
+        archived: false
     };
     return Conversation.find(params).populate("creator  messages recipient post").exec();
 };
+var archiveConversationsForPosts = function (/*Array<ObjectId>*/ postIds) {
+    if (!postIds) {
+        return Promise.resolve(null);
+    }
+    else {
+        return Conversation.update({
+            archived:false,
+            post: {$in: postIds}
+        }, {archived: true},{multi:true});
+    }
+};
+
 var findByCreator = function (/*Account*/ user, populateChildren) {
     if (!user) {
         return Promise.resolve([]);
     }
     if (populateChildren) {
         return Conversation.find({
-            'creator': user._id
+            'creator': user._id,
+            archived: false
         }).populate("post messages").exec();
     }
     else {
         return Conversation.find({
-            'creator': user._id
+            'creator': user._id,
+            archived: false
         }).exec();
     }
 };
@@ -44,7 +59,8 @@ var findByRecipient = function (/*Account*/ user) {
         return Promise.resolve([]);
     }
     return Conversation.find({
-        'recipient': user._id
+        recipient: user._id,
+        archived: false
     }).populate("post messages").exec();
 };
 var addMessageToConversation = function (message) {
@@ -55,15 +71,16 @@ var addMessageToConversation = function (message) {
     else {
         return Conversation.findByIdAndUpdate(message.conversation, {$push: {messages: message}}, {new: true}).exec();
     }
-}
+};
 
 var conversationExistsForUserAndPost = function (/*ObjectId */ account, /*ObjectId*/ post) {
     if (!RequestHelperMethods.validObjectId(account) || RequestHelperMethods.validObjectId(post)) {
         Promise.resolve(true);
     }
     return Conversation.findOne({
-        'creator': account,
-        'post': post
+        creator: account,
+        post: post,
+        archived: false
     }).then(function (conversation) {
         return conversation != null;
     });
@@ -77,12 +94,12 @@ var conversationsForUserAndPosts = function (/*Account*/ user, /*Array<ObjectId>
             {recipient: user._id},
             {creator: user._id}
         ],
-        post:{$in: conversations}
+        post: {$in: conversations},
+        archived: false
 
     };
     return Conversation.find(params).populate("messages").exec();
-}
-
+};
 
 var exports = {
     findById: findById,
@@ -91,7 +108,8 @@ var exports = {
     findByRecipient: findByRecipient,
     addMessageToConversation: addMessageToConversation,
     conversationsForUserAndPosts: conversationsForUserAndPosts,
-    conversationExistsForUserAndPost: conversationExistsForUserAndPost
+    conversationExistsForUserAndPost: conversationExistsForUserAndPost,
+    archiveConversationsForPosts: archiveConversationsForPosts
 };
 if (process.env.NODE_ENV !== 'production') {
     exports.getRandom = getRandom;
