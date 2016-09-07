@@ -15,7 +15,7 @@ router.get('/myOffers', hasUser, function (req, res) {
         var postIds = posts.map(function (p) {
             return p._id
         });
-        conversationController.conversationsForUserAndPosts(req.user, postIds).then(function (convs) {
+        conversationController.conversationsForUserAndPosts(req.user, postIds,{populate:"messages creator recipient"}).then(function (convs) {
             return res.json({posts: posts, conversations: convs});
         });
 
@@ -27,7 +27,7 @@ router.get('/myPosts', hasUser, function (req, res) {
         var postIds = posts.map(function (p) {
             return p._id
         });
-        conversationController.conversationsForUserAndPosts(req.user, postIds).then(function (convs) {
+        conversationController.conversationsForUserAndPosts(req.user, postIds,{populate:"messages creator recipient"}).then(function (convs) {
             return res.json({posts: posts, conversations: convs});
         });
     });

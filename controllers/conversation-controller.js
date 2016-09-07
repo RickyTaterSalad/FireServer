@@ -85,7 +85,7 @@ var conversationExistsForUserAndPost = function (/*ObjectId */ account, /*Object
         return conversation != null;
     });
 };
-var conversationsForUserAndPosts = function (/*Account*/ user, /*Array<ObjectId>*/ conversations) {
+var conversationsForUserAndPosts = function (/*Account*/ user, /*Array<ObjectId>*/ conversations,options) {
     if (!user || !conversations) {
         return Promise.resolve([]);
     }
@@ -98,7 +98,14 @@ var conversationsForUserAndPosts = function (/*Account*/ user, /*Array<ObjectId>
         archived: false
 
     };
-    return Conversation.find(params).populate("messages").exec();
+    if(options){
+        if(options.populate){
+            return Conversation.find(params).populate(options.populate).exec();
+        }
+    }
+    else {
+        return Conversation.find(params).populate("messages").exec();
+    }
 };
 
 var exports = {
