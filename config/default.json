@@ -1,0 +1,29 @@
+{
+  "workingDepartment": "LAFD",
+  "db": {
+    "uri": ""
+  },
+  "departments": {
+    "LAFD": {
+      "platoons": [
+        "A",
+        "B",
+        "C"
+      ]
+    }
+  },
+  "auth": {
+    "google": {
+      "clientId": "",
+      "clientSecret": "",
+      "callbackURL": ""
+    }
+  },
+  "redis": {
+    "enabled": false,
+    "sessionStoreDb": 1
+  },
+  "driveTimes": {
+    "units": "imperial"
+  }
+}
