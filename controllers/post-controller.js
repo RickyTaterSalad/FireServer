@@ -13,13 +13,13 @@ var getRandom = function () {
 var findById = function (/*ObjectId*/ id) {
     return controllerUtils.byId(Post, id);
 };
-var archiveBeforeDate = function(/*Moment*/ date){
-        return Post.update({shift: {$lt: date}},{archived:true},{multi:true});
+var archiveBeforeDate = function (/*Moment*/ date) {
+    return Post.update({shift: {$lt: date}}, {archived: true}, {multi: true});
 };
 
 var findByIds = function (/*Array<ObjectId>*/ ids) {
     return Post.find({
-        _id: { $in: ids}
+        _id: {$in: ids}
     });
 };
 var allOffersForUser = function (/*Account */ user) {
@@ -27,7 +27,7 @@ var allOffersForUser = function (/*Account */ user) {
     if (!user) {
         Promise.resolve([]);
     }
-   return conversationController.findByCreator(user,false).then(function (conversations) {
+    return conversationController.findByCreator(user, false).then(function (conversations) {
         var postIds = conversations.map(function (c) {
             return c.post;
         });
@@ -42,7 +42,7 @@ var allPostingsForUser = function (/*Account*/ user) {
     }
     return Post.find({
         creator: user._id || user.id,
-        archived:false
+        archived: false
     }).sort("shift");
 };
 var allBeforeDateThatAreNotArchived = function (/*Moment*/ date) {
@@ -50,7 +50,7 @@ var allBeforeDateThatAreNotArchived = function (/*Moment*/ date) {
         Promise.resolve([]);
     }
     return Post.find({
-        shift: {$lt:date.valueOf()},
+        shift: {$lt: date.valueOf()},
         archived: false
     }).populate("station").exec();
 };
@@ -61,11 +61,12 @@ var allForDate = function (/*Moment*/ date, options) {
     if (options) {
         var params = {
             shift: date.valueOf(),
-            archived:false
+            archived: false
         };
-        if(options.excludeUser){
+        if (options.excludeUser) {
             params.creator = {$ne: options.excludeUser};
-        };
+        }
+        ;
         if (options.loadUser) {
             return Post.find(params).populate("creator station").exec();
         }
@@ -84,7 +85,7 @@ var findUsersPost = function (/*ObjectId */ account, /*ObjectId*/ postId) {
     var params = {
         creator: account,
         _id: postId,
-        archived:false
+        archived: false
     };
     return Post.findOne(params);
 };
@@ -96,7 +97,7 @@ var allForDateAtStation = function (/*Date */ date, /*ObjectId*/ stationId) {
     }
     return Post.find({
         shift: date.valueOf(),
-        archived:false,
+        archived: false,
         station: stationId
     });
 };
@@ -164,7 +165,35 @@ var claimPost = function (/*Post */ post, /*ObjectID */ claiment) {
         return Promise.resolve(null);
     }
     return post.update({claiment: claiment}, {new: true});
-}
+};
+var getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDate) {
+    if (!startDate || !endDate) {
+        return Promise.resolve([]);
+    }
+     var o = {};
+     o.map = function(){
+        emit(this.shift,1)
+      };
+    o.query = {
+        shift: {$gte: startDate, $lte: endDate}
+    };
+    o.reduce = function (k, vals) { return vals.length}
+    return Post.mapReduce(o).then(function(res){
+        if(res){
+            var asMap = {};
+                for(var i =0 ; i < res.length;i++){
+                        asMap[res[i]._id] = res[i].value;
+
+                }
+            return asMap;
+        }
+        else{
+            return [];
+        }
+    });
+
+
+};
 
 var exports = {
     findById: findById,
@@ -179,8 +208,9 @@ var exports = {
     findUsersPost: findUsersPost,
     allOffersForUser: allOffersForUser,
     claimPost: claimPost,
-    allBeforeDateThatAreNotArchived:allBeforeDateThatAreNotArchived,
-    archiveBeforeDate:archiveBeforeDate
+    allBeforeDateThatAreNotArchived: allBeforeDateThatAreNotArchived,
+    archiveBeforeDate: archiveBeforeDate,
+    getPostCountsInDateRange: getPostCountsInDateRange
 };
 if (process.env.NODE_ENV !== 'production') {
     exports.getRandom = getRandom;

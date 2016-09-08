@@ -101,7 +101,6 @@ PostSchema.set('toJSON', {
             shiftStartTime: ret.shiftStartTime,
             requestType: ret.requestType,
             platoon: ret.platoon,
-            createdString: created.format('MMMM Do YYYY, h:mm:ss a'),
             created: created.valueOf()
         };
         if (ret.creator && ret.creator.station) {
