@@ -1,5 +1,8 @@
 //model types passed can be either the instance itself or the object id
-var Post = require('mongoose').model('Post');
+var mongoose = require('mongoose');
+
+var Post = mongoose.model('Post');
+var Account = mongoose.model('Account');
 var Promise = require("bluebird");
 var conversationController = require("./conversation-controller");
 var debug = require('debug')('fireServer:server');
@@ -41,10 +44,19 @@ var allPostingsForUser = function (/*Account*/ user) {
     if (!user) {
         Promise.resolve([]);
     }
-    return Post.find({
-        creator: user._id || user.id,
-        archived: false
-    }).sort("shift");
+    return Account.findById(user._id).populate("posts").select("-conversations -department -station -assignHireCode -platoon -email -photo -firstName -lastName").exec().then(function (account) {
+        if (account && account.posts) {
+            return account.posts.filter(function (post) {
+                return !post.archived;
+            });
+        }
+    });
+    /*
+     return Post.find({
+     creator: user._id || user.id,
+     archived: false
+     }).sort("shift");
+     */
 };
 var allBeforeDateThatAreNotArchived = function (/*Moment*/ date) {
     if (!date) {
@@ -67,7 +79,7 @@ var allForDate = function (/*Moment*/ date, options) {
         if (options.excludeUser) {
             params.creator = {$ne: options.excludeUser};
         }
-        ;
+
         if (options.loadUser) {
             return Post.find(params).populate("creator station").exec();
         }
@@ -147,7 +159,7 @@ var canCreatePost = function (/*Post*/ post) {
     });
 };
 
-var deletePost = function (/*ObjectId*/ ownerId, /*ObjectId */ postId) {
+var remove = function (/*ObjectId*/ ownerId, /*ObjectId */ postId) {
     var params = {
         _id: postId,
         creator: ownerId
@@ -156,9 +168,23 @@ var deletePost = function (/*ObjectId*/ ownerId, /*ObjectId */ postId) {
 };
 
 //writes a post to the database
-var createPost = function (/*Post*/ post) {
+var create = function (/*Post*/ post) {
     if (canCreatePost(post)) {
-        return post.save();
+        return post.save(function (err, post) {
+            if (err || !post) {
+                return null;
+            }
+            if (post && post._id) {
+                return Account.update({_id: post.creator},
+                    {$push: {posts: post._id}}, function (res) {
+                        return arguments;
+                    }
+                )
+            }
+            else {
+                return null;
+            }
+        });
     }
     else return Promise.resolve(null);
 };
@@ -168,30 +194,35 @@ var claimPost = function (/*Post */ post, /*ObjectID */ claiment) {
     }
     return post.update({claiment: claiment}, {new: true});
 };
-var getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDate,options) {
-    return _getPostCountsInDateRange(startDate, endDate, "off",options).then(function(offRequests){
-       return _getPostCountsInDateRange(startDate, endDate, "on",options).then(function(onRequests){
-           var res = {};
-           for(var key in offRequests){
-               if(!res[key]){
-                   res[key] = {off:0, on: 0};
-               }
-               res[key].off += offRequests[key] ;
+var getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDate, options) {
+    return _getPostCountsInDateRange(startDate, endDate, "off", options).then(function (offRequests) {
+        return _getPostCountsInDateRange(startDate, endDate, "on", options).then(function (onRequests) {
+            var res = {totalOn:0,totalOff:0,days:{}};
+            var key;
+            for (key in offRequests) {
+                if (!res.days[key]) {
+                    res.days[key] = {off: 0, on: 0};
+                }
+                res.days[key].off += offRequests[key];
 
-           }
-           for(var key in onRequests){
-               if(!res[key]){
-                   res[key] = {off:0, on: 0};
-               }
-               res[key].on += onRequests[key] ;
+            }
+            for (key in onRequests) {
+                if (!res.days[key]) {
+                    res.days[key] = {off: 0, on: 0};
+                }
+                res.days[key].on += onRequests[key];
 
-           }
+            }
+            for(key in res.days){
+                res.totalOn += res.days[key].on;
+                res.totalOff += res.days[key].off;
+            }
             return res;
         })
 
     })
 };
-var _getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDate, /*string*/ requestType,options) {
+var _getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDate, /*string*/ requestType, options) {
     if (!startDate || !endDate) {
         return Promise.resolve([]);
     }
@@ -205,9 +236,9 @@ var _getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDa
         shift: {$gte: startDate, $lte: endDate},
         requestType: requestType
     };
-    if(options){
-        if(options.excludeUser){
-            o.query.creator  = {$ne: options.excludeUser}
+    if (options) {
+        if (options.excludeUser) {
+            o.query.creator = {$ne: options.excludeUser}
         }
     }
     o.reduce = function (k, vals) {
@@ -236,8 +267,8 @@ var exports = {
     allForDateAtStation: allForDateAtStation,
     canCreatePost: canCreatePost,
     userHasPostForDate: userHasPostForDate,
-    createPost: createPost,
-    deletePost: deletePost,
+    create: create,
+    remove: remove,
     findUsersPost: findUsersPost,
     allOffersForUser: allOffersForUser,
     claimPost: claimPost,

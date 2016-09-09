@@ -68,10 +68,14 @@ var AccountSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Station"
     },
-    conversations: {
+    conversations: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Conversation"
-    }
+    }],
+    posts:[{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Post"
+    }]
 
 }, {timestamps: true});
 
@@ -84,9 +88,9 @@ AccountSchema.set('toJSON', {
             lastName: ret.lastName,
             platoon: ret.platoon,
             assignedHireCode: ret.assignedHireCode,
+            posts: ret.posts,
          //   department: ret.department,
-            station: ret.station,
-            conversations: ret.conversations
+            station: ret.station
         };
     }
 });

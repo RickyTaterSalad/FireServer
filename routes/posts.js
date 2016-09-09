@@ -28,7 +28,7 @@ router.get('/postCounts/:startDay', hasUser, function (req, res) {
         debug(err);
         return res.status(400).send("Bad Request");
     }
-    postController.getPostCountsInDateRange(startDate, endDate,{excludeUser: req.locals.userId}).then(function (posts) {
+    postController.getPostCountsInDateRange(startDate, endDate, {excludeUser: req.locals.userId}).then(function (posts) {
         return res.json(posts);
     });
 
@@ -39,20 +39,24 @@ router.get('/myOffers', hasUser, function (req, res) {
         var postIds = posts.map(function (p) {
             return p._id
         });
-        conversationController.conversationsForUserAndPosts(req.user, postIds).then(function (convs) {
-            return res.json({posts: posts, conversations: convs});
+        conversationController.conversationsForUserAndPosts(req.user, postIds, {populate: "recipient"}).then(function (convs) {
+            return res.json({
+                posts: posts,
+                conversations: convs
+            });
         });
 
     });
 });
-
 router.get('/myPosts', hasUser, function (req, res) {
     postController.allPostingsForUser(req.user).then(function (posts) {
         var postIds = posts.map(function (p) {
             return p._id
         });
-        conversationController.conversationsForUserAndPosts(req.user, postIds).then(function (convs) {
-            return res.json({posts: posts, conversations: convs});
+        conversationController.conversationsForUserAndPosts(req.user, postIds, {populate: "creator"}).then(function (convs) {
+            return res.json({
+                posts: posts, conversations: convs
+            });
         });
     });
 });

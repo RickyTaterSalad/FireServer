@@ -9,20 +9,17 @@ var conversationController = require("../controllers/conversation-controller");
 var debug = require('debug')('fireServer:server');
 
 router.get('/:postId', hasUser, function (req, res) {
-    conversationController.findByUserAndPostId(req.user,req.params.postId).then(function (conversations) {
+    conversationController.findByUserAndPostId(req.user, req.params.postId).then(function (conversations) {
         return res.json(conversations || []);
     });
 });
 router.post('/', hasUser, validateConversation, function (req, res) {
     if (req.locals && req.locals.conversation) {
+        conversationController.create(req.locals.conversation).then(function () {
+            return res.json(req.locals.conversation);
+        });
         req.locals.conversation.save(function (err) {
-            if (err) {
-                debug("could not save post");
-                return res.json(RequestHelperMethods.invalidRequestJson);
-            }
-            else {
-                return res.json(req.locals.conversation);
-            }
+
         });
     }
     else {

@@ -56,7 +56,7 @@ var run = function () {
         require("./tables/populate-ah").generateAH,
         createFireUser,
         require("./mock/generate-lots-of-data").createMockData,
-        require("./tables/populate-drive-times").createDriveTimes
+   //    require("./tables/populate-drive-times").createDriveTimes
     ], function () {
         process.exit();
     });

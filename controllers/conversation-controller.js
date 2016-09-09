@@ -7,6 +7,7 @@ var Account = mongoose.model('Account');
 var Message = mongoose.model('Message');
 var RequestHelperMethods = require("../util/request-helper-methods");
 var debug = require('debug')('fireServer:server');
+var async = require("async");
 
 var getRandom = function () {
     return controllerUtils.getRandomDocument(Conversation);
@@ -121,6 +122,48 @@ var conversationsForUserAndPosts = function (/*Account*/ user, /*Array<ObjectId>
         return obj;
     });
 };
+var create = function (/*Conversation */ conversation) {
+    if (!conversation || !conversation.recipient || !conversation.creator) {
+        return Promise.reject({error: true, message: "Bad Request"});
+    }
+    var accountFindParams = {
+        _id: {$in: [conversation.recipient, conversation.creator]}
+    };
+
+    var updateAccounts = function (accounts, conversation, callback) {
+        Account.update({_id: {$in: [accounts[0]._id, accounts[1]._id]}},
+            {$push: {conversations: conversation._id}},
+            {multi: true}
+            , callback);
+    };
+    var createConversation = function (accounts, callback) {
+        conversation.save(function (err, res) {
+            callback(err, accounts, res);
+        });
+    };
+    return new Promise(function (resolve,reject) {
+        async.waterfall([
+            Account.find.bind(Account, accountFindParams),
+            function (accounts, callback) {
+                if (!accounts || accounts.length != 2) {
+                    return callback(Error("Could not find accounts"));
+                }
+                callback(null, accounts);
+            },
+            createConversation,
+            updateAccounts
+
+        ], function (err, results) {
+            if(err){
+              return  reject(err);
+            }
+            else{
+                return resolve(results);
+            }
+        });
+    })
+
+};
 
 var exports = {
     findById: findById,
@@ -131,7 +174,8 @@ var exports = {
     conversationsForUserAndPosts: conversationsForUserAndPosts,
     conversationExistsForUserAndPost: conversationExistsForUserAndPost,
     archiveConversationsForPosts: archiveConversationsForPosts,
-    findByUserAndPostId: findByUserAndPostId
+    findByUserAndPostId: findByUserAndPostId,
+    create: create
 };
 if (process.env.NODE_ENV !== 'production') {
     exports.getRandom = getRandom;

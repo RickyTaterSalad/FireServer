@@ -1,6 +1,7 @@
 var faker = require("faker");
 var async = require("async");
 var accountController = require("../../../controllers/account-controller");
+var postController = require("../../../controllers/post-controller");
 var platoonGenerator = require('./generate-platoons');
 var Post = require('mongoose').model('Post');
 var debug = require('debug')('fireServer:server');
@@ -61,16 +62,7 @@ var generatePost = function (callback) {
             callback();
         }
         else {
-            post.save(function (err) {
-                if (err) {
-                    debug("error creating post");
-                    debug(err);
-                }
-                else {
-                    debug("created post");
-                }
-                callback()
-            });
+            postController.create(post).then(callback);
         }
     });
 };

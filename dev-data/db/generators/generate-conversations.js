@@ -3,6 +3,7 @@ var Conversation = require('mongoose').model('Conversation');
 
 var postController = require("../../../controllers/post-controller");
 var accountController = require("../../../controllers/account-controller");
+var conversationController = require("../../../controllers/conversation-controller");
 var debug = require('debug')('fireServer:server');
 
 var generateConversations = function (count, callback) {
@@ -14,7 +15,6 @@ var generateConversations = function (count, callback) {
         callback();
     });
     async.series(fxns);
-
 };
 var generateConversation = function (callback) {
     postController.getRandom().then(function (randomPost) {
@@ -25,7 +25,7 @@ var generateConversation = function (callback) {
             }
             var conversation = new Conversation({
                 creator: account._id,
-                recipient:randomPost.creator ,
+                recipient: randomPost.creator,
                 post: randomPost._id
             });
             var err = conversation.validateSync();
@@ -35,18 +35,14 @@ var generateConversation = function (callback) {
                 callback();
             }
             else {
-
-                conversation.save(function (err) {
+                conversationController.create(conversation).then(err)
+                {
                     if (err) {
-                        debug("error creating conversation");
+                        console.log("Error creating conversation");
                         console.dir(err);
                     }
-                    else {
-                        debug("created conversation");
-
-                    }
                     callback();
-                });
+                }
             }
         });
     });

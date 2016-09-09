@@ -4,11 +4,11 @@ var postGenerator = require("../generators/generate-post");
 var messageGenerator = require("../generators/generate-messages");
 var async = require("async");
 var debug = require('debug')('fireServer:server');
-var ACCOUNTS_TO_GENERATE = 20;
-var POSTS_TO_GENERATE = 500;
-var CONVERSATIONS_TO_GENERATE = 500;
-var CONVERSATION_TO_GENERATE_RANDOM_MESSAGES_FOR = 500;
-var MAX_MESSAGES_PER_CONVERSATION_TO_GENERATE = 20;
+var ACCOUNTS_TO_GENERATE = 10;
+var POSTS_TO_GENERATE = 50;
+var CONVERSATIONS_TO_GENERATE = 30;
+var CONVERSATION_TO_GENERATE_RANDOM_MESSAGES_FOR = 20;
+var MAX_MESSAGES_PER_CONVERSATION_TO_GENERATE = 5;
 
 var createMockData = function (callback) {
     debug("generate mock data");
