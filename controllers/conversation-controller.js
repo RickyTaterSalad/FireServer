@@ -25,15 +25,26 @@ var findByUser = function (/*Account*/ user) {
     };
     return Conversation.find(params).populate("creator  messages recipient post").exec();
 };
+var findByUserAndPostId = function (/*Account*/ user, /*ObjectId */ postId) {
+    if (!user || !postId) {
+        return Promise.resolve([]);
+    }
+    var params = {
+        $or: [{'creator': user._id}, {'recipient': user._id}],
+        post: postId,
+        archived: false
+    };
+    return Conversation.find(params).populate("creator messages recipient").exec();
+};
 var archiveConversationsForPosts = function (/*Array<ObjectId>*/ postIds) {
     if (!postIds) {
         return Promise.resolve(null);
     }
     else {
         return Conversation.update({
-            archived:false,
+            archived: false,
             post: {$in: postIds}
-        }, {archived: true},{multi:true});
+        }, {archived: true}, {multi: true});
     }
 };
 
@@ -85,7 +96,7 @@ var conversationExistsForUserAndPost = function (/*ObjectId */ account, /*Object
         return conversation != null;
     });
 };
-var conversationsForUserAndPosts = function (/*Account*/ user, /*Array<ObjectId>*/ conversations,options) {
+var conversationsForUserAndPosts = function (/*Account*/ user, /*Array<ObjectId>*/ conversations, options) {
     if (!user || !conversations) {
         return Promise.resolve([]);
     }
@@ -94,19 +105,21 @@ var conversationsForUserAndPosts = function (/*Account*/ user, /*Array<ObjectId>
             {recipient: user._id},
             {creator: user._id}
         ],
-        messages: {$exists:true,$not:{$size: 0}},
+        messages: {$exists: true, $not: {$size: 0}},
         post: {$in: conversations},
         archived: false
 
     };
-    if(options){
-        if(options.populate){
-            return Conversation.find(params).populate(options.populate).exec();
+    return Conversation.find(params).select("-creator -recipient -messages").then(function (res) {
+        var obj = {};
+        for (var i = 0; i < res.length; i++) {
+            if (!obj[res[i].post]) {
+                obj[res[i].post] = [];
+            }
+            obj[res[i].post].push(res[i]._id);
         }
-    }
-    else {
-        return Conversation.find(params).populate("messages").exec();
-    }
+        return obj;
+    });
 };
 
 var exports = {
@@ -117,7 +130,8 @@ var exports = {
     addMessageToConversation: addMessageToConversation,
     conversationsForUserAndPosts: conversationsForUserAndPosts,
     conversationExistsForUserAndPost: conversationExistsForUserAndPost,
-    archiveConversationsForPosts: archiveConversationsForPosts
+    archiveConversationsForPosts: archiveConversationsForPosts,
+    findByUserAndPostId: findByUserAndPostId
 };
 if (process.env.NODE_ENV !== 'production') {
     exports.getRandom = getRandom;
