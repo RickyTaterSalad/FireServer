@@ -85,7 +85,7 @@ var PostSchema = new mongoose.Schema({
         default: false,
         required: true,
         index: true
-    },
+    }
 }, {timestamps: true});
 
 

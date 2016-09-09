@@ -2,9 +2,10 @@
 var Post = require('mongoose').model('Post');
 var Promise = require("bluebird");
 var conversationController = require("./conversation-controller");
-
+var debug = require('debug')('fireServer:server');
 var controllerUtils = require("../util/controller-utils");
 var requestHelperMethods = require("../util/request-helper-methods");
+var async = require('async');
 
 var getRandom = function () {
     return controllerUtils.getRandomDocument(Post);
@@ -123,6 +124,7 @@ var userHasPostForDate = function (/*ObjectId */ account, /*Moment*/ date) {
     var params = {
         creator: account,
         shift: date.valueOf()
+
     };
     return Post.findOne(params).then(function (post) {
         return post != null;
@@ -166,33 +168,64 @@ var claimPost = function (/*Post */ post, /*ObjectID */ claiment) {
     }
     return post.update({claiment: claiment}, {new: true});
 };
-var getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDate) {
+var getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDate,options) {
+    return _getPostCountsInDateRange(startDate, endDate, "off",options).then(function(offRequests){
+       return _getPostCountsInDateRange(startDate, endDate, "on",options).then(function(onRequests){
+           var res = {};
+           for(var key in offRequests){
+               if(!res[key]){
+                   res[key] = {off:0, on: 0};
+               }
+               res[key].off += offRequests[key] ;
+
+           }
+           for(var key in onRequests){
+               if(!res[key]){
+                   res[key] = {off:0, on: 0};
+               }
+               res[key].on += onRequests[key] ;
+
+           }
+            return res;
+        })
+
+    })
+};
+var _getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDate, /*string*/ requestType,options) {
     if (!startDate || !endDate) {
         return Promise.resolve([]);
     }
-     var o = {};
-     o.map = function(){
-        emit(this.shift,1)
-      };
-    o.query = {
-        shift: {$gte: startDate, $lte: endDate}
-    };
-    o.reduce = function (k, vals) { return vals.length}
-    return Post.mapReduce(o).then(function(res){
-        if(res){
-            var asMap = {};
-                for(var i =0 ; i < res.length;i++){
-                        asMap[res[i]._id] = res[i].value;
 
-                }
+
+    var o = {};
+    o.map = function () {
+        emit(this.shift, 1)
+    };
+    o.query = {
+        shift: {$gte: startDate, $lte: endDate},
+        requestType: requestType
+    };
+    if(options){
+        if(options.excludeUser){
+            o.query.creator  = {$ne: options.excludeUser}
+        }
+    }
+    o.reduce = function (k, vals) {
+        return vals.length
+    };
+    return Post.mapReduce(o).then(function (res) {
+        if (res) {
+            var asMap = {};
+            for (var i = 0; i < res.length; i++) {
+                asMap[res[i]._id] = res[i].value;
+
+            }
             return asMap;
         }
-        else{
+        else {
             return [];
         }
     });
-
-
 };
 
 var exports = {

@@ -14,7 +14,7 @@ router.get('/postCounts/:startDay', hasUser, function (req, res) {
         return res.status(400).send("Bad Request");
     }
     var startDate;
-    var endDate
+    var endDate;
     try {
         debug("Start Date: " + req.params.startDay);
         var startDayAsInt = parseInt(req.params.startDay, 10);
@@ -28,9 +28,10 @@ router.get('/postCounts/:startDay', hasUser, function (req, res) {
         debug(err);
         return res.status(400).send("Bad Request");
     }
-    postController.getPostCountsInDateRange(startDate, endDate).then(function (posts) {
+    postController.getPostCountsInDateRange(startDate, endDate,{excludeUser: req.locals.userId}).then(function (posts) {
         return res.json(posts);
     });
+
 });
 
 router.get('/myOffers', hasUser, function (req, res) {
@@ -56,7 +57,7 @@ router.get('/myPosts', hasUser, function (req, res) {
     });
 });
 router.get('/self/:type', hasUser, function (req, res) {
-    var postTypeLower = req.params.type ? req.params.type.toLowerCase(): "";
+    var postTypeLower = req.params.type ? req.params.type.toLowerCase() : "";
     if (postTypeLower != "off" && postTypeLower != "on") {
         return res.status(400).send("Invalid Post Type");
     }
@@ -64,6 +65,7 @@ router.get('/self/:type', hasUser, function (req, res) {
         return res.json(posts);
     });
 });
+
 
 router.get("/hasPost/:year/:month/:day", hasUser, function (req, res) {
     if (!req.params || !req.params.year || !req.params.month || !req.params.day) {
