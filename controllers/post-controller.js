@@ -44,8 +44,9 @@ var allPostingsForUser = function (/*Account*/ user) {
     if (!user) {
         Promise.resolve([]);
     }
-    return Account.findById(user._id).populate("posts").select("-conversations -department -station -assignHireCode -platoon -email -photo -firstName -lastName").exec().then(function (account) {
+    return Account.findById(user._id,"posts").populate("posts").exec().then(function(account){
         if (account && account.posts) {
+            console.dir(account);
             return account.posts.filter(function (post) {
                 return !post.archived;
             });

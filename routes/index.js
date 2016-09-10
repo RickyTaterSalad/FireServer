@@ -12,6 +12,7 @@ router.use('/self', require('./self'));
 router.use('/register', require('./register'));
 router.use('/ahCodes', require('./assign-hire-code'));
 router.use('/driveTime', require('./drive-times'));
+router.use('/notifications', require('./notifications'));
 router.get("/", function (req, res) {
     res.send("API");
 });

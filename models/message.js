@@ -31,8 +31,8 @@ MessageSchema.set('toJSON', {
     transform: function (doc, ret, options) {
         var created = moment(ret.createdAt);
         return {
-           // id: ret._id,
-        //    conversation: ret.conversation,
+            id: ret._id,
+            conversation: ret.conversation,
             sender: ret.sender,
             recipient: ret.recipient,
             content: ret.content,
