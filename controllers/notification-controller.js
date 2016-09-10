@@ -16,36 +16,35 @@ var notificationsForUser = function (/*ObjectId*/ account, /*Moment*/ timestamp)
             $gt: date
         }
     };
+
     var messageCreatedParams = {
         recipient: account,
         createdAt: {$gt: date}
     };
+    var findMessages = function (callback) {
+        Message.find(messageCreatedParams).populate("conversation sender").exec(function(err,res){
+            console.log("MESSAGES");
+            console.dir(res);
+            callback(err,res);
+        });
+    };
     return new Promise(function (resolve) {
-        async.parallel([
+        async.series([
                 Post.find.bind(Post, postUpdateParams, "_id created shift"),
-                Post.find.bind(Message, messageCreatedParams, "conversation")
+                findMessages//Message.find.bind(Message, messageCreatedParams, "conversation sender")
             ],
             function (err, res) {
+
                 if (err) {
                     console.log("err");
                     console.dir(err);
                 }
                 else {
                     console.log("RES");
-                    console.dir(res);
+                    //console.dir(res[0]);
                 }
-                var obj = {conversations: [],posts:[]};
-                for(var i=0; i < res.length;i++){
-                    if(res[i] && res[i].length > 0){
-                        if(res[i][0].conversation){
-                            obj.conversations = res[i];
-                        }
-                        else{
-                            obj.posts = res[i];
-                        }
-                    }
 
-                }
+                var obj = {messages: res.length > 1 ? res[1] : [], posts: res.length > 0 ? res[0] : []};
                 resolve(obj);
             }
         )

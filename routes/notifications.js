@@ -7,14 +7,11 @@ router.get('/:timestamp', hasUser, function (req, res) {
     if (!req.params.timestamp) {
         return res.status(400).send("Bad Request");
     }
-    console.dir(req.params.timestamp);
     var lastCheck;
     var timestampAsInt;
     try{
         timestampAsInt = parseInt(req.params.timestamp,10);
         lastCheck = dateUtils.dateFromMS(timestampAsInt);
-        console.log("time: " + timestampAsInt);
-        console.dir(lastCheck);
     }
     catch(err){
         console.dir(err);
