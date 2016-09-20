@@ -1,5 +1,4 @@
 //model types passed can be either the instance itself or the object id
-var controllerUtils = require("../util/controller-utils");
 var Post = require('mongoose').model('Post');
 var Message = require('mongoose').model('Message');
 var async = require("async");
@@ -28,7 +27,7 @@ var notificationsForUser = function (/*ObjectId*/ account, /*Moment*/ timestamp)
     return new Promise(function (resolve) {
         async.series([
                 Post.find.bind(Post, postUpdateParams, "_id created shift"),
-                findMessages//Message.find.bind(Message, messageCreatedParams, "conversation sender")
+                findMessages
             ],
             function (err, res) {
 

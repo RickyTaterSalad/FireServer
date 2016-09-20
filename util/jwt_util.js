@@ -9,6 +9,7 @@ var generateToken = function(user){
     }
     return jwt.sign({
         _id: user._id,
+        id: user._id,
         firstName: user.firstName,
         photo: user.photo,
         lastName: user.lastName,

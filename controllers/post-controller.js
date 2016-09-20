@@ -164,6 +164,7 @@ var remove = function (/*ObjectId*/ ownerId, /*ObjectId */ postId) {
         _id: postId,
         creator: ownerId
     };
+    console.dir(params);
     return Post.remove(params);
 };
 

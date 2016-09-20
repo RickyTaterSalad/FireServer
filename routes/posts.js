@@ -113,7 +113,7 @@ router.get('/:id', hasUser, function (req, res) {
     }
 });
 router.delete("/:postId", hasUser, function (req, res) {
-    postController.deletePost(req.user.id, req.params.postId).then(function (response) {
+    postController.remove(req.user.id, req.params.postId).then(function (response) {
         if (!response || response.result.n == 0) {
             return res.status(400).send("Could Not Delete Requested Post.");
         }
