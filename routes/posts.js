@@ -136,14 +136,16 @@ router.post('/claim', hasUser, claimShiftValidator, function (req, res) {
 });
 
 router.post('/', hasUser, postValidator, function (req, res) {
+    debug("creating post");
     if (req.locals && req.locals.post) {
-        postController.createPost(req.locals.post)
+        postController.create(req.locals.userId, req.locals.post)
             .then(function (post) {
                 return !post ? res.status(400).send("Could Not Create Post.")
                     : res.json(post);
             });
     }
     else {
+        debug("bad post create");
         return res.status(400).send("Invalid Post.");
     }
 });

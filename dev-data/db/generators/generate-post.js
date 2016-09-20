@@ -15,7 +15,7 @@ var generatePosts = function (count, callback) {
     for (var i = 0; i < count; i++) {
         fxns.push(generatePost);
     }
-    async.series(fxns, callback);
+    async.series(fxns,callback );
 };
 
 var generatePost = function (callback) {
@@ -62,7 +62,11 @@ var generatePost = function (callback) {
             callback();
         }
         else {
-            postController.create(post).then(callback);
+            console.log("Create post outer");
+            postController.create(account._id,post).then(function(){
+                console.log("callback");
+                callback()
+            });
         }
     });
 };

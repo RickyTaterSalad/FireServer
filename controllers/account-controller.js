@@ -3,6 +3,14 @@ var controllerUtils = require("../util/controller-utils");
 var Account = require('mongoose').model('Account');
 
 
+
+//remove after dev
+var getFireUser = function(){
+    return Account.findOne({
+        email: "fire@fire.com"
+    });
+};
+
 var getRandom = function (butNotThis) {
     return controllerUtils.getRandomDocument(Account, butNotThis);
 };
@@ -56,7 +64,8 @@ var exports = {
     findByGoogleProfile: findByGoogleProfile,
     findByFacebookProfile: findByFacebookProfile,
     findByLocalUsername: findByLocalUsername,
-    registerAccount: registerAccount
+    registerAccount: registerAccount,
+    getFireUser:getFireUser
 };
 if (process.env.NODE_ENV !== 'production') {
     exports.getRandom = getRandom;

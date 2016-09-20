@@ -44,9 +44,8 @@ var allPostingsForUser = function (/*Account*/ user) {
     if (!user) {
         Promise.resolve([]);
     }
-    return Account.findById(user._id,"posts").populate("posts").exec().then(function(account){
+    return Account.findById(user._id, "posts").populate("posts").exec().then(function (account) {
         if (account && account.posts) {
-            console.dir(account);
             return account.posts.filter(function (post) {
                 return !post.archived;
             });
@@ -169,25 +168,25 @@ var remove = function (/*ObjectId*/ ownerId, /*ObjectId */ postId) {
 };
 
 //writes a post to the database
-var create = function (/*Post*/ post) {
-    if (canCreatePost(post)) {
-        return post.save(function (err, post) {
-            if (err || !post) {
+var create = function (/*ObjectId*/ user, /*Post*/ post) {
+
+    console.log("create post");
+    if (user && post  && canCreatePost(post)) {
+
+        return post.save().then(function (post) {
+            if (!post) {
                 return null;
             }
-            if (post && post._id) {
-                return Account.update({_id: post.creator},
-                    {$push: {posts: post._id}}, function (res) {
-                        return arguments;
-                    }
-                )
-            }
-            else {
-                return null;
-            }
+            return Account.update({_id: user}, {$push: {posts: post._id}}).then(function (res) {
+                console.log("post created");
+                return post;
+            });
         });
     }
-    else return Promise.resolve(null);
+    else {
+        console.log("Cant create post");
+        return Promise.resolve(null);
+    }
 };
 var claimPost = function (/*Post */ post, /*ObjectID */ claiment) {
     if (!post || !claiment) {
@@ -198,7 +197,7 @@ var claimPost = function (/*Post */ post, /*ObjectID */ claiment) {
 var getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDate, options) {
     return _getPostCountsInDateRange(startDate, endDate, "off", options).then(function (offRequests) {
         return _getPostCountsInDateRange(startDate, endDate, "on", options).then(function (onRequests) {
-            var res = {totalOn:0,totalOff:0,days:{}};
+            var res = {totalOn: 0, totalOff: 0, days: {}};
             var key;
             for (key in offRequests) {
                 if (!res.days[key]) {
@@ -214,7 +213,7 @@ var getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDat
                 res.days[key].on += onRequests[key];
 
             }
-            for(key in res.days){
+            for (key in res.days) {
                 res.totalOn += res.days[key].on;
                 res.totalOff += res.days[key].off;
             }

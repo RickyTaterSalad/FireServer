@@ -61,8 +61,8 @@ var AccountSchema = new mongoose.Schema({
     },
     department: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Department",
-        required: [true, 'User must be associated with a department.']
+        ref: "Department"//,
+     //   required: [true, 'User must be associated with a department.']
     },
     station: {
         type: mongoose.Schema.Types.ObjectId,

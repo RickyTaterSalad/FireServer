@@ -14,13 +14,11 @@ router.get('/:timestamp', hasUser, function (req, res) {
         lastCheck = dateUtils.dateFromMS(timestampAsInt);
     }
     catch(err){
-        console.dir(err);
         return res.status(400).send("Bad Request");
     }
     if (!lastCheck) {
         return res.json([]);
     }
-    console.dir(lastCheck);
     notificationController.notificationsForUser(req.user,lastCheck).then(function(notifications){
         if(!res){
             return res.json([]);

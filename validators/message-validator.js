@@ -39,7 +39,7 @@ var create = function (req, res, next) {
             if (!post) {
                 return res.status(400).send( "Post does not exist");
             }
-            if (post.creator == req.locals.userId || conversation.creator == req.locals.userId) {
+            if (post.creator != req.locals.userId && conversation.creator != req.locals.userId) {
                 return res.status(400).send( "You are not part of the conversation");
             }
             var otherPersonId = post.creator != req.locals.userId ? conversation.creator : post.creator;

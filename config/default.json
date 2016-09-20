@@ -12,13 +12,6 @@
       ]
     }
   },
-  "auth": {
-    "google": {
-      "clientId": "",
-      "clientSecret": "",
-      "callbackURL": ""
-    }
-  },
   "redis": {
     "enabled": false,
     "sessionStoreDb": 1

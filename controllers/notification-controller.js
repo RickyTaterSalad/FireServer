@@ -9,7 +9,6 @@ var notificationsForUser = function (/*ObjectId*/ account, /*Moment*/ timestamp)
         return Promise.resolve([]);
     }
     var date = timestamp.toDate();
-    console.log(date);
     var postUpdateParams = {
         creator: account,
         updatedAt: {
@@ -23,8 +22,6 @@ var notificationsForUser = function (/*ObjectId*/ account, /*Moment*/ timestamp)
     };
     var findMessages = function (callback) {
         Message.find(messageCreatedParams).populate("conversation sender").exec(function(err,res){
-            console.log("MESSAGES");
-            console.dir(res);
             callback(err,res);
         });
     };
@@ -36,12 +33,8 @@ var notificationsForUser = function (/*ObjectId*/ account, /*Moment*/ timestamp)
             function (err, res) {
 
                 if (err) {
-                    console.log("err");
-                    console.dir(err);
                 }
                 else {
-                    console.log("RES");
-                    //console.dir(res[0]);
                 }
 
                 var obj = {messages: res.length > 1 ? res[1] : [], posts: res.length > 0 ? res[0] : []};
