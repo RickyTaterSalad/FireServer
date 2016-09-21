@@ -19,7 +19,7 @@ var isPartOfConversation = function (req, res, next) {
                     if (post.creator == req.locals.userId || conversation.creator == req.locals.userId) {
                         return res.json({success: false, message: "User is not part of conversation"});
                     }
-                    else{
+                    else {
                         next();
                     }
                 })
@@ -29,18 +29,18 @@ var isPartOfConversation = function (req, res, next) {
 };
 var create = function (req, res, next) {
     if (!req.body.content || !req.body.conversation || !req.body.conversation.id) {
-        return res.status(400).send( "Bad Request");
+        return res.status(400).send();
     }
     conversationController.findById(req.body.conversation.id).then(function (conversation) {
         if (!conversation) {
-            return res.status(400).send( "Conversation does not exist");
+            return res.status(400).send("Conversation Does Not Exist");
         }
         postController.findById(conversation.post).then(function (post) {
             if (!post) {
-                return res.status(400).send( "Post does not exist");
+                return res.status(400).send("Post does not exist");
             }
             if (post.creator != req.locals.userId && conversation.creator != req.locals.userId) {
-                return res.status(400).send( "You are not part of the conversation");
+                return res.status(400).send("You Are Not Part Of The Conversation");
             }
             var otherPersonId = post.creator != req.locals.userId ? conversation.creator : post.creator;
             var message = new Message({
@@ -51,7 +51,7 @@ var create = function (req, res, next) {
             });
             var error = message.validateSync();
             if (error) {
-                return res.status(400).send( "Could not create message");
+                return res.status(400).send("Could Not Create Message");
             }
             else {
                 if (!req.locals) {

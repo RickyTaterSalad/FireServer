@@ -20,7 +20,7 @@ var initialize = function (app) {
             return res.status(401).send();
         }
         else {
-            res.status(err.status || 500).send("Error");
+            res.status(err.status || 500).send();
         }
     });
 };

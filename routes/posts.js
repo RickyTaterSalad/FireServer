@@ -1,7 +1,6 @@
 var router = require('express').Router();
 var postController = require("../controllers/post-controller");
 var conversationController = require("../controllers/conversation-controller");
-const RequestHelperMethods = require("../util/request-helper-methods");
 const hasUser = require("../validators/has-user-validator").validate;
 const postValidator = require("../validators/post-validator").validate;
 const claimShiftValidator = require("../validators/post-validator").claimShiftValidator;
@@ -11,7 +10,7 @@ var debug = require('debug')('fireServer:server');
 
 router.get('/postCounts/:startDay', hasUser, function (req, res) {
     if (!req.params.startDay) {
-        return res.status(400).send("Bad Request");
+        return res.status(400).send();
     }
     var startDate;
     var endDate;
@@ -26,7 +25,7 @@ router.get('/postCounts/:startDay', hasUser, function (req, res) {
     catch (err) {
         debug("could not parse day");
         debug(err);
-        return res.status(400).send("Bad Request");
+        return res.status(400).send();
     }
     postController.getPostCountsInDateRange(startDate, endDate, {excludeUser: req.locals.userId}).then(function (posts) {
         return res.json(posts);
@@ -73,12 +72,12 @@ router.get('/self/:type', hasUser, function (req, res) {
 
 router.get("/hasPost/:year/:month/:day", hasUser, function (req, res) {
     if (!req.params || !req.params.year || !req.params.month || !req.params.day) {
-        return res.status(400).send("Invalid Parameters");
+        return res.status(400).send();
     }
     var date = dateUtils.dateFromDayMonthYear(req.params.day, req.params.month, req.params.year);
     debug("Has Posts For: " + date.format('MMMM Do YYYY'));
     if (!date) {
-        return res.json(RequestHelperMethods.invalidRequestJson);
+        return res.status(400).send();
     }
 
     postController.userHasPostForDate(req.locals.userId, date).then(function (hasPost) {
@@ -90,12 +89,12 @@ router.get("/hasPost/:year/:month/:day", hasUser, function (req, res) {
 router.get('/:year/:month/:day', hasUser, function (req, res) {
     //don't return the users posts on this query
     if (!req.params || !req.params.year || !req.params.month || !req.params.day) {
-        return res.status(400).send("Invalid Parameters");
+        return res.status(400).send();
     }
     var date = dateUtils.dateFromDayMonthYear(req.params.day, req.params.month, req.params.year);
     debug("Shifts For: " + date.format('MMMM Do YYYY'));
     if (!date) {
-        return res.json(RequestHelperMethods.invalidRequestJson);
+        return res.status(400).send();
     }
 
     postController.allForDate(date, {loadUser: true, excludeUser: req.locals.userId}).then(function (posts) {
@@ -103,19 +102,19 @@ router.get('/:year/:month/:day', hasUser, function (req, res) {
     });
 });
 router.get('/:id', hasUser, function (req, res) {
-    if (req.params && RequestHelperMethods.validObjectId(req.params.id)) {
+    if (req.params && req.params.id) {
         postController.findById(req.params.id).then(function (post) {
             return res.json(post);
         });
     }
     else {
-        return res.status(400).send("Invalid Parameters");
+        return res.status(400).send();
     }
 });
 router.delete("/:postId", hasUser, function (req, res) {
     postController.remove(req.user.id, req.params.postId).then(function (response) {
         if (!response || response.result.n == 0) {
-            return res.status(400).send("Could Not Delete Requested Post.");
+            return res.status(400).send("Could Not Delete Requested Post");
         }
         else {
             return res.json({success: true, message: "complete"});
@@ -131,7 +130,7 @@ router.post('/claim', hasUser, claimShiftValidator, function (req, res) {
         })
     }
     else {
-        return res.status(400).send("Invalid Post.");
+        return res.status(400).send("Invalid Post");
     }
 });
 
@@ -140,13 +139,12 @@ router.post('/', hasUser, postValidator, function (req, res) {
     if (req.locals && req.locals.post) {
         postController.create(req.locals.userId, req.locals.post)
             .then(function (post) {
-                return !post ? res.status(400).send("Could Not Create Post.")
+                return !post ? res.status(400).send("Could Not Create Post")
                     : res.json(post);
             });
     }
     else {
-        debug("bad post create");
-        return res.status(400).send("Invalid Post.");
+        return res.status(400).send();
     }
 });
 module.exports = router;

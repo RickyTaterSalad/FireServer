@@ -9,18 +9,18 @@ var debug = require('debug')('fireServer:server');
 
 var validate = function (req, res, next) {
     if (!req.body.conversation || !req.body.conversation.post || !req.body.conversation.post.id) {
-        return res.status(400).send("Bad Request");
+        return res.status(400).send();
     }
     conversationController.conversationExistsForUserAndPost(req.locals.userId, req.body.conversation.post.id).then(function (exists) {
         if (exists) {
-            return res.status(400).send("Conversation already exists for post.");
+            return res.status(400).send("Conversation Exists For Post");
         }
         postController.findById(req.body.conversation.post.id).then(function (post) {
             if (post == null) {
-                return res.status(400).send("Cannot locate post to create conversation for.");
+                return res.status(400).send("Cannot Locate Post");
             }
             if (post.creator == req.locals.userId) {
-                return res.status(400).send("Cannot create a conversation with yourself.");
+                return res.status(400).send("Cannot Create A Conversation With Yourself");
             }
             var conversation = new Conversation({
                 creator: req.locals.userId,
@@ -29,7 +29,7 @@ var validate = function (req, res, next) {
             });
             var error = conversation.validateSync();
             if (error) {
-                return res.status(400).send("Bad Request")
+                return res.status(400).send()
             }
             else {
                 if (!req.locals) {

@@ -1,15 +1,14 @@
 var router = require('express').Router();
 var Station = require('mongoose').model('Station');
 const hasUser = require("../validators/has-user-validator").validate;
-const RequestHelperMethods = require("../util/request-helper-methods");
 router.get('/', function (req, res) {
     Station.find(function (err, stations) {
-        if(err){
-          return  res.json(RequestHelperMethods.invalidRequestJson);
+        if (err) {
+            return res.status(400).send();
         }
-        else{
+        else {
             var ret = {};
-            for(var i =0 ; i < stations.length;i++){
+            for (var i = 0; i < stations.length; i++) {
                 ret[stations[i]._id] = stations[i];
             }
             return res.json(ret);
@@ -17,17 +16,17 @@ router.get('/', function (req, res) {
     });
 });
 router.get('/:id', hasUser, function (req, res) {
-    if (req.params && RequestHelperMethods.validObjectId((req.params.id))) {
+    if (req.params && req.params.id) {
         Station.findById(req.params.id, function (err, station) {
             if (err) {
-                res.send(err);
+                return res.status(400).send();
             } else {
                 res.json(station);
             }
         });
     }
     else {
-        res.json(RequestHelperMethods.invalidRequestJson);
+        return res.status(400).send();
     }
 });
 module.exports = router;

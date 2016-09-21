@@ -22,7 +22,7 @@ router.get('/:departmentName', hasUser, function (req, res) {
         }
     }
     else {
-        res.json(RequestHelperMethods.invalidRequestJson);
+        return res.status(400).send();
     }
 });
 module.exports = router;
