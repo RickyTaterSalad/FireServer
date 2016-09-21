@@ -23,6 +23,7 @@ var createFireUser = function (callback) {
                 lastName: "Rivera",
                 department: dept,
                 station: station,
+                rank: "FF",
                 email: "fire@fire.com",
                 platoon: getRandomPlatoon()
             });

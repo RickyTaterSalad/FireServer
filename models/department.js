@@ -67,6 +67,10 @@ var DepartmentSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.String,
         uppercase: true
     }],
+    ranks: [{
+        type: mongoose.Schema.Types.String,
+        uppercase: true
+    }],
     schedule: ScheduleSchema
 
 });

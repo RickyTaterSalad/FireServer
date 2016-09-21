@@ -8,6 +8,7 @@ var getRandom = function () {
 };
 var cachedDept = {};
 
+
 var findByDepartmentName = function (/*String*/ departmentName) {
     if (!departmentName) {
         return Promise.resolve(null);
@@ -33,4 +34,3 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 module.exports = exports;
-

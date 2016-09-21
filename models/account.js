@@ -68,6 +68,11 @@ var AccountSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Station"
     },
+    rank: {
+        type : mongoose.Schema.Types.String,
+        index : true,
+        uppercase : true
+    },
     conversations: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Conversation"
