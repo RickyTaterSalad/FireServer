@@ -20,25 +20,6 @@ var initialize = function () {
     app.set('view engine', 'jade');
 
 
-    // will print stacktrace
-    if (process.env.NODE_ENV !== 'production') {
-        app.use(function (err, req, res, next) {
-            res.status(err.status || 500);
-            res.render('error', {
-                message: err.message,
-                error: err
-            });
-        });
-    }
-    // production error handler
-    // no stacktraces leaked to user
-    app.use(function (err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: {}
-        });
-    });
 
     return app;
 
