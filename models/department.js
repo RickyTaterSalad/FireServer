@@ -80,6 +80,7 @@ DepartmentSchema.set('toJSON', {
             id: ret._id,
             name: ret.name,
             platoons: ret.platoons,
+            ranks:ret.ranks,
             schedule: ret.schedule
         };
 

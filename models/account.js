@@ -93,6 +93,7 @@ AccountSchema.set('toJSON', {
             lastName: ret.lastName,
             platoon: ret.platoon,
             assignedHireCode: ret.assignedHireCode,
+            rank: ret.rank,
          //   posts: ret.posts,
          //   department: ret.department,
             station: ret.station
