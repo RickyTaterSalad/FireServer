@@ -5,7 +5,7 @@ var notificationController = require("../controllers/notification-controller");
 const hasUser = require("../validators/has-user-validator").validate;
 router.get('/:timestamp', hasUser, function (req, res) {
     if (!req.params.timestamp) {
-        return res.status(400).send("Bad Request");
+        return res.status(400).send();
     }
     var lastCheck;
     var timestampAsInt;
@@ -14,7 +14,7 @@ router.get('/:timestamp', hasUser, function (req, res) {
         lastCheck = dateUtils.dateFromMS(timestampAsInt);
     }
     catch(err){
-        return res.status(400).send("Bad Request");
+        return res.status(400).send();
     }
     if (!lastCheck) {
         return res.json([]);

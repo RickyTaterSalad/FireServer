@@ -1,7 +1,6 @@
 var router = require('express').Router();
 var mongoose = require('mongoose');
 var Conversation = mongoose.model('Conversation');
-const RequestHelperMethods = require("../util/request-helper-methods");
 const hasUser = require("../validators/has-user-validator").validate;
 const validateConversation = require("../validators/conversation-validator").validate;
 var conversationController = require("../controllers/conversation-controller");
@@ -23,7 +22,7 @@ router.post('/', hasUser, validateConversation, function (req, res) {
         });
     }
     else {
-        return res.json(RequestHelperMethods.invalidRequestJson);
+        return res.status(400).send();
     }
 
 });
