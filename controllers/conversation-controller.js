@@ -5,7 +5,6 @@ var Conversation = mongoose.model('Conversation');
 var Post = mongoose.model('Post');
 var Account = mongoose.model('Account');
 var Message = mongoose.model('Message');
-var RequestHelperMethods = require("../util/request-helper-methods");
 var debug = require('debug')('fireServer:server');
 var async = require("async");
 
@@ -13,6 +12,9 @@ var getRandom = function () {
     return controllerUtils.getRandomDocument(Conversation);
 };
 var findById = function (/*ObjectId*/ id) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return Promise.resolve(null);
+    }
     return controllerUtils.byId(Conversation, id).exec();
 };
 
@@ -27,7 +29,7 @@ var findByUser = function (/*Account*/ user) {
     return Conversation.find(params).populate("creator  messages recipient post").exec();
 };
 var findByUserAndPostId = function (/*Account*/ user, /*ObjectId */ postId) {
-    if (!user || !postId) {
+    if (!user || !postId || !mongoose.Types.ObjectId.isValid(postId)) {
         return Promise.resolve([]);
     }
     var params = {
@@ -38,15 +40,18 @@ var findByUserAndPostId = function (/*Account*/ user, /*ObjectId */ postId) {
     return Conversation.find(params).populate("creator messages recipient").exec();
 };
 var archiveConversationsForPosts = function (/*Array<ObjectId>*/ postIds) {
-    if (!postIds) {
+    if (!postIds || !postIds.length) {
         return Promise.resolve(null);
     }
-    else {
-        return Conversation.update({
-            archived: false,
-            post: {$in: postIds}
-        }, {archived: true}, {multi: true});
+    for (var i = 0; i < postIds.length; i++) {
+        if (!mongoose.Types.ObjectId.isValid(postIds[i])) {
+            return Promise.resolve([]);
+        }
     }
+    return Conversation.update({
+        archived: false,
+        post: {$in: postIds}
+    }, {archived: true}, {multi: true});
 };
 
 var findByCreator = function (/*Account*/ user, populateChildren) {
@@ -86,8 +91,8 @@ var addMessageToConversation = function (message) {
 };
 
 var conversationExistsForUserAndPost = function (/*ObjectId */ account, /*ObjectId*/ post) {
-    if (!RequestHelperMethods.validObjectId(account) || RequestHelperMethods.validObjectId(post)) {
-        Promise.resolve(true);
+    if (!mongoose.Types.ObjectId.isValid(account) || !mongoose.Types.ObjectId.isValid(post)) {
+        return Promise.resolve(true);
     }
     return Conversation.findOne({
         creator: account,
@@ -141,7 +146,7 @@ var create = function (/*Conversation */ conversation) {
             callback(err, accounts, res);
         });
     };
-    return new Promise(function (resolve,reject) {
+    return new Promise(function (resolve, reject) {
         async.waterfall([
             Account.find.bind(Account, accountFindParams),
             function (accounts, callback) {
@@ -154,10 +159,10 @@ var create = function (/*Conversation */ conversation) {
             updateAccounts
 
         ], function (err, results) {
-            if(err){
-              return  reject(err);
+            if (err) {
+                return reject(err);
             }
-            else{
+            else {
                 return resolve(results);
             }
         });

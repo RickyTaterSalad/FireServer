@@ -15,6 +15,9 @@ router.get('/:conversationId', hasUser, messageValidator.isPartOfConversation, f
     }
 });
 router.post('/', hasUser, messageValidator.create, function (req, res) {
+    if (!req.locals || !rea.locals.message) {
+        return res.status(400).send();
+    }
     req.locals.message.save(function (err) {
         if (err) {
             return res.status(400).send();

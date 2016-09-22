@@ -1,13 +1,12 @@
 //model types passed can be either the instance itself or the object id
 var mongoose = require('mongoose');
-
 var Post = mongoose.model('Post');
 var Account = mongoose.model('Account');
 var Promise = require("bluebird");
 var conversationController = require("./conversation-controller");
 var debug = require('debug')('fireServer:server');
 var controllerUtils = require("../util/controller-utils");
-var requestHelperMethods = require("../util/request-helper-methods");
+var postCountCacheController = require("../cache/post-count-cache-controller");
 var async = require('async');
 
 var getRandom = function () {
@@ -15,13 +14,28 @@ var getRandom = function () {
 };
 
 var findById = function (/*ObjectId*/ id) {
-    return controllerUtils.byId(Post, id);
+    if (id && mongoose.Types.ObjectId.isValid(id)) {
+        console.log("finding....");
+        return controllerUtils.byId(Post, id);
+    }
+    else {
+        console.log("cannot find by id")
+        return Promise.resolve(null);
+    }
 };
 var archiveBeforeDate = function (/*Moment*/ date) {
     return Post.update({shift: {$lt: date}}, {archived: true}, {multi: true});
 };
 
 var findByIds = function (/*Array<ObjectId>*/ ids) {
+    if (!ids || !ids.length) {
+        return Promise.resolve([]);
+    }
+    for (var i = 0; i < ids.length; i++) {
+        if (!mongoose.Types.ObjectId.isValid(ids[i])) {
+            return Promise.resolve([]);
+        }
+    }
     return Post.find({
         _id: {$in: ids}
     });
@@ -42,7 +56,7 @@ var allOffersForUser = function (/*Account */ user) {
 
 var allPostingsForUser = function (/*Account*/ user) {
     if (!user) {
-        Promise.resolve([]);
+        return Promise.resolve([]);
     }
     return Account.findById(user._id, "posts").populate("posts").exec().then(function (account) {
         if (account && account.posts) {
@@ -51,16 +65,11 @@ var allPostingsForUser = function (/*Account*/ user) {
             });
         }
     });
-    /*
-     return Post.find({
-     creator: user._id || user.id,
-     archived: false
-     }).sort("shift");
-     */
+
 };
 var allBeforeDateThatAreNotArchived = function (/*Moment*/ date) {
     if (!date) {
-        Promise.resolve([]);
+        return Promise.resolve([]);
     }
     return Post.find({
         shift: {$lt: date.valueOf()},
@@ -69,7 +78,7 @@ var allBeforeDateThatAreNotArchived = function (/*Moment*/ date) {
 };
 var allForDate = function (/*Moment*/ date, options) {
     if (!date) {
-        Promise.resolve([]);
+        return Promise.resolve([]);
     }
     if (options) {
         var params = {
@@ -92,8 +101,8 @@ var allForDate = function (/*Moment*/ date, options) {
 };
 
 var findUsersPost = function (/*ObjectId */ account, /*ObjectId*/ postId) {
-    if (!account || !postId || !account) {
-        Promise.resolve(true);
+    if (!account || !postId || !account || !mongoose.Types.ObjectId.isValid(account) || !mongoose.Types.ObjectId.isValid(postId)) {
+        return Promise.resolve(true);
     }
     var params = {
         creator: account,
@@ -105,8 +114,8 @@ var findUsersPost = function (/*ObjectId */ account, /*ObjectId*/ postId) {
 
 
 var allForDateAtStation = function (/*Date */ date, /*ObjectId*/ stationId) {
-    if (!date || !stationId) {
-        Promise.resolve([]);
+    if (!date || !stationId || !mongoose.Types.ObjectId.isValid(stationId)) {
+        return Promise.resolve([]);
     }
     return Post.find({
         shift: date.valueOf(),
@@ -116,7 +125,7 @@ var allForDateAtStation = function (/*Date */ date, /*ObjectId*/ stationId) {
 };
 var forUserFilterType = function (user, postType) {
     if (!postType || !user) {
-        Promise.resolve([]);
+      return  Promise.resolve([]);
     }
     var postTypeLower = postType.toLowerCase();
     if (postTypeLower != "off" && postType != "on") {
@@ -130,7 +139,7 @@ var forUserFilterType = function (user, postType) {
 };
 
 var userHasPostForDate = function (/*ObjectId */ account, /*Moment*/ date) {
-    if (!account || !date || !requestHelperMethods.validObjectId((account))) {
+    if (!account || !date || !mongoose.Types.ObjectId.isValid(account)) {
         Promise.resolve(true);
     }
     var params = {
@@ -160,6 +169,9 @@ var canCreatePost = function (/*Post*/ post) {
 };
 
 var remove = function (/*ObjectId*/ ownerId, /*ObjectId */ postId) {
+    if (!mongoose.Types.ObjectId.isValid(ownerId) || !mongoose.Types.ObjectId.isValid(postId)) {
+        return Promise.resolve(null);
+    }
     var params = {
         _id: postId,
         creator: ownerId
@@ -169,14 +181,18 @@ var remove = function (/*ObjectId*/ ownerId, /*ObjectId */ postId) {
 };
 
 //writes a post to the database
-var create = function (/*ObjectId*/ user, /*Post*/ post) {
-
+//calendar start is the start ms of the calendar this post will fall into so we can invalidate the cache on create
+var create = function (/*ObjectId*/ user, /*Post*/ post, /*number */ calendarStart) {
     console.log("create post");
-    if (user && post  && canCreatePost(post)) {
-
+    if (user && post && mongoose.Types.ObjectId.isValid(user) && canCreatePost(post)) {
         return post.save().then(function (post) {
             if (!post) {
                 return null;
+            }
+            //invalidate the cache
+            debug(calendarStart);
+            if (calendarStart) {
+                postCountCacheController.remove(calendarStart);
             }
             return Account.update({_id: user}, {$push: {posts: post._id}}).then(function (res) {
                 console.log("post created");
@@ -190,12 +206,31 @@ var create = function (/*ObjectId*/ user, /*Post*/ post) {
     }
 };
 var claimPost = function (/*Post */ post, /*ObjectID */ claiment) {
-    if (!post || !claiment) {
+    if (!post || !claiment || !mongoose.Types.ObjectId.isValid(claiment)) {
         return Promise.resolve(null);
     }
     return post.update({claiment: claiment}, {new: true});
 };
 var getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDate, options) {
+    if (!startDate || !endDate || !startDate.valueOf || !endDate.valueOf) {
+        return Promise.resolve(null);
+    }
+    if (postCountCacheController.enabled) {
+        return postCountCacheController.get(startDate.valueOf()).then(function (cachedPostCountObj) {
+            if (!cachedPostCountObj) {
+                return _getPostsCountsInDateRangeFromServer(startDate, endDate, options);
+            }
+            else {
+                debug("found post counts in cache");
+                return cachedPostCountObj;
+            }
+        });
+    }
+    else {
+        return _getPostsCountsInDateRangeFromServer(startDate, endDate, options);
+    }
+};
+var _getPostsCountsInDateRangeFromServer = function (/*Moment*/ startDate, /*Moment*/ endDate, options) {
     return _getPostCountsInDateRange(startDate, endDate, "off", options).then(function (offRequests) {
         return _getPostCountsInDateRange(startDate, endDate, "on", options).then(function (onRequests) {
             var res = {totalOn: 0, totalOff: 0, days: {}};
@@ -218,6 +253,9 @@ var getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDat
                 res.totalOn += res.days[key].on;
                 res.totalOff += res.days[key].off;
             }
+            //cache
+            debug("caching post counts");
+            postCountCacheController.add(startDate.valueOf(), res);
             return res;
         })
 

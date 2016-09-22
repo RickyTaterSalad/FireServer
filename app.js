@@ -12,7 +12,6 @@ require("./helpers/passport-helper").initialize();
 var app = require("./helpers/express-init-helper").initialize();
 
 //express auth helper
-require("./helpers/express-auth-helper").initialize(app);
 require("./helpers/express-route-helper").initialize(app);
 
 

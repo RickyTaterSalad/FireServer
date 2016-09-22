@@ -12,7 +12,7 @@ router.get('/', hasUser, function (req, res) {
                 res.json(ahObj);
             }
             else {
-                res.json({});
+                return res.status(400).send();
             }
         });
 });
@@ -27,7 +27,7 @@ router.get('/:ahCode', hasUser, function (req, res) {
                     res.json(ahObj);
                 }
                 else {
-                    res.json({});
+                    return res.status(400).send();
                 }
             });
     }
@@ -45,7 +45,7 @@ router.get('/Date/:date', hasUser, function (req, res) {
                     res.json(ahObj);
                 }
                 else {
-                    res.json({});
+                    return res.status(400).send();
                 }
             });
     }

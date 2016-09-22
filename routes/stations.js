@@ -18,7 +18,7 @@ router.get('/', function (req, res) {
 router.get('/:id', hasUser, function (req, res) {
     if (req.params && req.params.id) {
         Station.findById(req.params.id, function (err, station) {
-            if (err) {
+            if (err || !station) {
                 return res.status(400).send();
             } else {
                 res.json(station);

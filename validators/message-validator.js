@@ -1,5 +1,4 @@
 var Message = require('mongoose').model('Message');
-const RequestHelperMethods = require("../util/request-helper-methods");
 var conversationController = require("../controllers/conversation-controller");
 var postController = require("../controllers/post-controller");
 var debug = require('debug')('fireServer:server');
@@ -7,7 +6,7 @@ var debug = require('debug')('fireServer:server');
 
 var isPartOfConversation = function (req, res, next) {
     if (!req || !req.params || !req.params.conversation || !req.params.conversation.id) {
-        return res.json(RequestHelperMethods.invalidRequestJson);
+        return res.status(400).send();
     }
     else {
         conversationController.findById(req.params.conversation.id).then(function (conversation) {

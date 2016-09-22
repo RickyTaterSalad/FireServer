@@ -104,6 +104,11 @@ router.get('/:year/:month/:day', hasUser, function (req, res) {
 router.get('/:id', hasUser, function (req, res) {
     if (req.params && req.params.id) {
         postController.findById(req.params.id).then(function (post) {
+            console.log("got response");
+            console.log(post);
+            if (!post) {
+                return res.status(400).send();
+            }
             return res.json(post);
         });
     }
@@ -126,7 +131,7 @@ router.post('/claim', hasUser, claimShiftValidator, function (req, res) {
     if (req.locals && req.locals.post) {
         postController.claimPost(req.locals.post, req.locals.claiment).then(function (response) {
 
-            return res.json({success: response.n == 1});
+            return res.json({success: response && response.n == 1});
         })
     }
     else {
@@ -134,10 +139,11 @@ router.post('/claim', hasUser, claimShiftValidator, function (req, res) {
     }
 });
 
+
 router.post('/', hasUser, postValidator, function (req, res) {
     debug("creating post");
     if (req.locals && req.locals.post) {
-        postController.create(req.locals.userId, req.locals.post)
+        postController.create(req.locals.userId, req.locals.post, req.body ? req.body.calendarStart : null)
             .then(function (post) {
                 return !post ? res.status(400).send("Could Not Create Post")
                     : res.json(post);

@@ -12,10 +12,6 @@
       ]
     }
   },
-  "redis": {
-    "enabled": false,
-    "sessionStoreDb": 1
-  },
   "driveTimes": {
     "units": "imperial"
   }

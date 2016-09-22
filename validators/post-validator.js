@@ -1,5 +1,4 @@
 var Post = require('mongoose').model('Post');
-const RequestHelperMethods = require("../util/request-helper-methods");
 var postController = require("../controllers/post-controller");
 var util = require("util");
 var dateUtil = require("../util/date-utils");

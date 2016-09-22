@@ -1,6 +1,7 @@
 //model types passed can be either the instance itself or the object id
+var mongoose = require('mongoose');
 var controllerUtils = require("../util/controller-utils");
-var AssignHireCode = require('mongoose').model('AssignHireCode');
+var AssignHireCode = mongoose.model('AssignHireCode');
 var debug = require('debug')('fireServer:server');
 var dateUtils = require("../util/date-utils");
 var moment = require('moment');
@@ -22,6 +23,9 @@ var getAllAHCodes = function () {
 };
 
 var findById = function (/*ObjectId*/ id) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return Promise.resolve(null);
+    }
     return controllerUtils.byId(AssignHireCode, id);
 };
 

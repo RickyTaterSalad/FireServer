@@ -3,10 +3,16 @@ var async = require("async");
 var debug = require('debug')('fireServer:server');
 var postController = require("../controllers/post-controller");
 var conversationController = require("../controllers/conversation-controller");
+var postCountCacheController = require("../cache/post-count-cache-controller");
 var dateUtils = require("./date-utils");
 var util = require("util");
 
 var initialized = false;
+
+var flushCache= function(callback){
+    postCountCacheController.flush(callback);
+};
+
 var archiveConversations = function (archivePostIds, callback) {
     debug(util.format("Archiving conversations for %s posts", archivePostIds.length));
     conversationController.archiveConversationsForPosts(archivePostIds).then(function(result){
@@ -46,7 +52,8 @@ var initialize = function () {
             debug("**********ARCHIVING OLD POSTS AND CONVERSATIONS**********");
             async.waterfall([
                 archivePosts,
-                archiveConversations
+                archiveConversations,
+                flushCache
             ], function () {
                 debug("DB Cleanup Complete");
             });

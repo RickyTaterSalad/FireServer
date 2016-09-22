@@ -2,7 +2,6 @@ var Conversation = require('mongoose').model('Conversation');
 var Message = require('mongoose').model('Message');
 var postController = require("../controllers/post-controller");
 var conversationController = require("../controllers/conversation-controller");
-const RequestHelperMethods = require("../util/request-helper-methods");
 var debug = require('debug')('fireServer:server');
 
 //must have a message to create a conversation

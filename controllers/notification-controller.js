@@ -1,10 +1,11 @@
 //model types passed can be either the instance itself or the object id
-var Post = require('mongoose').model('Post');
-var Message = require('mongoose').model('Message');
+var mongoose =  require('mongoose');
+var Post = mongoose.model('Post');
+var Message = mongoose.model('Message');
 var async = require("async");
 
 var notificationsForUser = function (/*ObjectId*/ account, /*Moment*/ timestamp) {
-    if (!account || !timestamp) {
+    if (!account || !timestamp || !mongoose.Types.ObjectId.isValid(account)) {
         return Promise.resolve([]);
     }
     var date = timestamp.toDate();
