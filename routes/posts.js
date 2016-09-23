@@ -135,8 +135,6 @@ router.get('/:year/:month/:day', hasUser, function (req, res) {
 router.get('/:id', hasUser, function (req, res) {
     if (req.params && req.params.id) {
         postController.findById(req.params.id).then(function (post) {
-            console.log("got response");
-            console.log(post);
             if (!post) {
                 return res.status(400).send();
             }
@@ -149,7 +147,7 @@ router.get('/:id', hasUser, function (req, res) {
 });
 router.delete("/:postId", hasUser, function (req, res) {
     postController.remove(req.user.id, req.params.postId).then(function (response) {
-        if (!response || response.result.n == 0) {
+        if (!response) {
             return res.status(400).send("Could Not Delete Requested Post");
         }
         else {
@@ -162,7 +160,7 @@ router.post('/cancelConfirmedClaim/:postId', hasUser, function (req, res) {
         return res.status(400).send();
     }
     postController.cancelConfirmedClaim(req.params.postId, req.user.id).then(function (response) {
-        if (!response || response.n != 1) {
+        if (!response) {
             //failed to update. retrieve the post to see why
             return returnClaimError(req, res, req.params.postId, {isClaim: false});
         }
@@ -216,7 +214,7 @@ router.post('/claim', hasUser, claimShiftValidator, function (req, res) {
 router.post('/', hasUser, postValidator, function (req, res) {
     debug("creating post");
     if (req.locals && req.locals.post) {
-        postController.create(req.locals.userId, req.locals.post, req.body ? req.body.calendarStart : null)
+        postController.create(req.locals.userId, req.locals.post)
             .then(function (post) {
                 return !post ? res.status(400).send("Could Not Create Post")
                     : res.json(post);

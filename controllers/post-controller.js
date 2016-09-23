@@ -7,7 +7,29 @@ var conversationController = require("./conversation-controller");
 var debug = require('debug')('fireServer:server');
 var controllerUtils = require("../util/controller-utils");
 var postCountCacheController = require("../cache/post-count-cache-controller");
+var dateUtils = require("../util/date-utils");
 var async = require('async');
+
+
+var invalidatePostCountsForShift = function (/*shift ms */ shiftMs) {
+    if (!shiftMs) {
+        return;
+    }
+    if (shiftMs.valueOf) {
+        shiftMs = shiftMs.valueOf();
+    }
+    var keys = dateUtils.getCalendarKeysForShift(shiftMs);
+    if (keys && keys.length) {
+        for (var i = 0; i < keys.length; i++) {
+            var currKey = keys[i];
+            if (currKey) {
+                debug("invalidating post count cache key: " + currKey);
+                postCountCacheController.remove(currKey);
+            }
+        }
+    }
+};
+
 
 var getRandom = function () {
     return controllerUtils.getRandomDocument(Post);
@@ -15,11 +37,9 @@ var getRandom = function () {
 
 var findById = function (/*ObjectId*/ id) {
     if (id && mongoose.Types.ObjectId.isValid(id)) {
-        console.log("finding....");
         return controllerUtils.byId(Post, id);
     }
     else {
-        console.log("cannot find by id")
         return Promise.resolve(null);
     }
 };
@@ -170,38 +190,38 @@ var canCreatePost = function (/*Post*/ post) {
 
 var remove = function (/*ObjectId*/ ownerId, /*ObjectId */ postId) {
     if (!mongoose.Types.ObjectId.isValid(ownerId) || !mongoose.Types.ObjectId.isValid(postId)) {
-        return Promise.resolve(null);
+        return Promise.resolve(false);
     }
     var params = {
         _id: postId,
         creator: ownerId
     };
-    console.dir(params);
-    return Post.remove(params);
+    return Post.findOne(params).then(function (post) {
+        if (!post) {
+            return false;
+        }
+        return post.remove().then(function () {
+            invalidatePostCountsForShift(post.shift);
+            return true;
+        });
+    });
 };
 
 //writes a post to the database
 //calendar start is the start ms of the calendar this post will fall into so we can invalidate the cache on create
-var create = function (/*ObjectId*/ user, /*Post*/ post, /*number */ calendarStart) {
-    console.log("create post");
+var create = function (/*ObjectId*/ user, /*Post*/ post) {
     if (user && post && mongoose.Types.ObjectId.isValid(user) && canCreatePost(post)) {
         return post.save().then(function (post) {
             if (!post) {
                 return null;
             }
-            //invalidate the cache
-            debug(calendarStart);
-            if (calendarStart) {
-                postCountCacheController.remove(calendarStart);
-            }
+            invalidatePostCountsForShift(post.shift);
             return Account.update({_id: user}, {$push: {posts: post._id}}).then(function (res) {
-                console.log("post created");
                 return post;
             });
         });
     }
     else {
-        console.log("Cant create post");
         return Promise.resolve(null);
     }
 };
@@ -209,7 +229,13 @@ var claimPost = function (/*Post */ post, /*ObjectID */ claimant) {
     if (!post || !claimant || !mongoose.Types.ObjectId.isValid(claimant)) {
         return Promise.resolve(null);
     }
-    return post.update({claimant: claimant}, {new: true});
+    return post.update({claimant: claimant}, {new: true}).then(function (response) {
+        if (response && response.n == 1) {
+            debug("invalidate for: " + post.shift);
+            invalidatePostCountsForShift(post.shift);
+        }
+        return response;
+    });
 };
 var getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDate, options) {
     if (!startDate || !endDate || !startDate.valueOf || !endDate.valueOf) {
@@ -265,17 +291,16 @@ var _getUnclaimedPostCountsInDateRange = function (/*Moment*/ startDate, /*Momen
     if (!startDate || !endDate) {
         return Promise.resolve([]);
     }
-
-
     var o = {};
     o.map = function () {
         emit(this.shift, 1)
     };
     o.query = {
         shift: {$gte: startDate, $lte: endDate},
-        claimantHasConfirmed: false,
+        claimant: {$eq: null},
         requestType: requestType
     };
+    debug(o.query);
     if (options) {
         if (options.excludeUser) {
             o.query.creator = {$ne: options.excludeUser}
@@ -298,7 +323,7 @@ var _getUnclaimedPostCountsInDateRange = function (/*Moment*/ startDate, /*Momen
         }
     });
 };
-var confirmCLaim = function (/*ObjectId*/ postId, /*ObjectId*/ userClaimingId) {
+var confirmClaim = function (/*ObjectId*/ postId, /*ObjectId*/ userClaimingId) {
     if (!userClaimingId || !postId || !mongoose.Types.ObjectId.isValid(userClaimingId) || !mongoose.Types.ObjectId.isValid(postId)) {
         return Promise.resolve(null);
     }
@@ -306,7 +331,6 @@ var confirmCLaim = function (/*ObjectId*/ postId, /*ObjectId*/ userClaimingId) {
         claimant: userClaimingId,
         _id: postId
     };
-    debug(params);
     return Post.update(params, {claimantHasConfirmed: true}, {new: true})
 };
 var cancelConfirmedClaim = function (/*ObjectId*/ postId, /*ObjectId*/ userCancelId) {
@@ -317,8 +341,16 @@ var cancelConfirmedClaim = function (/*ObjectId*/ postId, /*ObjectId*/ userCance
         $or: [{claimant: userCancelId}, {creator: userCancelId}],
         _id: postId
     };
-    debug(params);
-    return Post.update(params, {claimantHasConfirmed: false, claimant: null}, {new: true});
+
+    return Post.findOne(params).then(function (post) {
+        if (!post) {
+            return false;
+        }
+        return post.update({claimantHasConfirmed: false, claimant: null}).then(function () {
+            invalidatePostCountsForShift(post.shift);
+            return true;
+        });
+    });
 };
 
 var exports = {
@@ -334,7 +366,7 @@ var exports = {
     findUsersPost: findUsersPost,
     allOffersForUser: allOffersForUser,
     claimPost: claimPost,
-    confirmClaim: confirmCLaim,
+    confirmClaim: confirmClaim,
     cancelConfirmedClaim: cancelConfirmedClaim,
     allBeforeDateThatAreNotArchived: allBeforeDateThatAreNotArchived,
     archiveBeforeDate: archiveBeforeDate,

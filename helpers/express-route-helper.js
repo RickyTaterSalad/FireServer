@@ -2,6 +2,7 @@ var jwtUtil = require("../util/jwt_util");
 var passportHelper = require("./passport-helper");
 var passport = require('passport');
 var favicon = require('serve-favicon');
+var debug = require('debug')('fireServer:server');
 var jwt = require('express-jwt');
 var initialize = function (app) {
     app.use(favicon(__dirname + '/../public/favicon.ico'));
@@ -15,7 +16,9 @@ var initialize = function (app) {
         res.json({error: true, message: "not found"});
     });
     app.use(function (err, req, res, next) {
-        console.log("ERROR");
+
+        debug("ERROR");
+        debug(err);
         if (err.name === 'UnauthorizedError') {
             return res.status(401).send();
         }

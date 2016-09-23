@@ -3,25 +3,25 @@ var debug = require('debug')('fireServer:server');
 var dbPrefix = "pc:";
 
 var getAsObject = function (calendarStart, destination) {
-    if (!calendarStart || !this.enabled()) {
+    if (!calendarStart || !cacheController.enabled()) {
         return Promise.resolve(null);
     }
     return get(calendarStart, true);
 };
 var get = function (calendarStart, returnObj) {
-    if (!calendarStart || !this.enabled()) {
+    if (!calendarStart || !cacheController.enabled()) {
         return Promise.resolve(null);
     }
     return cacheController.getObjectAsync(dbPrefix, calendarStart, returnObj);
 };
 var add = function (calendarStart, postCountObj) {
-    if (!calendarStart || !this.enabled()) {
+    if (!calendarStart || !cacheController.enabled()) {
         return Promise.resolve(null);
     }
     return cacheController.setObject(dbPrefix, calendarStart, postCountObj);
 };
 var remove = function (calendarStart) {
-    if (calendarStart && this.enabled()) {
+    if (calendarStart && cacheController.enabled()) {
         cacheController.remove(dbPrefix, calendarStart);
     }
 };
