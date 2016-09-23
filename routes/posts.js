@@ -8,6 +8,37 @@ var dateUtils = require("../util/date-utils");
 var debug = require('debug')('fireServer:server');
 
 
+var returnClaimError = function (req, res, postId, options) {
+    if (!options) {
+        options = {};
+    }
+    debug("ERROR POST ID: " + postId);
+    postController.findById(postId).then(function (post) {
+        debug(arguments);
+        var errorMsg = "";
+        if (!post) {
+            errorMsg = "Post Does Not Exist";
+        }
+        else if (post.claimantHasConfirmed && options.isClaim) {
+            errorMsg = "Post Has Already Been Claimed";
+        }
+        else if (options.isClaim && post.claimant != null && post.claimant != req.user.id) {
+            errorMsg = "Post Is Already Pending Confirmation";
+        }
+        else if(options.isConfirmClaim && post.claimant != null && post.claimant != req.user.id){
+            errorMsg = "You Cannot Confirm Claim On This Post";
+        }
+        else if (options.isClaim && post.claimant != req.user.id && post.creator != req.user.id) {
+            errorMsg = "You Are Not Part Of This Post";
+        }
+
+        else {
+            errorMsg = "Cannot Perform This Operation";
+        }
+        return res.json({success: false, message: errorMsg});
+    });
+}
+
 router.get('/postCounts/:startDay', hasUser, function (req, res) {
     if (!req.params.startDay) {
         return res.status(400).send();
@@ -126,18 +157,60 @@ router.delete("/:postId", hasUser, function (req, res) {
         }
     });
 });
+router.post('/cancelConfirmedClaim/:postId', hasUser, function (req, res) {
+    if (!req.params || !req.params.postId) {
+        return res.status(400).send();
+    }
+    postController.cancelConfirmedClaim(req.params.postId, req.user.id).then(function (response) {
+        if (!response || response.n != 1) {
+            //failed to update. retrieve the post to see why
+            return returnClaimError(req, res, req.params.postId, {isClaim: false});
+        }
+        else {
+            return res.json({success: true});
+        }
+    })
+});
+
+
+router.post('/confirmClaim/:postId', hasUser, function (req, res) {
+    if (!req.params || !req.params.postId) {
+        return res.status(400).send();
+    }
+    debug("Post Id: " + req.params.postId);
+    postController.confirmClaim(req.params.postId, req.user.id).then(function (response) {
+        if (!response || response.n != 1) {
+            //failed to update. retrieve the post to see why
+            return returnClaimError(req, res, req.params.postId, {isConfirmClaim: true});
+        }
+        else {
+            return res.json({success: true});
+        }
+    })
+});
 
 router.post('/claim', hasUser, claimShiftValidator, function (req, res) {
+    debug("------------");
+    debug(req.locals);
+    debug("------------");
     if (req.locals && req.locals.post) {
-        postController.claimPost(req.locals.post, req.locals.claiment).then(function (response) {
+        postController.claimPost(req.locals.post, req.locals.claimant).then(function (response) {
+                if (!response || response.n != 1) {
+                    //failed to update. retrieve the post to see why
+                    return returnClaimError(req, res, req.locals.post, {isClaim: true});
+                }
+                else {
+                    return res.json({success: true});
 
-            return res.json({success: response && response.n == 1});
-        })
+                }
+            }
+        )
     }
     else {
         return res.status(400).send("Invalid Post");
     }
-});
+})
+;
 
 
 router.post('/', hasUser, postValidator, function (req, res) {

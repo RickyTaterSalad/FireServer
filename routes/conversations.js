@@ -8,7 +8,7 @@ var conversationController = require("../controllers/conversation-controller");
 var debug = require('debug')('fireServer:server');
 
 router.get('/:postId', hasUser, function (req, res) {
-    conversationController.findByUserAndPostId(req.user, req.params.postId).then(function (conversations) {
+    conversationController.findByUserAndPostId(req.user.id, req.params.postId).then(function (conversations) {
         return res.json(conversations || []);
     });
 });

@@ -16,12 +16,14 @@ var PostSchema = new mongoose.Schema({
         required: true,
         index: true
     },
-    claiment: {
+    claimant: {
         type: mongoose.Schema.Types.ObjectId,
         "ref": "Account"
     },
-    claimentHasConfirmed: {
-        type: mongoose.Schema.Types.Boolean
+    claimantHasConfirmed: {
+        type: mongoose.Schema.Types.Boolean,
+        default: false,
+        required: true
     },
     shift: {
         type: "Moment",
@@ -138,6 +140,7 @@ PostSchema.set('toJSON', {
         if (ret.isRegular) {
             obj.isRegular = true;
         }
+        obj.claimed = ret.claimantHasConfirmed && ret.claimant;
         return obj;
     }
 });

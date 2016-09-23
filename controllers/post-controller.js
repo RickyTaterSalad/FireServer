@@ -125,7 +125,7 @@ var allForDateAtStation = function (/*Date */ date, /*ObjectId*/ stationId) {
 };
 var forUserFilterType = function (user, postType) {
     if (!postType || !user) {
-      return  Promise.resolve([]);
+        return Promise.resolve([]);
     }
     var postTypeLower = postType.toLowerCase();
     if (postTypeLower != "off" && postType != "on") {
@@ -205,11 +205,11 @@ var create = function (/*ObjectId*/ user, /*Post*/ post, /*number */ calendarSta
         return Promise.resolve(null);
     }
 };
-var claimPost = function (/*Post */ post, /*ObjectID */ claiment) {
-    if (!post || !claiment || !mongoose.Types.ObjectId.isValid(claiment)) {
+var claimPost = function (/*Post */ post, /*ObjectID */ claimant) {
+    if (!post || !claimant || !mongoose.Types.ObjectId.isValid(claimant)) {
         return Promise.resolve(null);
     }
-    return post.update({claiment: claiment}, {new: true});
+    return post.update({claimant: claimant}, {new: true});
 };
 var getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDate, options) {
     if (!startDate || !endDate || !startDate.valueOf || !endDate.valueOf) {
@@ -218,7 +218,7 @@ var getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDat
     if (postCountCacheController.enabled) {
         return postCountCacheController.get(startDate.valueOf()).then(function (cachedPostCountObj) {
             if (!cachedPostCountObj) {
-                return _getPostsCountsInDateRangeFromServer(startDate, endDate, options);
+                return _getUnclaimedPostsCountsInDateRangeFromServer(startDate, endDate, options);
             }
             else {
                 debug("found post counts in cache");
@@ -227,12 +227,12 @@ var getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDat
         });
     }
     else {
-        return _getPostsCountsInDateRangeFromServer(startDate, endDate, options);
+        return _getUnclaimedPostsCountsInDateRangeFromServer(startDate, endDate, options);
     }
 };
-var _getPostsCountsInDateRangeFromServer = function (/*Moment*/ startDate, /*Moment*/ endDate, options) {
-    return _getPostCountsInDateRange(startDate, endDate, "off", options).then(function (offRequests) {
-        return _getPostCountsInDateRange(startDate, endDate, "on", options).then(function (onRequests) {
+var _getUnclaimedPostsCountsInDateRangeFromServer = function (/*Moment*/ startDate, /*Moment*/ endDate, options) {
+    return _getUnclaimedPostCountsInDateRange(startDate, endDate, "off", options).then(function (offRequests) {
+        return _getUnclaimedPostCountsInDateRange(startDate, endDate, "on", options).then(function (onRequests) {
             var res = {totalOn: 0, totalOff: 0, days: {}};
             var key;
             for (key in offRequests) {
@@ -261,7 +261,7 @@ var _getPostsCountsInDateRangeFromServer = function (/*Moment*/ startDate, /*Mom
 
     })
 };
-var _getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDate, /*string*/ requestType, options) {
+var _getUnclaimedPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDate, /*string*/ requestType, options) {
     if (!startDate || !endDate) {
         return Promise.resolve([]);
     }
@@ -273,6 +273,7 @@ var _getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDa
     };
     o.query = {
         shift: {$gte: startDate, $lte: endDate},
+        claimantHasConfirmed: false,
         requestType: requestType
     };
     if (options) {
@@ -297,6 +298,28 @@ var _getPostCountsInDateRange = function (/*Moment*/ startDate, /*Moment*/ endDa
         }
     });
 };
+var confirmCLaim = function (/*ObjectId*/ postId, /*ObjectId*/ userClaimingId) {
+    if (!userClaimingId || !postId || !mongoose.Types.ObjectId.isValid(userClaimingId) || !mongoose.Types.ObjectId.isValid(postId)) {
+        return Promise.resolve(null);
+    }
+    var params = {
+        claimant: userClaimingId,
+        _id: postId
+    };
+    debug(params);
+    return Post.update(params, {claimantHasConfirmed: true}, {new: true})
+};
+var cancelConfirmedClaim = function (/*ObjectId*/ postId, /*ObjectId*/ userCancelId) {
+    if (!userCancelId || !postId || !mongoose.Types.ObjectId.isValid(userCancelId) || !mongoose.Types.ObjectId.isValid(postId)) {
+        return Promise.resolve(null);
+    }
+    var params = {
+        $or: [{claimant: userCancelId}, {creator: userCancelId}],
+        _id: postId
+    };
+    debug(params);
+    return Post.update(params, {claimantHasConfirmed: false, claimant: null}, {new: true});
+};
 
 var exports = {
     findById: findById,
@@ -311,6 +334,8 @@ var exports = {
     findUsersPost: findUsersPost,
     allOffersForUser: allOffersForUser,
     claimPost: claimPost,
+    confirmClaim: confirmCLaim,
+    cancelConfirmedClaim: cancelConfirmedClaim,
     allBeforeDateThatAreNotArchived: allBeforeDateThatAreNotArchived,
     archiveBeforeDate: archiveBeforeDate,
     getPostCountsInDateRange: getPostCountsInDateRange

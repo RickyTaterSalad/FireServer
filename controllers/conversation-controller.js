@@ -28,12 +28,12 @@ var findByUser = function (/*Account*/ user) {
     };
     return Conversation.find(params).populate("creator  messages recipient post").exec();
 };
-var findByUserAndPostId = function (/*Account*/ user, /*ObjectId */ postId) {
-    if (!user || !postId || !mongoose.Types.ObjectId.isValid(postId)) {
+var findByUserAndPostId = function (/*ObjectId*/ userId, /*ObjectId */ postId) {
+    if (!userId || !postId || !mongoose.Types.ObjectId.isValid(postId) || !mongoose.Types.ObjectId.isValid(userId)) {
         return Promise.resolve([]);
     }
     var params = {
-        $or: [{'creator': user._id}, {'recipient': user._id}],
+        $or: [{'creator': userId}, {'recipient': userId}],
         post: postId,
         archived: false
     };

@@ -1,5 +1,7 @@
-var Post = require('mongoose').model('Post');
+var mongoose = require('mongoose');
+var Post = mongoose.model('Post');
 var postController = require("../controllers/post-controller");
+var conversationController = require("../controllers/conversation-controller");
 var util = require("util");
 var dateUtil = require("../util/date-utils");
 var debug = require('debug')('fireServer:server');
@@ -13,27 +15,34 @@ var deptController = require("../controllers/department-controller");
 
 var claimShiftValidator = function (req, res, next) {
     if (!req.body.post || !req.body.post.id) {
+        debug("post missing");
         return res.status(400).send("Post Is Missing");
     }
-    if (!req.body.claiment || !req.body.claiment.id) {
-        return res.status(400).send("No Claiment Specified");
+    if (!req.body.claimant || !req.body.claimant.id) {
+        debug("no claimant");
+        return res.status(400).send("No claimant Specified");
     }
-    postController.findUsersPost(req.locals.userId, req.body.post.id).then(function (post) {
-        if (!post) {
-            return res.status(400).send();
+    //make sure the claimant has messaged the user about this post. don't want people to set other users as claimants without talking to them
+    conversationController.findByUserAndPostId(req.body.claimant.id, req.body.post.id).then(function (conversations) {
+        if (!conversations || conversations.length == 0) {
+            return res.status(400).send("Cannot Claim Post Without Messaging User");
         }
-        if (post.claiment != null) {
-            return res.status(400).send("This Post Has Already Been Claimed");
-        }
-        if (!req.locals) {
-            req.locals = {};
-        }
-        req.locals.post = post;
-        req.locals.claiment = req.body.claiment.id;
-        next();
+        postController.findUsersPost(req.locals.userId, req.body.post.id).then(function (post) {
+            if (!post) {
+                return res.status(400).send("You Are Not The Creator Of This Post");
+            }
+            if (post.claimant != null) {
+                return res.status(400).send("This Post Has Already Been Claimed");
+            }
+            if (!req.locals) {
+                req.locals = {};
+            }
+            req.locals.post = post;
+            req.locals.claimant = req.body.claimant.id;
+            next();
 
-    })
-
+        })
+    });
 };
 
 var validate = function (req, res, next) {
