@@ -9,6 +9,9 @@ var initialize = function (app) {
     app.use('/auth', require('../routes/auth'));
     //bring in api REST
     app.use('/api/v1/', jwt({secret: jwtUtil.secretKey()}), passportHelper.ensureAuthenticated, require("../routes/index"));
+
+    app.use('/department', require('../routes/department'));
+
     app.get("/", function (req, res) {
         res.send("INDEX");
     });

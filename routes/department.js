@@ -6,7 +6,7 @@ var cachedDepartment = null;
 var deploymentDepartment = config.get("workingDepartment");
 
 
-router.get('/:departmentName', hasUser, function (req, res) {
+router.get('/:departmentName', function (req, res) {
     if (req.params && req.params.departmentName == deploymentDepartment) {
         if (cachedDepartment) {
             res.json(cachedDepartment);
