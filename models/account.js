@@ -27,6 +27,10 @@ var AccountSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.Boolean,
         default: false
     },
+    isVouchedFor: {
+        type: mongoose.Schema.Types.Boolean,
+        default: false
+    },
     firstName: {
         type: mongoose.Schema.Types.String,
         required: [true, 'User must have a First name']
