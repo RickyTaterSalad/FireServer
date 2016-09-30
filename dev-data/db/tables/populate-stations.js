@@ -20,11 +20,9 @@ var createStations = function (callback) {
             if(!Number.isNaN(newStation.stationNumber)){
                 //ignore non-numerical e.g. special duty
 
-                console.log("Station Number:" + newStation.stationNumber);
                 var originalStationNumLength = newStation.stationNumber.length;
                 for(var j = 0; j < 3 - originalStationNumLength; j++){
                     newStation.stationNumber = "0" + newStation.stationNumber;
-                    console.log("Padded station number:" + newStation.stationNumber);
                 }
             }
 
