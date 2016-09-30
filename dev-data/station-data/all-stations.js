@@ -1,5 +1,20 @@
 var stations = [
     {
+        "street": "200 N. Main St",
+        "city": "Los Angeles",
+        "state": "CA",
+        "zip": 90012,
+        "stationCoordinate": {
+            "type": "Point",
+            "coordinates": [
+                118.217721,
+                34.075375
+            ]
+        },
+        "community": "Special Duty",
+        "stationNumber": "S/D"
+    },
+    {
         "street": "2230 Pasadena Ave",
         "city": "Los Angeles",
         "state": "CA",
@@ -12,7 +27,7 @@ var stations = [
             ]
         },
         "community": "Lincoln Heights",
-        "stationNumber": "1"
+        "stationNumber": "001"
     },
     {
         "street": "1962 East Cesar E Chavez Avenue",
@@ -1595,4 +1610,3 @@ var stations = [
 module.exports = {
     stations: stations
 };
-

@@ -27,8 +27,21 @@ var findByStationNumber = function (stationNumber) {
     }
     return Station.find({stationNumber: stationNumber});
 };
-var all = function () {
-    return controllerUtils.all(Station);
+
+
+var all = function (trimLeadingZerosFromStationNum) {
+    return controllerUtils
+            .all(Station)
+            .sort({ stationNumber: 1 })
+            .exec(function (err, stations) {
+                if(trimLeadingZerosFromStationNum){
+                    for(let station of stations){
+                        //remove leading 0s of station
+                        station.stationNumber = station.stationNumber.replace(/^0+/, '');
+                    }
+                }
+                return stations;
+            });
 };
 
 var exports = {

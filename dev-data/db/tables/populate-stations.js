@@ -16,6 +16,18 @@ var createStations = function (callback) {
             debug(err);
         }
         else {
+            //add leading 0s to station number for sort capability
+            if(!Number.isNaN(newStation.stationNumber)){
+                //ignore non-numerical e.g. special duty
+
+                console.log("Station Number:" + newStation.stationNumber);
+                var originalStationNumLength = newStation.stationNumber.length;
+                for(var j = 0; j < 3 - originalStationNumLength; j++){
+                    newStation.stationNumber = "0" + newStation.stationNumber;
+                    console.log("Padded station number:" + newStation.stationNumber);
+                }
+            }
+
             fxns.push(function (station, callback) {
                 station.save(function (err) {
                     if (err) {

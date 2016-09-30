@@ -1,20 +1,19 @@
 var router = require('express').Router();
 var Station = require('mongoose').model('Station');
+var stationController = require("../controllers/station-controller");
+
 const hasUser = require("../validators/has-user-validator").validate;
 router.get('/', function (req, res) {
-    Station.find(function (err, stations) {
-        if (err) {
-            return res.status(400).send();
+    stationController.all(true).then(function(stations){
+        if(stations){
+            return res.json(stations);
         }
         else {
-            var ret = {};
-            for (var i = 0; i < stations.length; i++) {
-                ret[stations[i]._id] = stations[i];
-            }
-            return res.json(ret);
+            return res.status(400).send();
         }
     });
 });
+
 router.get('/:id', hasUser, function (req, res) {
     if (req.params && req.params.id) {
         Station.findById(req.params.id, function (err, station) {
