@@ -8,6 +8,7 @@ router.use('/posts', require('./posts'));
 router.use('/messages', require('./messages'));
 router.use('/conversations', require('./conversations'));
 router.use('/stations', require('./stations'));
+router.use('/department', require('./department'));
 router.use('/self', require('./self'));
 router.use('/register', require('./register'));
 router.use('/ahCodes', require('./assign-hire-code'));
