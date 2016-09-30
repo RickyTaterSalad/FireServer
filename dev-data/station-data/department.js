@@ -6,7 +6,8 @@ module.exports = {
         platoons: [
             "A",
             "B",
-            "C"
+            "C",
+            "S/D"
         ],
         schedule: {
             name: "Schedule Name",
