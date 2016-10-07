@@ -42,6 +42,7 @@ var AssignHireCodeSchema = new mongoose.Schema({
 AssignHireCodeSchema.set('toJSON', {
     transform : function(doc, ret, options){
         return {
+            id : ret._id,
             ahCode : ret.ahCode,
             department : ret.department,
             shifts : ret.shifts
