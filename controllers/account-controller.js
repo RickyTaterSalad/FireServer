@@ -66,8 +66,25 @@ var softBanUser = function (account) {
     })
 };
 
-var registerAccount = function (/*Account */ account, registrationParameters) {
-//todo
+var registerAccount = function (/*Account */ account) {
+    if(!account) return Promise.resolve(null);
+    console.log(account);
+    return Account.findByIdAndUpdate(
+        account.id, //query criteria
+        {
+            $set : {
+                // firstName : account.firstName,
+                // lastName : account.lastName,
+                // email : account.email,
+                assignHireCode : account.assignedHireCode,
+                platoon : account.platoon,
+                station : account.station,
+                rank : account.rank
+                //photo URL
+            }
+        },
+        {new : true}   //get back new account doc
+    );
 };
 
 var exports = {
