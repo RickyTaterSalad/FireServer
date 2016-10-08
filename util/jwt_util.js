@@ -15,8 +15,10 @@ var generateToken = function(user){
         lastName: user.lastName,
         platoon: user.platoon,
         department: user.department,
-        assignedHireCode: user.assignedHireCode,
-        station: user.station
+        assignHireCode: user.assignHireCode,
+        station: user.station,
+        rank: user.rank
+
     },secretKey());
 };
 var decode = function(token){

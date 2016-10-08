@@ -96,7 +96,7 @@ AccountSchema.set('toJSON', {
             photo: ret.photo,
             lastName: ret.lastName,
             platoon: ret.platoon,
-            assignedHireCode: ret.assignedHireCode,
+            assignHireCode: ret.assignHireCode,
             rank: ret.rank,
          //   posts: ret.posts,
          //   department: ret.department,

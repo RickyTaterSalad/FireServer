@@ -3,6 +3,9 @@ var mongoose = require('mongoose');
 var controllerUtils = require("../util/controller-utils");
 var Account = mongoose.model('Account');
 
+var stationController = require("../controllers/station-controller");
+var assignHireController = require("../controllers/assign-hire-controller");
+
 //remove after dev
 var getFireUser = function () {
     return Account.findOne({
@@ -66,25 +69,32 @@ var softBanUser = function (account) {
     })
 };
 
-var registerAccount = function (/*Account */ account) {
-    if(!account) return Promise.resolve(null);
-    console.log(account);
-    return Account.findByIdAndUpdate(
-        account.id, //query criteria
-        {
-            $set : {
-                // firstName : account.firstName,
-                // lastName : account.lastName,
-                // email : account.email,
-                assignHireCode : account.assignedHireCode,
-                platoon : account.platoon,
-                station : account.station,
-                rank : account.rank
-                //photo URL
+var registerAccount = function (/*ObjectId*/ userId, /*registerParams */ registrationParams) {
+    if (!mongoose.Types.ObjectId.isValid(userId) || !registrationParams ||
+        !mongoose.Types.ObjectId.isValid(registrationParams.station) ||
+        !mongoose.Types.ObjectId.isValid(registrationParams.assignHireCode)) {
+        return Promise.resolve(null);
+    }
+    console.dir(userId);
+    console.dir(registrationParams);
+
+    return stationController.findById(registrationParams.station).then(function(station){
+        if(!station){
+            console.log("invalid station");
+            return null;
+        }
+        return assignHireController.findById(registrationParams.assignHireCode).then(function(ahCode) {
+            if(!ahCode){
+                console.log("invalid ah code");
+                return null;
             }
-        },
-        {new : true}   //get back new account doc
-    );
+            return Account.findByIdAndUpdate(
+                userId, //query criteria
+                registrationParams,
+                {new: true}   //get back new account doc
+            );
+        });
+    });
 };
 
 var exports = {
